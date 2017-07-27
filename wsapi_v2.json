@@ -1,0 +1,3266 @@
+{
+  "basePath": "/v2/",
+  "definitions": {
+    "CertsAndKeys": {
+      "properties": {
+        "Cert": {
+          "type": "string"
+        },
+        "EncryptedKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Cert"
+      ],
+      "type": "object"
+    },
+    "DeleteKeyReq": {
+      "example": {
+        "PgpKeyId": "string"
+      },
+      "properties": {
+        "PgpKeyId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PgpKeyId"
+      ],
+      "type": "object"
+    },
+    "DeleteKeyResp": {
+      "properties": {
+        "PgpKeys": {
+          "items": {
+            "$ref": "#/definitions/PgpKeyDescriptor"
+          },
+          "type": "array"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "PgpKeys"
+      ],
+      "type": "object"
+    },
+    "DownloadFileResp": {
+      "properties": {
+        "Content": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Content"
+      ],
+      "type": "object"
+    },
+    "Empty": {
+      "type": "object"
+    },
+    "EnrollCertReq": {
+      "example": {
+        "Code": "string",
+        "Company": "string",
+        "WsUserId": "string",
+        "wstargetid": "string"
+      },
+      "properties": {
+        "Code": {
+          "type": "string"
+        },
+        "Company": {
+          "type": "string"
+        },
+        "WsUserId": {
+          "type": "string"
+        },
+        "wstargetid": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Code",
+        "Company",
+        "WsUserId",
+        "wstargetid"
+      ],
+      "type": "object"
+    },
+    "Error": {
+      "properties": {
+        "RequestId": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ExportCertResp": {
+      "properties": {
+        "Certs": {
+          "items": {
+            "$ref": "#/definitions/CertsAndKeys"
+          },
+          "type": "array"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Certs"
+      ],
+      "type": "object"
+    },
+    "FileDescriptor": {
+      "example": {
+        "FileReference": "227166",
+        "FileTimestamp": "2017-05-20T03:36:21.148+03:00",
+        "FileType": "VA",
+        "ServiceId": "N/A",
+        "Status": "NEW",
+        "TargetId": "MLP"
+      },
+      "properties": {
+        "FileReference": {
+          "type": "string"
+        },
+        "FileTimestamp": {
+          "type": "string"
+        },
+        "FileType": {
+          "type": "string"
+        },
+        "ServiceId": {
+          "type": "string"
+        },
+        "Status": {
+          "type": "string"
+        },
+        "TargetId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "FileType",
+        "Status",
+        "FileTimestamp",
+        "FileReference"
+      ],
+      "type": "object"
+    },
+    "ImportCertReq": {
+      "example": {
+        "Certificate": "string",
+        "Company": "string",
+        "EncCertificate": "string",
+        "EncPrivatekey": "string",
+        "PrivateKey": "string",
+        "WsTargetId": "string",
+        "WsUserId": "string"
+      },
+      "properties": {
+        "Certificate": {
+          "type": "string"
+        },
+        "Company": {
+          "type": "string"
+        },
+        "EncCertificate": {
+          "type": "string"
+        },
+        "EncPrivatekey": {
+          "type": "string"
+        },
+        "PrivateKey": {
+          "type": "string"
+        },
+        "WsTargetId": {
+          "type": "string"
+        },
+        "WsUserId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Company",
+        "WsUserId",
+        "WsTargetId",
+        "PrivateKey",
+        "Certificate"
+      ],
+      "type": "object"
+    },
+    "InitLoginResp": {
+      "properties": {
+        "Challenge": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Challenge"
+      ],
+      "type": "object"
+    },
+    "InitRegisterResp": {
+      "properties": {
+        "Challenge": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Challenge"
+      ],
+      "type": "object"
+    },
+    "ListCertsResp": {
+      "properties": {
+        "Certs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Certs"
+      ],
+      "type": "object"
+    },
+    "ListFilesResp": {
+      "properties": {
+        "FileDescriptors": {
+          "items": {
+            "$ref": "#/definitions/FileDescriptor"
+          },
+          "type": "array"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "FileDescriptors"
+      ],
+      "type": "object"
+    },
+    "ListKeysResp": {
+      "properties": {
+        "PgpKeys": {
+          "items": {
+            "$ref": "#/definitions/PgpKeyDescriptor"
+          },
+          "type": "array"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "PgpKeys"
+      ],
+      "type": "object"
+    },
+    "LoginMFAReq": {
+      "example": {
+        "Code": "string",
+        "Session": "string"
+      },
+      "properties": {
+        "Code": {
+          "type": "string"
+        },
+        "Session": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Code",
+        "Session"
+      ],
+      "type": "object"
+    },
+    "LoginMFAResp": {
+      "properties": {
+        "AccessToken": {
+          "type": "string"
+        },
+        "ApiKey": {
+          "type": "string"
+        },
+        "ExpiresIn": {
+          "type": "string"
+        },
+        "IdToken": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "AccessToken",
+        "IdToken",
+        "ExpiresIn",
+        "ApiKey"
+      ],
+      "type": "object"
+    },
+    "LoginReq": {
+      "example": {
+        "ChResp": "string",
+        "Encrypted": "string"
+      },
+      "properties": {
+        "ChResp": {
+          "type": "string"
+        },
+        "Encrypted": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ChResp",
+        "Encrypted"
+      ],
+      "type": "object"
+    },
+    "LoginResp": {
+      "properties": {
+        "AccessToken": {
+          "type": "string"
+        },
+        "ApiKey": {
+          "type": "string"
+        },
+        "ExpiresIn": {
+          "type": "string"
+        },
+        "IdToken": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        },
+        "Session": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "AccessToken",
+        "IdToken",
+        "ExpiresIn",
+        "Session",
+        "ApiKey"
+      ],
+      "type": "object"
+    },
+    "PasswordResetReq": {
+      "example": {
+        "ChResp": "string",
+        "Code": "string",
+        "Encrypted": "string"
+      },
+      "properties": {
+        "ChResp": {
+          "type": "string"
+        },
+        "Code": {
+          "type": "string"
+        },
+        "Encrypted": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Code",
+        "ChResp",
+        "Encrypted"
+      ],
+      "type": "object"
+    },
+    "PgpKeyDescriptor": {
+      "example": {
+        "PgpKeyId": "3A3A59B2"
+      },
+      "properties": {
+        "PgpKeyId": {
+          "description": "Short version of a PGP Key id idenfiying the key, e.g. `3A3A59B2`",
+          "type": "string"
+        }
+      },
+      "required": [
+        "PgpKeyId"
+      ],
+      "type": "object"
+    },
+    "RegisterReq": {
+      "example": {
+        "ApiKey": "hzYAVO9Sg98nsNh81M84O2kyXVy6K1xwHD8",
+        "ChResp": "ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e",
+        "Company": "ISECure Oy",
+        "Encrypted": "...",
+        "Name": "Dan Forsberg",
+        "Phone": "+358404835507"
+      },
+      "properties": {
+        "ApiKey": {
+          "type": "string"
+        },
+        "ChResp": {
+          "type": "string"
+        },
+        "Company": {
+          "type": "string"
+        },
+        "Encrypted": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "Phone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Name",
+        "Phone",
+        "Company",
+        "ApiKey",
+        "ChResp",
+        "Encrypted"
+      ],
+      "type": "object"
+    },
+    "RegisterResp": {
+      "properties": {
+        "ApiKey": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "ApiKey"
+      ],
+      "type": "object"
+    },
+    "Response": {
+      "properties": {
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText"
+      ],
+      "type": "object"
+    },
+    "ShareCertsResp": {
+      "properties": {
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        },
+        "SharedFrom": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "SharedTo": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "SharedTo",
+        "SharedFrom"
+      ],
+      "type": "object"
+    },
+    "UnshareCertsResp": {
+      "properties": {
+        "ResponseCode": {
+          "type": "string"
+        },
+        "ResponseText": {
+          "type": "string"
+        },
+        "SharedFrom": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "SharedTo": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "SharedTo",
+        "SharedFrom"
+      ],
+      "type": "object"
+    },
+    "UploadFileReq": {
+      "example": {
+        "Bank": "string",
+        "FileContents": "string",
+        "FileType": "string"
+      },
+      "properties": {
+        "Bank": {
+          "type": "string"
+        },
+        "FileContents": {
+          "type": "string"
+        },
+        "FileType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "FileContents",
+        "FileType",
+        "Bank"
+      ],
+      "type": "object"
+    },
+    "UploadKeyReq": {
+      "example": {
+        "PgpKey": "string"
+      },
+      "properties": {
+        "PgpKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "PgpKey"
+      ],
+      "type": "object"
+    },
+    "VerifyEmailReq": {
+      "example": {
+        "AccessToken": "string",
+        "Code": "string"
+      },
+      "properties": {
+        "AccessToken": {
+          "type": "string"
+        },
+        "Code": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Code",
+        "AccessToken"
+      ],
+      "type": "object"
+    },
+    "VerifyPhoneReq": {
+      "example": {
+        "Code": "123456"
+      },
+      "properties": {
+        "Code": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "Code"
+      ],
+      "type": "object"
+    }
+  },
+  "host": "ws-api.test.isecure.fi",
+  "info": {
+    "contact": {
+      "email": "dan.forsberg@isecure.fi",
+      "name": "ISECure Oy",
+      "url": "https://www.isecure.fi/"
+    },
+    "description": "The API provides normal file based access to all common banks in Finland via WebServices channel on the service side, including certificate enrollment (PKI) with automatic renewals. Additionally, user account management, password recovery, and SMS based 2nd or Multi Factor Authentication (MFA) are provided (AWS Cognito Your User Pool). Access is secured with HTTPS/TLS (AWS API Gateway), using email address as username and password. On login, password is RSA encrypted along with dynamic parameters fetched from the service (username specific challenge response). Every integrator has own API Key and every user account belongs to one integrator. Certificate sharing between accounts is possible under the same integrator API Key, meaning that the enrolled bank connection certificates are shared. Under the same email address / username, both *admin* and *data* accounts must be used as they have separate passwords and differing functions.",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "termsOfService": "https://www.isecure.fi/ws-api-terms",
+    "title": "ISECure WS Channel API",
+    "version": "v2.1.0",
+    "x-logo": {
+      "backgroundColor": "#FFFFFF",
+      "url": "https://www.isecure.fi/images/isecure-small-logo.png"
+    }
+  },
+  "paths": {
+    "/account/{Email}/{Mode}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Before register (or login), client must fetch `challenge` from the server. Then on register (or login), the challenge must be passed along to the server (as response to the challenge). The challenge is always fresh for some period of time and the server validates it when passed with register (or login). The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n",
+        "operationId": "InitRegister",
+        "parameters": [
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/InitRegisterResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "InitRegister",
+        "tags": [
+          "Account"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": "curl -H 'Content-Type: application/json' https://ws-api.test.isecure.fi/v2/account/dan.forsberg%40isecure.fi/admin"
+          },
+          {
+            "lang": "PHP",
+            "source": "$config = new Swagger\\Client\\Configuration();\n$api = new Swagger\\Client\\Api\\AccountApi(new Swagger\\Client\\apiClient($config));\n$api->InitRegister(\"dan.forsberg@isecure.fi\", \"admin\");"
+          },
+          {
+            "lang": "C#",
+            "source": "InitRegisterResp r = account.InitRegister(\"dan.forsberg@isecure.fi\", \"admin\");\nreturn r.Challenge;"
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Provide _code_ received to _email_ address for email address verification. Provide also _accesstoken_ received during login.",
+        "operationId": "VerifyEmail",
+        "parameters": [
+          {
+            "description": "Account parameters",
+            "in": "body",
+            "name": "VerifyEmailReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyEmailReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "VerifyEmail",
+        "tags": [
+          "Account"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "You need to register both *admin* and *data* accounts with the same email address. Both accounts share the same data, but are used for different purposes. *Admin* account must be registered first, then *data* account.\n\n*Admin* account is used to configure setup with **Certs** and **Pgp** operations, while the *data* account is used with **Files** operations only. Both accounts use **Account** and **Session** operations.\n\n*Admin* account always requires SMS MFA during login, whilst *data* account does not. Generally, the *data* account is considered *read-noly* when no PGP keys are configured, since PGP Keys are used to verify file upload signatures and are thus required to successfully upload files with **Files** *UploadFile* operation.\n\nRegistrations are independent for both accounts, *admin* and *data* and both require phone number and email verifications.\n\n`email` is the login username for both accounts and `mode` defines the selected &quot;mode&quot; for the login, i.e. *admin* or *data*.\n\nBefore registration client must fetch challenge from server (see Account InitRegister operation) and pass it back within the `ChResp` parameter.\n\nThe following parameters `name`, `phone`, and `company` are required and must be valid (`phone`, `email`) as they need to be confirmed before registration becomes successful and login possible.\n\nClient must RSA encrypt (OAEP padding) the _password_ and the challenge _timestamp_ as string in the form `password||timestamp`, base64 encode it and provide the resulting string as `Encrypted` parameter. The RSA encryption can be done e.g. for illustration purposes within command line with openssl rsautl:\n```\necho -n 'Toddler_..123456789012345||1475175151231' |\n\topenssl rsautl -oaep -encrypt -pubin -inkey server_rsa_public_key.pem |\n\tbase64\n\n```\n\nThe server's RSA public key is as follows:\n\n```\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuSaoSZztGAIGDTY7Rff\npsBHJJT1k207UodOJbYFhHAq0lWJnvMPLl5Q1DUUZdTGtTdL8Dsaj/Bo2+gSykMM\nR5QiKewvQsLfvqjwOO8JDItnhJl0lUqcPpdQV4M/Ai3YNRjNcVy4a+pichqtSAWl\n9S1HV01MNeouk8PEr/zoUasmgfO3mz6N6XTUtF/tIi8K2kBOsLAtqltihFSd/zT8\nifYZE9cZTJ09lUs7kMz1wxFIsiegaE1jUYV+VSLu3PJ97oKhQpqop8EnkBAoBl6r\nmdmFryBQIdakPIdd4rO5Yg+to10n4u7Wij9ePIwWMfbqY4QoW5nXqMgFJQkIt4TG\neQIDAQAB\n-----END PUBLIC KEY-----\n\n```\n\n\n\n- **NOTE:** Password must be at least 20 characters long, have lower and upper case letters, numbers, and special characters.\n- **NOTE:** Phone number must be provided with country code, e.g. `+358404982201`.",
+        "operationId": "Register",
+        "parameters": [
+          {
+            "description": "Account parameters",
+            "in": "body",
+            "name": "RegisterReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation succesfully processed. Resource created. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/RegisterResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "Register",
+        "tags": [
+          "Account"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/account/{Email}/{Mode}/password": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Start password reset by getting confirmation SMS code.",
+        "operationId": "InitPasswordReset",
+        "parameters": [
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "InitPasswordReset",
+        "tags": [
+          "Account"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Set new _password_ for user with _email_. Provide received SMS _code_.\n\n**NOTE:** the password must be encrypted, see Register for more details.\n",
+        "operationId": "PasswordReset",
+        "parameters": [
+          {
+            "description": "Account parameters",
+            "in": "body",
+            "name": "PasswordResetReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PasswordResetReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "PasswordReset",
+        "tags": [
+          "Account"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/account/{Email}/{Mode}/{Phone}": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Confirm phone number for _email_ _mode_ user, with _code_ received via SMS.",
+        "operationId": "VerifyPhone",
+        "parameters": [
+          {
+            "description": "Account parameters",
+            "in": "body",
+            "name": "VerifyPhoneReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyPhoneReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Phone number with country code, e.g. `+358401234567`",
+            "in": "path",
+            "name": "Phone",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "VerifyPhone",
+        "tags": [
+          "Account"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/certs/": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "ListCerts",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ListCertsResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ListCerts",
+        "tags": [
+          "Certs"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/certs/shared/{ExtEmail}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Unshare certs with an existing _ExtEmail_ account.",
+        "operationId": "UnshareCerts",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Unshare certs with _ExtEMail_ account.",
+            "in": "path",
+            "name": "ExtEmail",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/UnshareCertsResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "UnshareCerts",
+        "tags": [
+          "Certs"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Share certs with an existing account _ExtEmail_ under the same API Key.\n\nIf the _ExtEmail_ account does not have the specific bank certificate (key pair), then certs (key pair) from this account will be used (shared), if any. Both accounts must be registered and using the same integrator API Key.",
+        "operationId": "ShareCerts",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Share certs with _ExtEMail_ account.",
+            "in": "path",
+            "name": "ExtEmail",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation succesfully processed. Resource created. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ShareCertsResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ShareCerts",
+        "tags": [
+          "Certs"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/certs/{Bank}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Download bank certificate and private key encrypted with stored PGP key",
+        "operationId": "ExportCert",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, or `alandsbanken`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Short version of a PGP Key id idenfiying the exported Private Key, e.g. `3A3A59B2`",
+            "in": "query",
+            "name": "PgpKeyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ExportCertResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ExportCert",
+        "tags": [
+          "Certs"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Provide WS-Channel user id, _wsuserid_, _wstargetid_, _company_, and PIN _code_ for _bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted on service side and never leaves from there. Certificates are automatically renewed when needed.",
+        "operationId": "EnrollCert",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Certs parameters",
+            "in": "body",
+            "name": "EnrollCertReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnrollCertReq"
+            }
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, or `alandsbanken`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation succesfully processed. Resource created. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "EnrollCert",
+        "tags": [
+          "Certs"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Provide _wsuserid_, _wstargetid_, _company_, _privatekey_, and _certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n- **NOTE:** _enccertificate_ and _encprivatekey_ are for DanskeBank only.",
+        "operationId": "ImportCert",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Certs parameters",
+            "in": "body",
+            "name": "ImportCertReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ImportCertReq"
+            }
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, or `alandsbanken`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation succesfully processed. Resource created. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ImportCert",
+        "tags": [
+          "Certs"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/files/{Bank}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific, see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n- **NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n- **NOTE:** The uploaded files do not show up on the file listing.",
+        "operationId": "ListFiles",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Status of the *file*, e.g. `ALL`. `NEW`, `DLD`",
+            "in": "query",
+            "name": "Status",
+            "type": "string"
+          },
+          {
+            "description": "*Bank* specific *FileType* identifies the file type to be listed",
+            "in": "query",
+            "name": "FileType",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ListFilesResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ListFiles",
+        "tags": [
+          "Files"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Uploads file to bank. _Filecontents_ is a _Base64_ encoded string parameter. _Filetype_ is bank specific.",
+        "operationId": "UploadFile",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Files parameters",
+            "in": "body",
+            "name": "UploadFileReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadFileReq"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation succesfully processed. Resource created. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "UploadFile",
+        "tags": [
+          "Files"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/files/{Bank}/{FileType}/{FileReference}": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Deletes file on bank side. File is identified with _filereference_.",
+        "operationId": "DeleteFile",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "File reference *id* from list files",
+            "in": "path",
+            "name": "FileType",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "File reference *id* from list files",
+            "in": "path",
+            "name": "FileReference",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DeleteFile",
+        "tags": [
+          "Files"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Downloads file identified with _filereference_, _filetype_, and _bank_. _Filereference_ is received in file list from bank. Returns _base64_ encoded file content.",
+        "operationId": "DownloadFile",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "File type from list files",
+            "in": "path",
+            "name": "FileType",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "File reference identifier from list files",
+            "in": "path",
+            "name": "FileReference",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/DownloadFileResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DownloadFile",
+        "tags": [
+          "Files"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/pgp": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Delete PGP key",
+        "operationId": "DeleteKey",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Pgp parameters",
+            "in": "body",
+            "name": "DeleteKeyReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteKeyReq"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/DeleteKeyResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DeleteKey",
+        "tags": [
+          "Pgp"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List PGP keys",
+        "operationId": "ListKeys",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ListKeysResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ListKeys",
+        "tags": [
+          "Pgp"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Upload PGP key",
+        "operationId": "UploadKey",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Pgp parameters",
+            "in": "body",
+            "name": "UploadKeyReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UploadKeyReq"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation succesfully processed. Resource created. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "UploadKey",
+        "tags": [
+          "Pgp"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/session/{Email}/{Mode}": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Before login, client must fetch `challenge` from the server. Then on login, the challenge must be passed along to the server (as response to the challenge). The challenge is always fresh for some period of time and the server validates it when passed with login. The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n",
+        "operationId": "InitLogin",
+        "parameters": [
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/InitLoginResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "InitLogin",
+        "tags": [
+          "Session"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "After `getchallenge`, call `login` with _email_, _mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authroization), include the received _idtoken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n- **NOTE:** In case SMS _code_ is required, the call returns _session_.\n- **NOTE:** If _email_ has not been yet verified, successful login provides only _accesstoken_ that must be used to verify email address.\n",
+        "operationId": "Login",
+        "parameters": [
+          {
+            "description": "Login body parameters",
+            "in": "body",
+            "name": "LoginReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/LoginResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "Login",
+        "tags": [
+          "Session"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/session/{Email}/{Mode}/mfacode": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Send SMS _code_ along with previously received _session_ token. If _email_ has not been yet verified, successful login provides only _accesstoken_ that must be used to verify email address. If email is already verified and the login succeeds, add the _idtoken_ from the login response as Authorization header in API requests requiring authorization (i.e. pass as parameter to client SDK API calls). _IdToken_ expires in _ExpiresIn_ seconds.",
+        "operationId": "LoginMFA",
+        "parameters": [
+          {
+            "description": "Session parameters",
+            "in": "body",
+            "name": "LoginMFAReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginMFAReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Administer account with `admin` mode, exchange files with `data` mode",
+            "enum": [
+              "admin",
+              "data"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/LoginMFAResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "LoginMFA",
+        "tags": [
+          "Session"
+        ],
+        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
+          "ACCESS_DENIED": {},
+          "API_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_CONFIGURATION_ERROR": {},
+          "AUTHORIZER_FAILURE": {},
+          "BAD_REQUEST_BODY": {},
+          "BAD_REQUEST_PARAMETERS": {},
+          "DEFAULT_4XX": {},
+          "DEFAULT_5XX": {},
+          "EXPIRED_TOKEN": {},
+          "INTEGRATION_FAILURE": {},
+          "INTEGRATION_TIMEOUT": {},
+          "INVALID_API_KEY": {},
+          "INVALID_SIGNATURE": {},
+          "MISSING_AUTHENTICATION_TOKEN": {},
+          "QUOTA_EXCEEDED": {},
+          "REQUEST_TOO_LARGE": {},
+          "RESOURCE_NOT_FOUND": {},
+          "THROTTLED": {},
+          "UNAUTHORIZED": {},
+          "UNSUPPORTED_MEDIA_TYPES": {}
+        },
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "Authorizer": {
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    },
+    "X-Api-Key": {
+      "in": "header",
+      "name": "x-api-key",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0",
+  "x-servers": [
+    {
+      "description": "Development server",
+      "url": "https://ws-api.test.isecure.fi/v2/"
+    },
+    {
+      "description": "Production server",
+      "url": "https://ws-api.isecure.fi/v2/"
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": "Admin account",
+      "tags": [
+        "Account",
+        "Pgp",
+        "Certs"
+      ]
+    },
+    {
+      "name": "Data account",
+      "tags": [
+        "Files"
+      ]
+    },
+    {
+      "name": "Common for both accounts",
+      "tags": [
+        "Session"
+      ]
+    }
+  ]
+}
