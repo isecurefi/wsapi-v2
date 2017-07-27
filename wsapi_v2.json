@@ -750,28 +750,6 @@
         "tags": [
           "Account"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -861,28 +839,6 @@
         "tags": [
           "Account"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -972,28 +928,6 @@
         "tags": [
           "Account"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1076,28 +1010,6 @@
         "tags": [
           "Account"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1187,28 +1099,6 @@
         "tags": [
           "Account"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1307,28 +1197,6 @@
         "tags": [
           "Account"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1414,28 +1282,6 @@
         "tags": [
           "Certs"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1529,28 +1375,6 @@
         "tags": [
           "Certs"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1642,28 +1466,6 @@
         "tags": [
           "Certs"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1764,28 +1566,6 @@
         "tags": [
           "Certs"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -1886,28 +1666,6 @@
         "tags": [
           "Certs"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2008,28 +1766,6 @@
         "tags": [
           "Certs"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2135,28 +1871,6 @@
         "tags": [
           "Files"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2250,28 +1964,6 @@
         "tags": [
           "Files"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2379,28 +2071,6 @@
         "tags": [
           "Files"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2506,28 +2176,6 @@
         "tags": [
           "Files"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2623,28 +2271,6 @@
         "tags": [
           "Pgp"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2729,28 +2355,6 @@
         "tags": [
           "Pgp"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2844,28 +2448,6 @@
         "tags": [
           "Pgp"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -2948,28 +2530,6 @@
         "tags": [
           "Session"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -3059,28 +2619,6 @@
         "tags": [
           "Session"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
@@ -3172,28 +2710,6 @@
         "tags": [
           "Session"
         ],
-        "x-amazon-apigateway-gateway-responses.gatewayResponse": {
-          "ACCESS_DENIED": {},
-          "API_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_CONFIGURATION_ERROR": {},
-          "AUTHORIZER_FAILURE": {},
-          "BAD_REQUEST_BODY": {},
-          "BAD_REQUEST_PARAMETERS": {},
-          "DEFAULT_4XX": {},
-          "DEFAULT_5XX": {},
-          "EXPIRED_TOKEN": {},
-          "INTEGRATION_FAILURE": {},
-          "INTEGRATION_TIMEOUT": {},
-          "INVALID_API_KEY": {},
-          "INVALID_SIGNATURE": {},
-          "MISSING_AUTHENTICATION_TOKEN": {},
-          "QUOTA_EXCEEDED": {},
-          "REQUEST_TOO_LARGE": {},
-          "RESOURCE_NOT_FOUND": {},
-          "THROTTLED": {},
-          "UNAUTHORIZED": {},
-          "UNSUPPORTED_MEDIA_TYPES": {}
-        },
         "x-code-samples": [
           {
             "lang": "cURL",
