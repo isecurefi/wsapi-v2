@@ -1,6 +1,37 @@
 {
   "basePath": "/v2/",
   "definitions": {
+    "CertDescription": {
+      "properties": {
+        "CertName": {
+          "type": "string"
+        },
+        "Expires": {
+          "type": "string"
+        },
+        "Issuer": {
+          "type": "string"
+        },
+        "PEM": {
+          "type": "string"
+        },
+        "Serial": {
+          "type": "string"
+        },
+        "Subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "CertName",
+        "Expires",
+        "Subject",
+        "Issuer",
+        "Serial",
+        "PEM"
+      ],
+      "type": "object"
+    },
     "CertsAndKeys": {
       "properties": {
         "Cert": {
@@ -259,7 +290,7 @@
       "properties": {
         "Certs": {
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/CertDescription"
           },
           "type": "array"
         },
