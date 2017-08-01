@@ -2504,7 +2504,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Logout invalidates _IdToken_.",
+        "description": "Logout user.\n\n- **NOTE**: AWS Cognito allows user logout, but the received authorization _IdToken_ **is still valid**. AWS hopefully fixes this soon.",
         "operationId": "Logout",
         "parameters": [
           {
