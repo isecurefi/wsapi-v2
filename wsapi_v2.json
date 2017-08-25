@@ -150,7 +150,7 @@
     },
     "ExportCertResp": {
       "properties": {
-        "Certs": {
+        "CertificatesAndKeys": {
           "items": {
             "$ref": "#/definitions/CertsAndKeys"
           },
@@ -166,7 +166,7 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "Certs"
+        "CertificatesAndKeys"
       ],
       "type": "object"
     },
@@ -289,7 +289,7 @@
     },
     "ListCertsResp": {
       "properties": {
-        "Certs": {
+        "Certificates": {
           "items": {
             "$ref": "#/definitions/CertDescription"
           },
@@ -305,7 +305,7 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "Certs"
+        "Certificates"
       ],
       "type": "object"
     },
