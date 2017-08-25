@@ -713,7 +713,7 @@
     },
     "termsOfService": "https://www.isecure.fi/ws-api-terms",
     "title": "ISECure WS Channel API",
-    "version": "v2.1.1",
+    "version": "v2.2.3",
     "x-logo": {
       "backgroundColor": "#FFFFFF",
       "url": "https://www.isecure.fi/images/isecure-small-logo.png"
