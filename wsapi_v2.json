@@ -34,15 +34,16 @@
     },
     "CertsAndKeys": {
       "properties": {
-        "Cert": {
+        "Certificate": {
           "type": "string"
         },
-        "EncryptedKey": {
+        "EncryptedPrivateKey": {
           "type": "string"
         }
       },
       "required": [
-        "Cert"
+        "Certificate",
+        "EncryptedPrivateKey"
       ],
       "type": "object"
     },
@@ -712,7 +713,7 @@
     },
     "termsOfService": "https://www.isecure.fi/ws-api-terms",
     "title": "ISECure WS Channel API",
-    "version": "v2.1.0",
+    "version": "v2.1.1",
     "x-logo": {
       "backgroundColor": "#FFFFFF",
       "url": "https://www.isecure.fi/images/isecure-small-logo.png"
