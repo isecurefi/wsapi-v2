@@ -61,6 +61,7 @@
       },
       "properties": {
         "export": {
+          "description": "Set export to `disabled` to disallow certificate and private key pair exporting",
           "type": "string"
         }
       },
@@ -177,7 +178,7 @@
     },
     "ExportCertResp": {
       "properties": {
-        "CertificatesAndKeys": {
+        "CertsAndKeys": {
           "items": {
             "$ref": "#/definitions/CertsAndKeys"
           },
@@ -195,7 +196,7 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "CertificatesAndKeys"
+        "CertsAndKeys"
       ],
       "type": "object"
     },
@@ -457,9 +458,11 @@
       },
       "properties": {
         "ChResp": {
+          "description": "Challenge copied from service response",
           "type": "string"
         },
         "Encrypted": {
+          "description": "RSA encrypted password and timestamp",
           "type": "string"
         }
       },
@@ -715,9 +718,11 @@
       },
       "properties": {
         "PgpKey": {
+          "description": "ASCII armored PGP Key",
           "type": "string"
         },
         "PgpKeyPurpose": {
+          "description": "PGP key purpose, i.e. `Export` (exporting cert private key) or `Verification` (upload content authorization verification).",
           "type": "string"
         }
       },
@@ -1411,7 +1416,7 @@
             "type": "string"
           },
           {
-            "description": "Set export to `disabled` to disallow certificate and private key pair exporting",
+            "description": "Certs handling settings",
             "in": "body",
             "name": "ConfigCertsReq",
             "required": true,
@@ -2577,7 +2582,7 @@
             "type": "string"
           },
           {
-            "description": "Base64 encoded PGP Key in `PgpKey` and key purpose, i.e. `Export` (exporting cert private key) or `Verification` (upload content authorization verification) in `PgpKeyPurpose`.",
+            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `Export` (exporting cert private key) or `Verification` (upload content authorization verification) in `PgpKeyPurpose`.",
             "in": "body",
             "name": "UploadKeyReq",
             "required": true,
