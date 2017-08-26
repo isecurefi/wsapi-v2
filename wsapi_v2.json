@@ -4,21 +4,27 @@
     "CertDescription": {
       "properties": {
         "CertName": {
+          "description": "Certificate common name",
           "type": "string"
         },
         "Expires": {
+          "description": "Date of expiry",
           "type": "string"
         },
         "Issuer": {
+          "description": "Certificate issuer",
           "type": "string"
         },
         "PEM": {
+          "description": "Certificate in PEM format",
           "type": "string"
         },
         "Serial": {
+          "description": "Certificate serial number",
           "type": "string"
         },
         "Subject": {
+          "description": "Certificate subject",
           "type": "string"
         }
       },
@@ -35,9 +41,11 @@
     "CertsAndKeys": {
       "properties": {
         "Certificate": {
+          "description": "Certificate in PEM format",
           "type": "string"
         },
         "EncryptedPrivateKey": {
+          "description": "PGP encrypted ascii armored private key",
           "type": "string"
         }
       },
@@ -45,6 +53,18 @@
         "Certificate",
         "EncryptedPrivateKey"
       ],
+      "type": "object"
+    },
+    "ConfigCertsReq": {
+      "example": {
+        "export": "disabled"
+      },
+      "properties": {
+        "export": {
+          "type": "string"
+        }
+      },
+      "required": [],
       "type": "object"
     },
     "DeleteKeyReq": {
@@ -70,9 +90,11 @@
           "type": "array"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -89,9 +111,11 @@
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -137,12 +161,15 @@
     "Error": {
       "properties": {
         "RequestId": {
+          "description": "Service side request id for problem tracing purposes",
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -157,9 +184,11 @@
           "type": "array"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -181,21 +210,27 @@
       },
       "properties": {
         "FileReference": {
+          "description": "File reference id, use e.g. when downloading the file",
           "type": "string"
         },
         "FileTimestamp": {
+          "description": "Creation time stamp of the file from bank",
           "type": "string"
         },
         "FileType": {
+          "description": "Bank specific file type",
           "type": "string"
         },
         "ServiceId": {
+          "description": "Bank specific service id (e.g. bank account number)",
           "type": "string"
         },
         "Status": {
+          "description": "File download status",
           "type": "string"
         },
         "TargetId": {
+          "description": "Bank specific target id",
           "type": "string"
         }
       },
@@ -255,9 +290,11 @@
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -274,9 +311,11 @@
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -296,9 +335,11 @@
           "type": "array"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -318,9 +359,11 @@
           "type": "array"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -340,9 +383,11 @@
           "type": "array"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -387,9 +432,11 @@
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -437,9 +484,11 @@
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         },
         "Session": {
@@ -541,9 +590,11 @@
           "type": "string"
         },
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -557,9 +608,11 @@
     "Response": {
       "properties": {
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         }
       },
@@ -572,9 +625,11 @@
     "ShareCertsResp": {
       "properties": {
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         },
         "SharedFrom": {
@@ -601,9 +656,11 @@
     "UnshareCertsResp": {
       "properties": {
         "ResponseCode": {
+          "description": "Two digit response code in string format",
           "type": "string"
         },
         "ResponseText": {
+          "description": "Human readable response text",
           "type": "string"
         },
         "SharedFrom": {
@@ -653,15 +710,20 @@
     },
     "UploadKeyReq": {
       "example": {
-        "PgpKey": "string"
+        "PgpKey": "string",
+        "PgpKeyPurpose": "Export"
       },
       "properties": {
         "PgpKey": {
           "type": "string"
+        },
+        "PgpKeyPurpose": {
+          "type": "string"
         }
       },
       "required": [
-        "PgpKey"
+        "PgpKey",
+        "PgpKeyPurpose"
       ],
       "type": "object"
     },
@@ -713,7 +775,7 @@
     },
     "termsOfService": "https://www.isecure.fi/ws-api-terms",
     "title": "ISECure WS Channel API",
-    "version": "v2.2.3",
+    "version": "v2.2.4",
     "x-logo": {
       "backgroundColor": "#FFFFFF",
       "url": "https://www.isecure.fi/images/isecure-small-logo.png"
@@ -1254,6 +1316,7 @@
         "consumes": [
           "application/json"
         ],
+        "description": "List certs from all banks",
         "operationId": "ListCerts",
         "parameters": [
           {
@@ -1311,6 +1374,99 @@
           }
         ],
         "summary": "ListCerts",
+        "tags": [
+          "Certs"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Configure certificate usage parameters. Currently, only settable (permanent) parameter is `export`. Set it to `disable` for disallowing private key export.\n\n**NOTE**: When export is disabled it is permanent, it can not be re-enabled through the API (safety feature).",
+        "operationId": "ConfigCerts",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Set export to `disabled` to disallow certificate and private key pair exporting",
+            "in": "body",
+            "name": "ConfigCertsReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigCertsReq"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ConfigCerts",
         "tags": [
           "Certs"
         ],
@@ -1523,7 +1679,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Download bank certificate and private key encrypted with stored PGP key",
+        "description": "Download bank certificate and private key encrypted with stored PGP key.\n\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `Export`. I.e. purpose type `Authorize` PGP keys can not be used for exporting.\n\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
         "operationId": "ExportCert",
         "parameters": [
           {
@@ -2421,7 +2577,7 @@
             "type": "string"
           },
           {
-            "description": "Pgp parameters",
+            "description": "Base64 encoded PGP Key in `PgpKey` and key purpose, i.e. `Export` (exporting cert private key) or `Verification` (upload content authorization verification) in `PgpKeyPurpose`.",
             "in": "body",
             "name": "UploadKeyReq",
             "required": true,
