@@ -2440,7 +2440,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Delete PGP key",
+        "description": "Delete PGP key. API implementation is to-be-done (TBD).",
         "operationId": "DeleteKey",
         "parameters": [
           {
@@ -2533,7 +2533,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List PGP keys",
+        "description": "List PGP keys. API implementation is to-be-done (TBD).",
         "operationId": "ListKeys",
         "parameters": [
           {
@@ -2617,7 +2617,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Upload PGP key",
+        "description": "Upload PGP key. API implementation is to-be-done (TBD).",
         "operationId": "UploadKey",
         "parameters": [
           {
