@@ -218,7 +218,7 @@
       ],
       "type": "object"
     },
-    "Error": {
+    "ErrorResponse": {
       "properties": {
         "RequestId": {
           "description": "Service side request id for problem tracing purposes",
@@ -960,13 +960,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1049,13 +1049,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1138,13 +1138,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1220,13 +1220,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1309,13 +1309,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1407,13 +1407,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1478,25 +1478,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1571,25 +1571,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1664,25 +1664,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1755,25 +1755,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1855,25 +1855,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -1955,25 +1955,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2055,25 +2055,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2160,25 +2160,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2253,25 +2253,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2360,25 +2360,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2465,25 +2465,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2551,25 +2551,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2646,25 +2646,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2730,25 +2730,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2823,25 +2823,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -2927,25 +2927,25 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "401": {
             "description": "Unauthorized",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "403": {
             "description": "Unauthenticated",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -3022,13 +3022,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -3111,13 +3111,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -3202,13 +3202,13 @@
           "400": {
             "description": "Request validation error",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           },
           "500": {
             "description": "Unexpected error occurred",
             "schema": {
-              "$ref": "#/definitions/Error"
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
