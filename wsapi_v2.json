@@ -109,6 +109,7 @@
     "DownloadFileResp": {
       "properties": {
         "Content": {
+          "description": "Downloaded file content as from bank (e.g. in Base64 form)",
           "type": "string"
         },
         "ResponseCode": {
@@ -288,6 +289,7 @@
     "InitLoginResp": {
       "properties": {
         "Challenge": {
+          "description": "Challenge from server",
           "type": "string"
         },
         "ResponseCode": {
@@ -309,6 +311,7 @@
     "InitRegisterResp": {
       "properties": {
         "Challenge": {
+          "description": "Challenge from server",
           "type": "string"
         },
         "ResponseCode": {
@@ -421,15 +424,19 @@
     "LoginMFAResp": {
       "properties": {
         "AccessToken": {
+          "description": "Access token",
           "type": "string"
         },
         "ApiKey": {
+          "description": "API Key",
           "type": "string"
         },
         "ExpiresIn": {
+          "description": "Session expiration time",
           "type": "string"
         },
         "IdToken": {
+          "description": "ID token",
           "type": "string"
         },
         "ResponseCode": {
@@ -475,15 +482,19 @@
     "LoginResp": {
       "properties": {
         "AccessToken": {
+          "description": "Access token",
           "type": "string"
         },
         "ApiKey": {
+          "description": "API Key",
           "type": "string"
         },
         "ExpiresIn": {
+          "description": "Session expiration time",
           "type": "string"
         },
         "IdToken": {
+          "description": "ID token",
           "type": "string"
         },
         "ResponseCode": {
@@ -495,6 +506,7 @@
           "type": "string"
         },
         "Session": {
+          "description": "Session token",
           "type": "string"
         }
       },
@@ -590,6 +602,7 @@
     "RegisterResp": {
       "properties": {
         "ApiKey": {
+          "description": "API Key",
           "type": "string"
         },
         "ResponseCode": {
@@ -636,12 +649,14 @@
           "type": "string"
         },
         "SharedFrom": {
+          "description": "_ExtEmail_ account that this account shares certs from",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "SharedTo": {
+          "description": "_ExtEmail_ account that this account shares certs for",
           "items": {
             "type": "string"
           },
@@ -667,12 +682,14 @@
           "type": "string"
         },
         "SharedFrom": {
+          "description": "_ExtEmail_ account that this account shares certs from",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "SharedTo": {
+          "description": "_ExtEmail_ account that this account shares certs for",
           "items": {
             "type": "string"
           },
