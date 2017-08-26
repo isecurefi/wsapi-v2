@@ -401,7 +401,7 @@
       "properties": {
         "Accounts": {
           "items": {
-            "$ref": "#/definitions/Account"
+            "$ref": "#/definitions/AccountDescriptor"
           },
           "type": "array"
         },
