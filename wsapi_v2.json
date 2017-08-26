@@ -141,6 +141,7 @@
     "DeleteKeyResp": {
       "properties": {
         "PgpKeys": {
+          "description": "List of PGP keys in service",
           "items": {
             "$ref": "#/definitions/PgpKeyDescriptor"
           },
@@ -240,6 +241,7 @@
     "ExportCertResp": {
       "properties": {
         "CertsAndKeys": {
+          "description": "List of certificate and encrypted private key pairs",
           "items": {
             "$ref": "#/definitions/CertsAndKeys"
           },
@@ -400,6 +402,7 @@
     "ListAccountsResp": {
       "properties": {
         "Accounts": {
+          "description": "List of accounts under the API key",
           "items": {
             "$ref": "#/definitions/AccountDescriptor"
           },
@@ -424,6 +427,7 @@
     "ListCertsResp": {
       "properties": {
         "Certificates": {
+          "description": "List of certificates",
           "items": {
             "$ref": "#/definitions/CertDescriptor"
           },
@@ -448,6 +452,7 @@
     "ListFilesResp": {
       "properties": {
         "FileDescriptors": {
+          "description": "List of downloadable files from bank",
           "items": {
             "$ref": "#/definitions/FileDescriptor"
           },
@@ -472,6 +477,7 @@
     "ListKeysResp": {
       "properties": {
         "PgpKeys": {
+          "description": "List of PGP keys in service",
           "items": {
             "$ref": "#/definitions/PgpKeyDescriptor"
           },
