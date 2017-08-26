@@ -70,10 +70,11 @@
     },
     "DeleteKeyReq": {
       "example": {
-        "PgpKeyId": "string"
+        "PgpKeyId": "DBCBE671"
       },
       "properties": {
         "PgpKeyId": {
+          "description": "8 chars hexadecimal PGP Key Id (see e.g. gpg --list-keys)",
           "type": "string"
         }
       },
@@ -133,22 +134,26 @@
     },
     "EnrollCertReq": {
       "example": {
-        "Code": "string",
-        "Company": "string",
-        "WsUserId": "string",
-        "wstargetid": "string"
+        "Code": "8642603384107437",
+        "Company": "...",
+        "WsUserId": "...",
+        "wstargetid": "..."
       },
       "properties": {
         "Code": {
+          "description": "Full PIN code from bank (e.g. combined from SMS and letter)",
           "type": "string"
         },
         "Company": {
+          "description": "Company name as registered with bank (e.g. full capital letters without Oy, see contract)",
           "type": "string"
         },
         "WsUserId": {
+          "description": "WebServices channel user id as in contract with bank",
           "type": "string"
         },
         "wstargetid": {
+          "description": "WebServices channel target id as in contract with bank",
           "type": "string"
         }
       },
@@ -246,34 +251,41 @@
     },
     "ImportCertReq": {
       "example": {
-        "Certificate": "string",
-        "Company": "string",
-        "EncCertificate": "string",
-        "EncPrivatekey": "string",
-        "PrivateKey": "string",
-        "WsTargetId": "string",
-        "WsUserId": "string"
+        "Certificate": "...",
+        "Company": "...",
+        "EncCertificate": "...",
+        "EncPrivatekey": "...",
+        "PrivateKey": "...",
+        "WsTargetId": "...",
+        "WsUserId": "..."
       },
       "properties": {
         "Certificate": {
+          "description": "Certificate in PEM format",
           "type": "string"
         },
         "Company": {
+          "description": "Company name as registered with bank (e.g. full capital letters without Oy, see contract)",
           "type": "string"
         },
         "EncCertificate": {
+          "description": "Certificate in PEM format (encryption certificate for DanskeBank)",
           "type": "string"
         },
         "EncPrivatekey": {
+          "description": "Private key in PEM format (encryption certificate for DanskeBank)",
           "type": "string"
         },
         "PrivateKey": {
+          "description": "Private key in PEM format",
           "type": "string"
         },
         "WsTargetId": {
+          "description": "WebServices channel target id as in contract with bank",
           "type": "string"
         },
         "WsUserId": {
+          "description": "WebServices channel user id as in contract with bank",
           "type": "string"
         }
       },
@@ -289,7 +301,7 @@
     "InitLoginResp": {
       "properties": {
         "Challenge": {
-          "description": "Challenge from server",
+          "description": "Challenge copied from server response",
           "type": "string"
         },
         "ResponseCode": {
@@ -311,7 +323,7 @@
     "InitRegisterResp": {
       "properties": {
         "Challenge": {
-          "description": "Challenge from server",
+          "description": "Challenge copied from server response",
           "type": "string"
         },
         "ResponseCode": {
@@ -404,14 +416,16 @@
     },
     "LoginMFAReq": {
       "example": {
-        "Code": "string",
-        "Session": "string"
+        "Code": "123456",
+        "Session": "..."
       },
       "properties": {
         "Code": {
+          "description": "Code from SMS",
           "type": "string"
         },
         "Session": {
+          "description": "Session token from login response",
           "type": "string"
         }
       },
@@ -428,7 +442,7 @@
           "type": "string"
         },
         "ApiKey": {
-          "description": "API Key",
+          "description": "Integrator API Key",
           "type": "string"
         },
         "ExpiresIn": {
@@ -460,12 +474,12 @@
     },
     "LoginReq": {
       "example": {
-        "ChResp": "string",
-        "Encrypted": "string"
+        "ChResp": "...",
+        "Encrypted": "..."
       },
       "properties": {
         "ChResp": {
-          "description": "Challenge copied from service response",
+          "description": "Challenge copied from server response",
           "type": "string"
         },
         "Encrypted": {
@@ -486,7 +500,7 @@
           "type": "string"
         },
         "ApiKey": {
-          "description": "API Key",
+          "description": "Integrator API Key",
           "type": "string"
         },
         "ExpiresIn": {
@@ -523,18 +537,21 @@
     },
     "PasswordResetReq": {
       "example": {
-        "ChResp": "string",
-        "Code": "string",
-        "Encrypted": "string"
+        "ChResp": "...",
+        "Code": "123456",
+        "Encrypted": "..."
       },
       "properties": {
         "ChResp": {
+          "description": "Challenge copied from server response",
           "type": "string"
         },
         "Code": {
+          "description": "Code from SMS",
           "type": "string"
         },
         "Encrypted": {
+          "description": "RSA encrypted NEW password and timestamp",
           "type": "string"
         }
       },
@@ -571,21 +588,27 @@
       },
       "properties": {
         "ApiKey": {
+          "description": "Integrator API Key, or `0` if not already known (e.g. initial integrator registration)",
           "type": "string"
         },
         "ChResp": {
+          "description": "Challenge copied from server response",
           "type": "string"
         },
         "Company": {
+          "description": "Company name",
           "type": "string"
         },
         "Encrypted": {
+          "description": "RSA encrypted password and timestamp",
           "type": "string"
         },
         "Name": {
+          "description": "Full name of registrant",
           "type": "string"
         },
         "Phone": {
+          "description": "Phone number with country code and `+` in front",
           "type": "string"
         }
       },
@@ -602,7 +625,7 @@
     "RegisterResp": {
       "properties": {
         "ApiKey": {
-          "description": "API Key",
+          "description": "Integrator API Key",
           "type": "string"
         },
         "ResponseCode": {
@@ -706,18 +729,21 @@
     },
     "UploadFileReq": {
       "example": {
-        "Bank": "string",
-        "FileContents": "string",
-        "FileType": "string"
+        "Bank": "nordea",
+        "FileContents": "...",
+        "FileType": "KTL"
       },
       "properties": {
         "Bank": {
+          "description": "Name of the bank",
           "type": "string"
         },
         "FileContents": {
+          "description": "Base64 encoded file contents",
           "type": "string"
         },
         "FileType": {
+          "description": "Bank specific file type",
           "type": "string"
         }
       },
@@ -730,8 +756,8 @@
     },
     "UploadKeyReq": {
       "example": {
-        "PgpKey": "string",
-        "PgpKeyPurpose": "Export"
+        "PgpKey": "...",
+        "PgpKeyPurpose": "Authorize"
       },
       "properties": {
         "PgpKey": {
@@ -739,7 +765,7 @@
           "type": "string"
         },
         "PgpKeyPurpose": {
-          "description": "PGP key purpose, i.e. `Export` (exporting cert private key) or `Verification` (upload content authorization verification).",
+          "description": "PGP key purpose, i.e. `Export` (exporting cert private key) or `Authorize` (upload content authorization verification).",
           "type": "string"
         }
       },
@@ -751,14 +777,16 @@
     },
     "VerifyEmailReq": {
       "example": {
-        "AccessToken": "string",
-        "Code": "string"
+        "AccessToken": "...",
+        "Code": "123456"
       },
       "properties": {
         "AccessToken": {
+          "description": "Access token from login response",
           "type": "string"
         },
         "Code": {
+          "description": "Code from email",
           "type": "string"
         }
       },
@@ -774,6 +802,7 @@
       },
       "properties": {
         "Code": {
+          "description": "Code from SMS",
           "type": "string"
         }
       },
@@ -2422,7 +2451,7 @@
             "type": "string"
           },
           {
-            "description": "Pgp parameters",
+            "description": "Pgp (TBD) parameters",
             "in": "body",
             "name": "DeleteKeyReq",
             "required": true,
@@ -2479,7 +2508,7 @@
         ],
         "summary": "DeleteKey",
         "tags": [
-          "Pgp"
+          "Pgp (TBD)"
         ],
         "x-code-samples": [
           {
@@ -2563,7 +2592,7 @@
         ],
         "summary": "ListKeys",
         "tags": [
-          "Pgp"
+          "Pgp (TBD)"
         ],
         "x-code-samples": [
           {
@@ -2599,7 +2628,7 @@
             "type": "string"
           },
           {
-            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `Export` (exporting cert private key) or `Verification` (upload content authorization verification) in `PgpKeyPurpose`.",
+            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `Export` (exporting cert private key) or `Authorize` (upload content authorization verification) in `PgpKeyPurpose`.",
             "in": "body",
             "name": "UploadKeyReq",
             "required": true,
@@ -2656,7 +2685,7 @@
         ],
         "summary": "UploadKey",
         "tags": [
-          "Pgp"
+          "Pgp (TBD)"
         ],
         "x-code-samples": [
           {
