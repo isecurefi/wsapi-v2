@@ -1,7 +1,62 @@
 {
   "basePath": "/v2/",
   "definitions": {
-    "CertDescription": {
+    "AccountDescriptor": {
+      "example": {
+        "AdminMode": "registered",
+        "DataMode": "unregistered",
+        "Email": "dan.forsberg@isecure.fi",
+        "Name": "Dan Forsberg",
+        "Phone": "+358404835507",
+        "export": "allowed"
+      },
+      "properties": {
+        "AdminMode": {
+          "description": "`admin` mode status",
+          "enum": [
+            "registered",
+            "unregistered"
+          ],
+          "type": "string"
+        },
+        "DataMode": {
+          "description": "`data` mode status",
+          "enum": [
+            "registered",
+            "unregistered"
+          ],
+          "type": "string"
+        },
+        "Email": {
+          "description": "Email address as the account username",
+          "type": "string"
+        },
+        "Export": {
+          "description": "Status for certificate and private key export allowance. See ConfigCerts.",
+          "enum": [
+            "disabled",
+            "allowed"
+          ],
+          "type": "string"
+        },
+        "Name": {
+          "description": "Full name of registrant",
+          "type": "string"
+        },
+        "Phone": {
+          "description": "Phone number with country code and `+` in front",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Name",
+        "Email",
+        "Phone",
+        "Export"
+      ],
+      "type": "object"
+    },
+    "CertDescriptor": {
       "properties": {
         "CertName": {
           "description": "Certificate common name",
@@ -342,11 +397,35 @@
       ],
       "type": "object"
     },
+    "ListAccountsResp": {
+      "properties": {
+        "Accounts": {
+          "items": {
+            "$ref": "#/definitions/Account"
+          },
+          "type": "array"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Accounts"
+      ],
+      "type": "object"
+    },
     "ListCertsResp": {
       "properties": {
         "Certificates": {
           "items": {
-            "$ref": "#/definitions/CertDescription"
+            "$ref": "#/definitions/CertDescriptor"
           },
           "type": "array"
         },
@@ -2414,6 +2493,92 @@
         "summary": "DownloadFile",
         "tags": [
           "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/integrator/accounts": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "List accounts registered under the integrator's API key. Account that created the API key is authorized to call this. API implementation is to-be-done (TBD).",
+        "operationId": "ListAccounts",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation succesfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ListAccountsResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ListAccounts",
+        "tags": [
+          "Integrator (TBD)"
         ],
         "x-code-samples": [
           {
