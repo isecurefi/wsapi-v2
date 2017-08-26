@@ -135,7 +135,7 @@
     "EnrollCertReq": {
       "example": {
         "Code": "8642603384107437",
-        "Company": "...",
+        "Company": "ISECURE OY",
         "WsUserId": "...",
         "wstargetid": "..."
       },
@@ -252,7 +252,7 @@
     "ImportCertReq": {
       "example": {
         "Certificate": "...",
-        "Company": "...",
+        "Company": "ISECURE OY",
         "EncCertificate": "...",
         "EncPrivatekey": "...",
         "PrivateKey": "...",
@@ -474,7 +474,7 @@
     },
     "LoginReq": {
       "example": {
-        "ChResp": "...",
+        "ChResp": "ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e",
         "Encrypted": "..."
       },
       "properties": {
@@ -537,7 +537,7 @@
     },
     "PasswordResetReq": {
       "example": {
-        "ChResp": "...",
+        "ChResp": "ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e",
         "Code": "123456",
         "Encrypted": "..."
       },
