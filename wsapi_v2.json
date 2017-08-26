@@ -398,7 +398,7 @@
     },
     "ListAccountsResp": {
       "properties": {
-        "Accounts": {
+        "AccountDescriptors": {
           "description": "List of accounts under the API key",
           "items": {
             "$ref": "#/definitions/AccountDescriptor"
@@ -417,7 +417,7 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "Accounts"
+        "AccountDescriptors"
       ],
       "type": "object"
     },
