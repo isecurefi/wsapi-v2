@@ -57,6 +57,13 @@
       "type": "object"
     },
     "CertDescriptor": {
+      "example": {
+        "CertName": "",
+        "Expires": "",
+        "Issuer": "",
+        "PEM": "",
+        "Serial": ""
+      },
       "properties": {
         "CertName": {
           "description": "Certificate common name",
@@ -423,7 +430,7 @@
     },
     "ListCertsResp": {
       "properties": {
-        "Certificates": {
+        "Certs": {
           "description": "List of certificates",
           "items": {
             "$ref": "#/definitions/CertDescriptor"
@@ -442,7 +449,7 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "Certificates"
+        "Certs"
       ],
       "type": "object"
     },
