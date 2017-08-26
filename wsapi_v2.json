@@ -185,9 +185,6 @@
       ],
       "type": "object"
     },
-    "Empty": {
-      "type": "object"
-    },
     "EnrollCertReq": {
       "example": {
         "Code": "8642603384107437",
