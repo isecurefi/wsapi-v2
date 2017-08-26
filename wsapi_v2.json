@@ -58,11 +58,12 @@
     },
     "CertDescriptor": {
       "example": {
-        "CertName": "",
-        "Expires": "",
-        "Issuer": "",
-        "PEM": "",
-        "Serial": ""
+        "CertName": "osuuspankki_customer_signing_cert",
+        "Expires": "Oct 28 06:30:08 2017 GMT",
+        "Issuer": "CUSTOMER TEST OP-Pohjola WS CA",
+        "PEM": "-----BEGIN CERTIFICATE-----\nMIIF+DCCA+CgAwIBAgIDEaBdMA0GCS...x0t6Cnd5lyGKg=\n-----END CERTIFICATE-----",
+        "Serial": "11A05D",
+        "Subject": "1000038023"
       },
       "properties": {
         "CertName": {
