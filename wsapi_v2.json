@@ -19,6 +19,12 @@
           ],
           "type": "string"
         },
+        "Certs": {
+          "items": {
+            "$ref": "#/definitions/CertDescriptor"
+          },
+          "type": "array"
+        },
         "DataMode": {
           "description": "`data` mode status",
           "enum": [
@@ -52,7 +58,8 @@
         "Name",
         "Email",
         "Phone",
-        "Export"
+        "Export",
+        "Certs"
       ],
       "type": "object"
     },
@@ -406,7 +413,7 @@
     },
     "ListAccountsResp": {
       "properties": {
-        "AccountDescriptors": {
+        "Accounts": {
           "description": "List of accounts under the API key",
           "items": {
             "$ref": "#/definitions/AccountDescriptor"
@@ -425,7 +432,7 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "AccountDescriptors"
+        "Accounts"
       ],
       "type": "object"
     },
