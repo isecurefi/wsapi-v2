@@ -127,10 +127,10 @@
     },
     "ConfigCertsReq": {
       "example": {
-        "export": "disabled"
+        "Export": "disabled"
       },
       "properties": {
-        "export": {
+        "Export": {
           "description": "Set export to `disabled` to disallow certificate and private key pair exporting",
           "type": "string"
         }
@@ -1548,7 +1548,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Configure certificate usage parameters. Currently, only settable (permanent) parameter is `export`. Set it to `disable` for disallowing private key export.\n\n**NOTE**: When export is disabled it is permanent, it can not be re-enabled through the API (safety feature).",
+        "description": "Configure certificate usage parameters. Currently, only settable (permanent) parameter is `export`. Set it to `disabled` for disallowing private key export.\n\n**NOTE**: When export is disabled it is permanent, it can not be re-enabled through the API (safety feature).",
         "operationId": "ConfigCerts",
         "parameters": [
           {
@@ -2537,7 +2537,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List accounts registered under the integrator's API key. Account that created the API key is authorized to call this. API implementation is to-be-done (TBD).",
+        "description": "List accounts registered under the integrator's API key. Account that created the API key is authorized to call this.",
         "operationId": "ListAccounts",
         "parameters": [
           {
@@ -2596,7 +2596,7 @@
         ],
         "summary": "ListAccounts",
         "tags": [
-          "Integrator (TBD)"
+          "Integrator"
         ],
         "x-code-samples": [
           {
@@ -3273,7 +3273,7 @@
   "swagger": "2.0",
   "x-servers": [
     {
-      "description": "Development server",
+      "description": "Staging server",
       "url": "https://ws-api.test.isecure.fi/v2/"
     },
     {
