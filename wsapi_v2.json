@@ -204,8 +204,8 @@
       "example": {
         "Code": "8642603384107437",
         "Company": "ISECURE OY",
-        "WsUserId": "...",
-        "wstargetid": "..."
+        "WsTargetId": "...",
+        "WsUserId": "..."
       },
       "properties": {
         "Code": {
@@ -216,12 +216,12 @@
           "description": "Company name as registered with bank (e.g. full capital letters without Oy, see contract)",
           "type": "string"
         },
-        "WsUserId": {
-          "description": "WebServices channel user id as in contract with bank",
+        "WsTargetId": {
+          "description": "WebServices channel target id as in contract with bank",
           "type": "string"
         },
-        "wstargetid": {
-          "description": "WebServices channel target id as in contract with bank",
+        "WsUserId": {
+          "description": "WebServices channel user id as in contract with bank",
           "type": "string"
         }
       },
@@ -229,7 +229,7 @@
         "Code",
         "Company",
         "WsUserId",
-        "wstargetid"
+        "WsTargetId"
       ],
       "type": "object"
     },
@@ -938,7 +938,7 @@
     },
     "termsOfService": "https://www.isecure.fi/ws-api-terms",
     "title": "ISECure WS Channel API",
-    "version": "v2.3.0",
+    "version": "v2.3.1",
     "x-logo": {
       "backgroundColor": "#FFFFFF",
       "url": "https://www.isecure.fi/images/isecure-small-logo.png"
@@ -1030,7 +1030,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _code_ received to _email_ address for email address verification. Provide also _accesstoken_ received during login.",
+        "description": "Provide _Code_ received to _Email_ address for email address verification. Provide also _AccessToken_ received during login.",
         "operationId": "VerifyEmail",
         "parameters": [
           {
@@ -1290,7 +1290,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Set new _password_ for user with _email_. Provide received SMS _code_.\n\n**NOTE:** the password must be encrypted, see Register for more details.\n",
+        "description": "Set new _password_ for user with _Email_. Provide received SMS _Code_.\n\n**NOTE:** the password must be encrypted, see Register for more details.\n",
         "operationId": "PasswordReset",
         "parameters": [
           {
@@ -1381,7 +1381,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Confirm phone number for _email_ _mode_ user, with _code_ received via SMS.",
+        "description": "Confirm phone number for _Email_ _Mode_ user, with _Code_ received via SMS.",
         "operationId": "VerifyPhone",
         "parameters": [
           {
@@ -1940,7 +1940,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide WS-Channel user id, _wsuserid_, _wstargetid_, _company_, and PIN _code_ for _bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted on service side and never leaves from there. Certificates are automatically renewed when needed.",
+        "description": "Provide WS-Channel user id, _WsUserId_, _WsTargetId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted on service side and never leaves from there. Certificates are automatically renewed when needed.",
         "operationId": "EnrollCert",
         "parameters": [
           {
@@ -2040,7 +2040,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _wsuserid_, _wstargetid_, _company_, _privatekey_, and _certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n- **NOTE:** _enccertificate_ and _encprivatekey_ are for DanskeBank only.",
+        "description": "Provide _WsUserId_, _WsTargetId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n- **NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
         "operationId": "ImportCert",
         "parameters": [
           {
@@ -3099,7 +3099,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "After `getchallenge`, call `login` with _email_, _mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authroization), include the received _idtoken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n- **NOTE:** In case SMS _code_ is required, the call returns _session_.\n- **NOTE:** If _email_ has not been yet verified, successful login provides only _accesstoken_ that must be used to verify email address.\n",
+        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authroization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n- **NOTE:** In case SMS _Code_ is required, the call returns _Session_.\n- **NOTE:** If _Email_ has not been yet verified, successful login provides only _AccessToken_ that must be used to verify email address.\n",
         "operationId": "Login",
         "parameters": [
           {
@@ -3190,7 +3190,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Send SMS _code_ along with previously received _session_ token. If _email_ has not been yet verified, successful login provides only _accesstoken_ that must be used to verify email address. If email is already verified and the login succeeds, add the _idtoken_ from the login response as Authorization header in API requests requiring authorization (i.e. pass as parameter to client SDK API calls). _IdToken_ expires in _ExpiresIn_ seconds.",
+        "description": "Send SMS _Code_ along with previously received _Session_ token. If _Email_ has not been yet verified, successful login provides only _AccessToken_ that must be used to verify email address. If email is already verified and the login succeeds, add the _IdToken_ from the login response as Authorization header in API requests requiring authorization (i.e. pass as parameter to client SDK API calls). _IdToken_ expires in _ExpiresIn_ seconds.",
         "operationId": "LoginMFA",
         "parameters": [
           {
