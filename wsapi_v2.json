@@ -2645,7 +2645,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Delete PGP key. API implementation is to-be-done (TBD).",
+        "description": "Delete PGP key.",
         "operationId": "DeleteKey",
         "parameters": [
           {
@@ -2656,7 +2656,7 @@
             "type": "string"
           },
           {
-            "description": "Pgp (TBD) parameters",
+            "description": "Pgp parameters",
             "in": "body",
             "name": "DeleteKeyReq",
             "required": true,
@@ -2713,7 +2713,7 @@
         ],
         "summary": "DeleteKey",
         "tags": [
-          "Pgp (TBD)"
+          "Pgp"
         ],
         "x-code-samples": [
           {
@@ -2738,7 +2738,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "List PGP keys. API implementation is to-be-done (TBD).",
+        "description": "List PGP keys.",
         "operationId": "ListKeys",
         "parameters": [
           {
@@ -2797,7 +2797,7 @@
         ],
         "summary": "ListKeys",
         "tags": [
-          "Pgp (TBD)"
+          "Pgp"
         ],
         "x-code-samples": [
           {
@@ -2822,7 +2822,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Upload PGP key. API implementation is to-be-done (TBD).",
+        "description": "Upload PGP key.",
         "operationId": "UploadKey",
         "parameters": [
           {
@@ -2890,7 +2890,7 @@
         ],
         "summary": "UploadKey",
         "tags": [
-          "Pgp (TBD)"
+          "Pgp"
         ],
         "x-code-samples": [
           {
