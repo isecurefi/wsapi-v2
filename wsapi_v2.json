@@ -1,5 +1,5 @@
 {
-  "basePath": "/v2/",
+  "basePath": "/v2",
   "definitions": {
     "AccountDescriptor": {
       "example": {
@@ -661,11 +661,20 @@
     },
     "PgpKeyDescriptor": {
       "example": {
-        "PgpKeyId": "3A3A59B2"
+        "PgpKeyId": "3A3A59B2",
+        "PgpKeyPurpose": "authorize"
       },
       "properties": {
         "PgpKeyId": {
           "description": "Short version of a PGP Key id idenfiying the key, e.g. `3A3A59B2`",
+          "type": "string"
+        },
+        "PgpKeyPurpose": {
+          "description": "PGP Key purpose",
+          "enum": [
+            "export",
+            "authorize"
+          ],
           "type": "string"
         }
       },
@@ -826,28 +835,34 @@
     },
     "UploadFileReq": {
       "example": {
-        "Bank": "nordea",
         "FileContents": "...",
-        "FileType": "KTL"
+        "FileName": "testfile",
+        "FileType": "KTL",
+        "Signature": "string"
       },
       "properties": {
-        "Bank": {
-          "description": "Name of the bank",
-          "type": "string"
-        },
         "FileContents": {
           "description": "Base64 encoded file contents",
           "type": "string"
         },
+        "FileName": {
+          "description": "Upload file name",
+          "type": "string"
+        },
         "FileType": {
           "description": "Bank specific file type",
+          "type": "string"
+        },
+        "Signature": {
+          "description": "Detached PGP signature(s) made with registered PGP key(s)",
           "type": "string"
         }
       },
       "required": [
         "FileContents",
         "FileType",
-        "Bank"
+        "FileName",
+        "Signature"
       ],
       "type": "object"
     },
@@ -862,7 +877,7 @@
           "type": "string"
         },
         "PgpKeyPurpose": {
-          "description": "PGP key purpose, i.e. `Export` (exporting cert private key) or `Authorize` (upload content authorization verification).",
+          "description": "PGP key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification).",
           "type": "string"
         }
       },
@@ -1827,7 +1842,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Download bank certificate and private key encrypted with stored PGP key.\n\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `Export`. I.e. purpose type `Authorize` PGP keys can not be used for exporting.\n\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
+        "description": "Download bank certificate and private key encrypted with stored PGP key.\n\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `export`. I.e. purpose type `authorize` PGP keys can not be used for exporting.\n\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
         "operationId": "ExportCert",
         "parameters": [
           {
@@ -2230,7 +2245,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Uploads file to bank. _Filecontents_ is a _Base64_ encoded string parameter. _Filetype_ is bank specific.",
+        "description": "Uploads file to bank if PGP signature(s) are valid. _FileContents_ is a _Base64_ encoded string parameter. _FileType_ is bank specific. _Signature_ is detached PGP signature or concatenation of PGP detached signatures in ASCII armor format. PGP signatures are used for authorizing file uploads. Currently one valid PGP authorize registered key signature is enough. _FileName_ is upload filename.",
         "operationId": "UploadFile",
         "parameters": [
           {
@@ -2248,6 +2263,13 @@
             "schema": {
               "$ref": "#/definitions/UploadFileReq"
             }
+          },
+          {
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
           }
         ],
         "produces": [
@@ -2811,7 +2833,7 @@
             "type": "string"
           },
           {
-            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `Export` (exporting cert private key) or `Authorize` (upload content authorization verification) in `PgpKeyPurpose`.",
+            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification) in `PgpKeyPurpose`.\n\n**NOTE**: The same PGP key can not be used for both `export` and `authorize` purpose at the same time.",
             "in": "body",
             "name": "UploadKeyReq",
             "required": true,
