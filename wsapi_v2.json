@@ -217,7 +217,7 @@
           "type": "string"
         },
         "WsTargetId": {
-          "description": "WebServices channel target id as in contract with bank",
+          "description": "WebServices channel target id as in contract with bank. Mandatory for `nordea`, set it to `11111111A1`. For `osuuspankki` API side will set it to `MLP`. For Samlink banks (`shb`, `sp`, `aktia`, `pop`) and `spankki`, not used. For `danskebank` set it to `1`.",
           "type": "string"
         },
         "WsUserId": {
@@ -350,7 +350,7 @@
           "type": "string"
         },
         "WsTargetId": {
-          "description": "WebServices channel target id as in contract with bank",
+          "description": "WebServices channel target id as in contract with bank. Mandatory for `nordea`, set it to `11111111A1`. For `osuuspankki` API side will set it to `MLP`. For Samlink banks (`shb`, `sp`, `aktia`, `pop`) and `spankki`, not used. For `danskebank` set it to `1`.",
           "type": "string"
         },
         "WsUserId": {
