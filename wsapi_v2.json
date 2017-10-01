@@ -135,7 +135,9 @@
           "type": "string"
         }
       },
-      "required": [],
+      "required": [
+        "Export"
+      ],
       "type": "object"
     },
     "DeleteKeyReq": {
