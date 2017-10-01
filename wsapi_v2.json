@@ -3284,11 +3284,13 @@
   ],
   "securityDefinitions": {
     "Authorizer": {
+      "description": "Successful login provides `IdToken` that must be provided in the `Authorizer` header",
       "in": "header",
       "name": "Authorization",
       "type": "apiKey"
     },
     "X-Api-Key": {
+      "description": "Integrator specific API Key. For all integrator customers, the API key must be the same.",
       "in": "header",
       "name": "x-api-key",
       "type": "apiKey"
