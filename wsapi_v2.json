@@ -206,7 +206,6 @@
       "example": {
         "Code": "8642603384107437",
         "Company": "ISECURE OY",
-        "WsTargetId": "...",
         "WsUserId": "..."
       },
       "properties": {
@@ -218,10 +217,6 @@
           "description": "Company name as registered with bank (e.g. full capital letters without Oy, see contract)",
           "type": "string"
         },
-        "WsTargetId": {
-          "description": "WebServices channel target id as in contract with bank. Mandatory for `nordea`. For `osuuspankki` API side will set it to `MLP`. For Samlink banks (`shb`, `sp`, `aktia`, `pop`) and `spankki`, not used. For `danskebank` set it to `1`.",
-          "type": "string"
-        },
         "WsUserId": {
           "description": "WebServices channel user id as in contract with bank",
           "type": "string"
@@ -230,8 +225,7 @@
       "required": [
         "Code",
         "Company",
-        "WsUserId",
-        "WsTargetId"
+        "WsUserId"
       ],
       "type": "object"
     },
@@ -327,7 +321,6 @@
         "EncCertificate": "...",
         "EncPrivatekey": "...",
         "PrivateKey": "...",
-        "WsTargetId": "...",
         "WsUserId": "..."
       },
       "properties": {
@@ -351,10 +344,6 @@
           "description": "Private key in PEM format",
           "type": "string"
         },
-        "WsTargetId": {
-          "description": "WebServices channel target id as in contract with bank. Mandatory for `nordea`. For `osuuspankki` API side will set it to `MLP`. For Samlink banks (`shb`, `sp`, `aktia`, `pop`) and `spankki`, not used. For `danskebank` set it to `1`.",
-          "type": "string"
-        },
         "WsUserId": {
           "description": "WebServices channel user id as in contract with bank",
           "type": "string"
@@ -363,7 +352,6 @@
       "required": [
         "Company",
         "WsUserId",
-        "WsTargetId",
         "PrivateKey",
         "Certificate"
       ],
@@ -1855,7 +1843,7 @@
             "type": "string"
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, or `alandsbanken`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, or `alandsbanken`.",
             "in": "path",
             "name": "Bank",
             "required": true,
@@ -1942,7 +1930,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide WS-Channel user id, _WsUserId_, _WsTargetId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted on service side and never leaves from there. Certificates are automatically renewed when needed.",
+        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted on service side and never leaves from there. Certificates are automatically renewed when needed.",
         "operationId": "EnrollCert",
         "parameters": [
           {
@@ -1962,7 +1950,7 @@
             }
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, or `alandsbanken`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, or `alandsbanken`.",
             "in": "path",
             "name": "Bank",
             "required": true,
@@ -2042,7 +2030,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _WsUserId_, _WsTargetId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n- **NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
+        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n- **NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
         "operationId": "ImportCert",
         "parameters": [
           {
@@ -2062,7 +2050,7 @@
             }
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, or `alandsbanken`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, or `alandsbanken`.",
             "in": "path",
             "name": "Bank",
             "required": true,
@@ -2155,7 +2143,7 @@
             "type": "string"
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, `alandsbanken` or `SEB`.",
             "in": "path",
             "name": "Bank",
             "required": true,
@@ -2267,7 +2255,7 @@
             }
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, `alandsbanken` or `SEB`.",
             "in": "path",
             "name": "Bank",
             "required": true,
@@ -2360,7 +2348,7 @@
             "type": "string"
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, `alandsbanken` or `SEB`.",
             "in": "path",
             "name": "Bank",
             "required": true,
@@ -2465,7 +2453,7 @@
             "type": "string"
           },
           {
-            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `spankki`, `alandsbanken` or `SEB`.",
+            "description": "*Bank* used for this operation, can have values of `nordea`, `osuuspankki`, `danskebank`, `aktia`, `sp`, `shb`, `pop`, `spankki`, `alandsbanken` or `SEB`.",
             "in": "path",
             "name": "Bank",
             "required": true,
