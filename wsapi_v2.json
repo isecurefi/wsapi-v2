@@ -214,7 +214,7 @@
           "type": "string"
         },
         "Company": {
-          "description": "Company name as registered with bank (e.g. full capital letters without Oy, see contract)",
+          "description": "Company name as registered with bank (e.g. full capital letters, see contract). **NOTE**: The value of this field is not compared with the account company name set during registration because the format for cert enrollment differs between banks.",
           "type": "string"
         },
         "WsUserId": {
