@@ -2132,7 +2132,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific, see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n- **NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n- **NOTE:** The uploaded files do not show up on the file listing.",
+        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n- **NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n- **NOTE:** The uploaded files do not show up on the file listing.",
         "operationId": "ListFiles",
         "parameters": [
           {
