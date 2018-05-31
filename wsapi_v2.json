@@ -859,7 +859,7 @@
     "UploadKeyReq": {
       "example": {
         "PgpKey": "...",
-        "PgpKeyPurpose": "Authorize"
+        "PgpKeyPurpose": "authorize"
       },
       "properties": {
         "PgpKey": {
@@ -1020,7 +1020,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _Code_ received to _Email_ address for email address verification. Provide also _AccessToken_ received during login.",
+        "description": "Provide _Code_ received to _Email_ address for email address verification. Provide also _AccessToken_ received during login.\n\n- **NOTE**: Phone and EMail verification can be bypassed per API key on request. E.g. if integrator verifies EMail and Phone beforehand.",
         "operationId": "VerifyEmail",
         "parameters": [
           {
@@ -1371,7 +1371,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Confirm phone number for _Email_ _Mode_ user, with _Code_ received via SMS.",
+        "description": "Confirm phone number for _Email_ _Mode_ user, with _Code_ received via SMS.\n\n- **NOTE**: Phone and EMail verification can be bypassed per API key on request. E.g. if integrator verifies EMail and Phone beforehand.",
         "operationId": "VerifyPhone",
         "parameters": [
           {
