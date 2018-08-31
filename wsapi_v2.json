@@ -1020,7 +1020,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _Code_ received to _Email_ address for email address verification. Provide also _AccessToken_ received during login.\n\n- **NOTE**: _Phone_ and _EMail_ verification can be bypassed per API key on request to _dan.forsberg@isecure.fi_. E.g. if integrator verifies EMail and Phone beforehand.",
+        "description": "Provide _Code_ received to _Email_ address for email address verification. Provide also _AccessToken_ received during login.\n\n**NOTE**: _Phone_ and _EMail_ verification can be bypassed per API key on request to _dan.forsberg@isecure.fi_. E.g. if integrator verifies EMail and Phone beforehand.",
         "operationId": "VerifyEmail",
         "parameters": [
           {
@@ -1109,7 +1109,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "You need to register both *admin* and *data* accounts with the same email address. Both accounts share the same data, but are used for different purposes. *Admin* account must be registered first, then *data* account.\n\n*Admin* account is used to configure setup with **Certs** and **Pgp** operations, while the *data* account is used with **Files** operations only. Both accounts use **Account** and **Session** operations.\n\n*Admin* account always requires SMS MFA during login, whilst *data* account does not. Generally, the *data* account is considered *read-noly* when no PGP keys are configured, since PGP Keys are used to verify file upload signatures and are thus required to successfully upload files with **Files** *UploadFile* operation.\n\nRegistrations are independent for both accounts, *admin* and *data* and both require phone number and email verifications.\n\n`email` is the login username for both accounts and `mode` defines the selected &quot;mode&quot; for the login, i.e. *admin* or *data*.\n\nBefore registration client must fetch challenge from API (see Account InitRegister operation) and pass it back within the `ChResp` parameter.\n\nThe following parameters `name`, `phone`, and `company` are required and must be valid (`phone`, `email`) as they need to be confirmed before registration becomes successful and login possible.\n\nClient must RSA encrypt (OAEP padding) the _password_ and the challenge _timestamp_ as string in the form `password||timestamp`, base64 encode it and provide the resulting string as `Encrypted` parameter. The RSA encryption can be done e.g. for illustration purposes within command line with openssl rsautl:\n```\necho -n 'Toddler_..123456789012345||1475175151231' |\n\topenssl rsautl -oaep -encrypt -pubin -inkey server_rsa_public_key.pem |\n\tbase64\n\n```\n\nThe **test** API's RSA public key is as follows:\n\n```\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuSaoSZztGAIGDTY7Rff\npsBHJJT1k207UodOJbYFhHAq0lWJnvMPLl5Q1DUUZdTGtTdL8Dsaj/Bo2+gSykMM\nR5QiKewvQsLfvqjwOO8JDItnhJl0lUqcPpdQV4M/Ai3YNRjNcVy4a+pichqtSAWl\n9S1HV01MNeouk8PEr/zoUasmgfO3mz6N6XTUtF/tIi8K2kBOsLAtqltihFSd/zT8\nifYZE9cZTJ09lUs7kMz1wxFIsiegaE1jUYV+VSLu3PJ97oKhQpqop8EnkBAoBl6r\nmdmFryBQIdakPIdd4rO5Yg+to10n4u7Wij9ePIwWMfbqY4QoW5nXqMgFJQkIt4TG\neQIDAQAB\n-----END PUBLIC KEY-----\n\n```\n\nThe **production** API's RSA public key is as follows:\n\n```\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7wx4l7P3eLsaEyK7ZRME\ng5urEHwaEoY9LjkYcpMw9gmPIi3RoGjQX7HzPad2D7ES2yIGdmyxjN8R2LyFa8ke\nEE+VY3ISYzP2cOjd/zDkX01yjDXQLRxntXbtqIypGQAzmZbCyIB226ZKEE+ldh6M\nYyM41YWYikfocYssFEjY7fpPGeUg4FOmHmyWIZeMkXYovskoi1jZ1Ay1qn95XlpA\n/Ptru2efro4T1xksv4WBBrj8bMNwdDpf4oyzH2PKYkn3/KlNTBCHlAmzP0jd4pIa\nN0tAf2m8TcNq7kuBzyfs8AcCUj870p8SEiko0PMx6K+zVsTVWsxfUX+/+kmapmp/\nAwIDAQAB\n-----END PUBLIC KEY-----\n\n```\n\n\n\n- **NOTE:** Password must be at least 20 characters long, have lower and upper case letters, numbers, and special characters.\n- **NOTE:** Phone number must be provided with country code, e.g. `+358404982201`.",
+        "description": "You need to register both *admin* and *data* accounts with the same email address. Both accounts share the same data, but are used for different purposes. *Admin* account must be registered first, then *data* account.\n\n*Admin* account is used to configure setup with **Certs** and **Pgp** operations, while the *data* account is used with **Files** operations only. Both accounts use **Account** and **Session** operations.\n\n*Admin* account always requires SMS MFA during login, whilst *data* account does not. Generally, the *data* account is considered *read-noly* when no PGP keys are configured, since PGP Keys are used to verify file upload signatures and are thus required to successfully upload files with **Files** *UploadFile* operation.\n\nRegistrations are independent for both accounts, *admin* and *data* and both require phone number and email verifications.\n\n`email` is the login username for both accounts and `mode` defines the selected &quot;mode&quot; for the login, i.e. *admin* or *data*.\n\nBefore registration client must fetch challenge from API (see Account InitRegister operation) and pass it back within the `ChResp` parameter.\n\nThe following parameters `name`, `phone`, and `company` are required and must be valid (`phone`, `email`) as they need to be confirmed before registration becomes successful and login possible.\n\nClient must RSA encrypt (OAEP padding) the _password_ and the challenge _timestamp_ as string in the form `password||timestamp`, base64 encode it and provide the resulting string as `Encrypted` parameter. The RSA encryption can be done e.g. for illustration purposes within command line with openssl rsautl:\n```\necho -n 'Toddler_..123456789012345||1475175151231' |\n\topenssl rsautl -oaep -encrypt -pubin -inkey server_rsa_public_key.pem |\n\tbase64\n\n```\n\nThe **test** API's RSA public key is as follows:\n\n```\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuSaoSZztGAIGDTY7Rff\npsBHJJT1k207UodOJbYFhHAq0lWJnvMPLl5Q1DUUZdTGtTdL8Dsaj/Bo2+gSykMM\nR5QiKewvQsLfvqjwOO8JDItnhJl0lUqcPpdQV4M/Ai3YNRjNcVy4a+pichqtSAWl\n9S1HV01MNeouk8PEr/zoUasmgfO3mz6N6XTUtF/tIi8K2kBOsLAtqltihFSd/zT8\nifYZE9cZTJ09lUs7kMz1wxFIsiegaE1jUYV+VSLu3PJ97oKhQpqop8EnkBAoBl6r\nmdmFryBQIdakPIdd4rO5Yg+to10n4u7Wij9ePIwWMfbqY4QoW5nXqMgFJQkIt4TG\neQIDAQAB\n-----END PUBLIC KEY-----\n\n```\n\nThe **production** API's RSA public key is as follows:\n\n```\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7wx4l7P3eLsaEyK7ZRME\ng5urEHwaEoY9LjkYcpMw9gmPIi3RoGjQX7HzPad2D7ES2yIGdmyxjN8R2LyFa8ke\nEE+VY3ISYzP2cOjd/zDkX01yjDXQLRxntXbtqIypGQAzmZbCyIB226ZKEE+ldh6M\nYyM41YWYikfocYssFEjY7fpPGeUg4FOmHmyWIZeMkXYovskoi1jZ1Ay1qn95XlpA\n/Ptru2efro4T1xksv4WBBrj8bMNwdDpf4oyzH2PKYkn3/KlNTBCHlAmzP0jd4pIa\nN0tAf2m8TcNq7kuBzyfs8AcCUj870p8SEiko0PMx6K+zVsTVWsxfUX+/+kmapmp/\nAwIDAQAB\n-----END PUBLIC KEY-----\n\n```\n\n\n\n**NOTE:** Password must be at least 20 characters long, have lower and upper case letters, numbers, and special characters.\n**NOTE:** Phone number must be provided with country code, e.g. `+358404982201`.",
         "operationId": "Register",
         "parameters": [
           {
@@ -1371,7 +1371,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Confirm phone number for _Email_ _Mode_ user, with _Code_ received via SMS.\n\n- **NOTE**: _Phone_ and _EMail_ verification can be bypassed per API key on request to _dan.forsberg@isecure.fi_. E.g. if integrator verifies EMail and Phone beforehand.",
+        "description": "Confirm phone number for _Email_ _Mode_ user, with _Code_ received via SMS.\n\n**NOTE**: _Phone_ and _EMail_ verification can be bypassed per API key on request to _dan.forsberg@isecure.fi_. E.g. if integrator verifies EMail and Phone beforehand.",
         "operationId": "VerifyPhone",
         "parameters": [
           {
@@ -1930,7 +1930,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted with AWS KMS encrypted authentication on API side. Certificates are automatically renewed when needed.",
+        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted with AWS KMS encrypted authentication on API side. Certificates are automatically renewed when needed.\n\n**NOTE:** For OP bank, ensure that you set the PIN code blocks 1 and 2 in correct order. If not initially in correct order, bank will lock the registration and you need to call them for unlock..",
         "operationId": "EnrollCert",
         "parameters": [
           {
@@ -2030,7 +2030,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n- **NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
+        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n**NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
         "operationId": "ImportCert",
         "parameters": [
           {
@@ -2132,7 +2132,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n- **NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n- **NOTE:** The uploaded files do not show up on the file listing.",
+        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n**NOTE:** The uploaded files do not show up on the file listing.",
         "operationId": "ListFiles",
         "parameters": [
           {
@@ -2907,7 +2907,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Logout user.\n\n- **NOTE**: AWS Cognito allows user logout, but the received authorization _IdToken_ **is still valid**. AWS hopefully fixes this soon.",
+        "description": "Logout user.\n\n**NOTE**: AWS Cognito allows user logout, but the received authorization _IdToken_ **is still valid**. AWS hopefully fixes this soon.",
         "operationId": "Logout",
         "parameters": [
           {
@@ -3089,7 +3089,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authroization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n- **NOTE:** In case SMS _Code_ is required, the call returns _Session_.\n- **NOTE:** If _Email_ has not been yet verified, successful login provides only _AccessToken_ that must be used to verify email address.\n",
+        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authroization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n**NOTE:** In case SMS _Code_ is required, the call returns _Session_.\n**NOTE:** If _Email_ has not been yet verified, successful login provides only _AccessToken_ that must be used to verify email address.\n",
         "operationId": "Login",
         "parameters": [
           {
