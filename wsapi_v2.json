@@ -1930,7 +1930,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted with AWS KMS encrypted authentication on API side. Certificates are automatically renewed when needed.\n\n**NOTE:** For OP bank, ensure that you set the PIN code blocks 1 and 2 in correct order. If not initially in correct order, bank will lock the registration and you need to call them for unlock..",
+        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted with AWS KMS encrypted authentication on API side. Certificates are automatically renewed when needed.\n\n**NOTE:** For OP bank, ensure that you set the PIN code blocks 1 and 2 in correct order. If not initially in correct order, bank will lock the registration and you need to call them for unlock.",
         "operationId": "EnrollCert",
         "parameters": [
           {
