@@ -960,11 +960,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/InitRegisterResp"
             }
@@ -1049,11 +1044,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1138,11 +1128,6 @@
         "responses": {
           "201": {
             "description": "Operation succesfully processed. Resource created. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/RegisterResp"
             }
@@ -1217,11 +1202,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1306,11 +1286,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1404,11 +1379,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1472,11 +1442,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/ListCertsResp"
             }
@@ -1565,11 +1530,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1655,11 +1615,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/UnshareCertsResp"
             }
@@ -1746,11 +1701,6 @@
         "responses": {
           "201": {
             "description": "Operation succesfully processed. Resource created. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/ShareCertsResp"
             }
@@ -1843,11 +1793,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/ExportCertResp"
             }
@@ -1943,11 +1888,6 @@
         "responses": {
           "201": {
             "description": "Operation succesfully processed. Resource created. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2043,11 +1983,6 @@
         "responses": {
           "201": {
             "description": "Operation succesfully processed. Resource created. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2145,11 +2080,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/ListFilesResp"
             }
@@ -2245,11 +2175,6 @@
         "responses": {
           "201": {
             "description": "Operation succesfully processed. Resource created. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2349,11 +2274,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2451,11 +2371,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/DownloadFileResp"
             }
@@ -2534,11 +2449,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/ListAccountsResp"
             }
@@ -2626,11 +2536,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/DeleteKeyResp"
             }
@@ -2707,11 +2612,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/ListKeysResp"
             }
@@ -2800,11 +2700,6 @@
         "responses": {
           "201": {
             "description": "Operation succesfully processed. Resource created. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2901,11 +2796,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2993,11 +2883,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/InitLoginResp"
             }
@@ -3082,11 +2967,23 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
+            "examples": [
+              {
+                "LoginWithMFA": {
+                  "ResponseCode": "string",
+                  "ResponseText": "string",
+                  "Session": "string"
+                },
+                "LoginWithouMFA": {
+                  "AccessToken": "string",
+                  "ApiKey": "string",
+                  "ExpiresIn": "string",
+                  "IdToken": "string",
+                  "ResponseCode": "string",
+                  "ResponseText": "string"
+                }
               }
-            },
+            ],
             "schema": {
               "$ref": "#/definitions/LoginResp"
             }
@@ -3173,11 +3070,6 @@
         "responses": {
           "200": {
             "description": "Operation succesfully processed. See response.",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              }
-            },
             "schema": {
               "$ref": "#/definitions/LoginMFAResp"
             }
