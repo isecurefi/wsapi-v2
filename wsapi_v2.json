@@ -1498,9 +1498,16 @@
         "operationId": "ListCerts",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           }
@@ -1577,9 +1584,16 @@
         "operationId": "ConfigCerts",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -1664,9 +1678,16 @@
         "operationId": "UnshareCerts",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -1750,9 +1771,16 @@
         "operationId": "ShareCerts",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -1835,9 +1863,16 @@
         "operationId": "ExportCert",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -1928,9 +1963,16 @@
         "operationId": "EnrollCert",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2023,9 +2065,16 @@
         "operationId": "ImportCert",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2113,13 +2162,20 @@
     },
     "/files/{Bank}": {
       "get": {
-        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n**NOTE:** The uploaded files do not show up on the file listing.",
+        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n**NOTE:** The uploaded files do not show up on the file listing.\n\n```curl -s -H &quot;Authorization: $IDTOKEN&quot; -H &quot;x-api-key: $APIKEY&quot; https://ws-api.isecure.fi/v2/files/danskebank```",
         "operationId": "ListFiles",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2215,9 +2271,16 @@
         "operationId": "UploadFile",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2309,9 +2372,16 @@
         "operationId": "DeleteFile",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2406,9 +2476,16 @@
         "operationId": "DownloadFile",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2505,9 +2582,16 @@
         "operationId": "ListAccounts",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           }
@@ -2583,9 +2667,16 @@
         "operationId": "DeleteKey",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2668,9 +2759,16 @@
         "operationId": "ListKeys",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           }
@@ -2747,9 +2845,16 @@
         "operationId": "UploadKey",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
@@ -2834,9 +2939,16 @@
         "operationId": "Logout",
         "parameters": [
           {
-            "description": "Use _IdToken_ from the Login response as the Authorization header",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
             "in": "header",
             "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
             "required": true,
             "type": "string"
           },
