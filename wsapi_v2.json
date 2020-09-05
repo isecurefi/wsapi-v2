@@ -2162,7 +2162,7 @@
     },
     "/files/{Bank}": {
       "get": {
-        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n**NOTE:** The uploaded files do not show up on the file listing.\n\n```\ncurl -s -H Authorization:$IDTOKEN \n    -H x-api-key:$APIKEY \n    https://ws-api.isecure.fi/v2/files/danskebank\n```",
+        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n**NOTE:** The uploaded files do not show up on the file listing.\n\n```\ncurl -s -H Authorization:$IDTOKEN \n     -H x-api-key:$APIKEY \n     https://ws-api.isecure.fi/v2/files/danskebank\n```",
         "operationId": "ListFiles",
         "parameters": [
           {
