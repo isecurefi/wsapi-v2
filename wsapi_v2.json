@@ -3036,7 +3036,7 @@
         ]
       },
       "get": {
-        "description": "Before login, client must fetch `challenge` from the API. Then on login, the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with login. The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n",
+        "description": "Before login, client must fetch `challenge` from the API. Then on login, the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with login. The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n\n```\n% CHALLENGE=`curl -s https://ws-api.test.isecure.fi/v2/session/dan.forsberg@isecure.fi/data | jq -r &#x27;.Challenge&#x27;`\n%  TIMESTAMP=`echo $CHALLENGE | cut -f 2 -d &#x27;|&#x27;`\n% ENCRYPTED=`echo -n testPassword..123455677098811\\|\\|$TIMESTAMP | openssl rsautl -oaep -encrypt -pubin -inkey server_rsa_public_key.pem | base64```",
         "operationId": "InitLogin",
         "parameters": [
           {
