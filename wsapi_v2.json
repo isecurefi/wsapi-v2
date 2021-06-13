@@ -679,7 +679,6 @@
           "type": "string"
         }
       },
-      "required": [],
       "type": "object"
     },
     "PasswordResetReq": {
