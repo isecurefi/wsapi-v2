@@ -1,5 +1,5 @@
 {
-  "basePath": "/v2",
+  "basePath": "/dev",
   "definitions": {
     "AccountDescriptor": {
       "example": {
