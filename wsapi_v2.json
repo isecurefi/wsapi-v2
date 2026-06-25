@@ -199,7 +199,7 @@
           "type": "string"
         },
         "WsUserId": {
-          "description": "*SEPA WebService*s channel user id as in contract with bank",
+          "description": "*SEPA WebServices* channel user id as in contract with bank",
           "type": "string"
         }
       },
@@ -331,7 +331,7 @@
           "type": "string"
         },
         "WsUserId": {
-          "description": "*SEPA WebService*s channel user id as in contract with bank",
+          "description": "*SEPA WebServices* channel user id as in contract with bank",
           "type": "string"
         }
       },
@@ -554,7 +554,7 @@
         "ApiKey": "4vN6hGHrav31smM0Ha1k15MDlZKOEGn43UToWTt2",
         "ExpiresIn": "3600",
         "IdToken": "eyJraWQiOiJ...jExlzbFU4GlGtml7AWQHDYi05IpA",
-        "OtpauthUri": "otpauth://totp/ISECure:dan.forsberg@isecure.fi?secret=JBSWY3DPEHPK3PXP&issuer=ISECure",
+        "OtpauthUri": "otpauth://totp/ISECure:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=ISECure",
         "ResponseCode": "..",
         "ResponseText": "..",
         "SecretCode": "JBSWY3DPEHPK3PXP"
@@ -705,7 +705,7 @@
       },
       "properties": {
         "PgpKeyId": {
-          "description": "Short version of a PGP Key id idenfiying the key, e.g. `3A3A59B2`",
+          "description": "Short version of a PGP Key id identifying the key, e.g. `3A3A59B2`",
           "type": "string"
         },
         "PgpKeyPurpose": {
@@ -1028,7 +1028,7 @@
         "operationId": "InitRegister",
         "parameters": [
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -1079,15 +1079,15 @@
         "x-code-samples": [
           {
             "lang": "cURL",
-            "source": "curl -H 'Content-Type: application/json' https://ws-api.isecure.fi/v2/account/dan.forsberg%40isecure.fi/admin"
+            "source": "curl -H 'Content-Type: application/json' https://ws-api.isecure.fi/v2/account/user%40example.com/admin"
           },
           {
             "lang": "PHP",
-            "source": "$config = new Swagger\\\\Client\\\\Configuration();\\n$api = new Swagger\\\\Client\\\\Api\\\\AccountApi(new Swagger\\\\Client\\\\apiClient($config));\\n$api->InitRegister(\\\"dan.forsberg@isecure.fi\\\", \\\"admin\\\");"
+            "source": "$config = new Swagger\\\\Client\\\\Configuration();\\n$api = new Swagger\\\\Client\\\\Api\\\\AccountApi(new Swagger\\\\Client\\\\apiClient($config));\\n$api->InitRegister(\\\"user@example.com\\\", \\\"admin\\\");"
           },
           {
             "lang": "C#",
-            "source": "InitRegisterResp r = account.InitRegister(\\\"dan.forsberg@isecure.fi\\\", \\\"admin\\\");\\nreturn r.Challenge;"
+            "source": "InitRegisterResp r = account.InitRegister(\\\"user@example.com\\\", \\\"admin\\\");\\nreturn r.Challenge;"
           },
           {
             "lang": "Javascript",
@@ -1112,7 +1112,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -1196,7 +1196,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -1270,7 +1270,7 @@
         "operationId": "InitPasswordReset",
         "parameters": [
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -1354,7 +1354,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -1440,7 +1440,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -1882,7 +1882,7 @@
     },
     "/certs/{Bank}": {
       "get": {
-        "description": "Download bank certificate and private key encrypted with stored PGP key.\\n\\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `export`. I.e. purpose type `authorize` PGP keys can not be used for exporting.\\n\\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
+        "description": "Download bank certificate and private key encrypted with stored PGP key.\\n\\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `export`. I.e. purpose type `authorize` PGP keys cannot be used for exporting.\\n\\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
         "operationId": "ExportCert",
         "parameters": [
           {
@@ -1907,7 +1907,7 @@
             "type": "string"
           },
           {
-            "description": "Short version of a PGP Key id idenfiying the exported Private Key, e.g. `3A3A59B2`",
+            "description": "Short version of a PGP Key id identifying the exported Private Key, e.g. `3A3A59B2`",
             "in": "query",
             "name": "PgpKeyId",
             "required": true,
@@ -2084,7 +2084,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\\n\\n**NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
+        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\\n\\n**NOTE:** _EncCertificate_ and _EncPrivatekey_ are for DanskeBank only.",
         "operationId": "ImportCert",
         "parameters": [
           {
@@ -2185,7 +2185,7 @@
     },
     "/files/{Bank}": {
       "get": {
-        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\\n\\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\\n\\n**NOTE:** The uploaded files do not show up on the file listing.\\n\\n```\\n% export SESSION=~/.wscli/settings.yaml\\n% wscli session login -c $SESSION\\n%\\n% curl -H Authorization:`yq -r .settings.idtoken $SESSION` \\\\ \\n       -H x-api-key:`yq -r .settings.apikey $SESSION` \\\\ \\n       https://ws-api.isecure.fi/v2/files/danskebank\\n```",
+        "description": "Ask the selected _Bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _FileType_ is bank specific (`ALL` is not accepted); see the bank specification. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded, or uploaded.\n\n**NOTE:** Uploaded files do not show up in the bank file listing.\n\n~~~sh\nexport SESSION=~/.wscli/settings.yaml\nwscli session login -c $SESSION\n\ncurl -H Authorization:$(yq -r .settings.idtoken $SESSION) \\\n     -H x-api-key:$(yq -r .settings.apikey $SESSION) \\\n     https://ws-api.isecure.fi/v2/files/danskebank\n~~~",
         "operationId": "ListFiles",
         "parameters": [
           {
@@ -2882,7 +2882,7 @@
             "type": "string"
           },
           {
-            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification) in `PgpKeyPurpose`.\\n\\n**NOTE**: The same PGP key can not be used for both `export` and `authorize` purpose at the same time.",
+            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification) in `PgpKeyPurpose`.\\n\\n**NOTE**: The same PGP key cannot be used for both `export` and `authorize` purpose at the same time.",
             "in": "body",
             "name": "UploadKeyReq",
             "required": true,
@@ -2976,7 +2976,7 @@
             "type": "string"
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -3063,7 +3063,7 @@
         "operationId": "InitLogin",
         "parameters": [
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -3134,7 +3134,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authorization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\\n\\n**NOTE:** In case MFA _Code_ is required, the call returns _Session_, _ChallengeName_, _ResponseCode_, and _ResponseText_ as the login process continues with the _LoginMFA_ API call. Echo _ChallengeName_ back to `LoginMFA` so the API can distinguish SMS (`SMS_MFA`) from authenticator/TOTP (`SOFTWARE_TOKEN_MFA`) codes.\\n\\n**NOTE:** If _Email_ has not been yet verified, successful login provides only _ResponseCode_, _ResponseText_, and an _AccessToken_ that must be used to verify email address.\\n\\n\\n```\\n% CHALLENGE=`curl -s https://ws-api.isecure.fi/v2/session/dan.forsberg@isecure.fi/data | jq -r .Challenge`\\n% TIMESTAMP=`echo $CHALLENGE | cut -f 2 -d \\\\|`\\n% ENCRYPTED=`echo -n testPassword..123455677098811\\\\|\\\\|$TIMESTAMP | openssl rsautl -oaep -encrypt -pubin -inkey prod.pem | base64\\n```",
+        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authorization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n**NOTE:** In case MFA _Code_ is required, the call returns _Session_, _ChallengeName_, _ResponseCode_, and _ResponseText_ as the login process continues with the _LoginMFA_ API call. Echo _ChallengeName_ back to `LoginMFA` so the API can distinguish SMS (`SMS_MFA`) from authenticator/TOTP (`SOFTWARE_TOKEN_MFA`) codes.\n\n**NOTE:** If _Email_ has not been yet verified, successful login provides only _ResponseCode_, _ResponseText_, and an _AccessToken_ that must be used to verify email address.\n\n~~~sh\nCHALLENGE=$(curl -s https://ws-api.isecure.fi/v2/session/user@example.com/data | jq -r .Challenge)\nTIMESTAMP=$(echo $CHALLENGE | cut -f 2 -d \\|)\nENCRYPTED=$(echo -n testPassword..123455677098811\\|\\|$TIMESTAMP | openssl rsautl -oaep -encrypt -pubin -inkey prod.pem | base64)\n~~~",
         "operationId": "Login",
         "parameters": [
           {
@@ -3147,7 +3147,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -3233,7 +3233,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
@@ -3319,7 +3319,7 @@
             }
           },
           {
-            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "description": "Email address as the account username, e.g. `user@example.com`",
             "in": "path",
             "name": "Email",
             "required": true,
