@@ -4,11 +4,12 @@
     "AccountDescriptor": {
       "example": {
         "AdminMode": "registered",
+        "Certs": [],
         "DataMode": "unregistered",
         "Email": "dan.forsberg@isecure.fi",
+        "Export": "allowed",
         "Name": "Dan Forsberg",
-        "Phone": "+358404835507",
-        "export": "allowed"
+        "Phone": "+358404835507"
       },
       "properties": {
         "AdminMode": {
@@ -155,35 +156,6 @@
       ],
       "type": "object"
     },
-    "DeleteKeyResp": {
-      "example": {
-        "ResponseCode": "..",
-        "ResponseText": ".."
-      },
-      "properties": {
-        "PgpKeys": {
-          "description": "List of PGP keys in API",
-          "items": {
-            "$ref": "#/definitions/PgpKeyDescriptor"
-          },
-          "type": "array"
-        },
-        "ResponseCode": {
-          "description": "Two digit response code in string format",
-          "type": "string"
-        },
-        "ResponseText": {
-          "description": "Human readable response text",
-          "type": "string"
-        }
-      },
-      "required": [
-        "ResponseCode",
-        "ResponseText",
-        "PgpKeys"
-      ],
-      "type": "object"
-    },
     "DownloadFileResp": {
       "example": {
         "Content": "xxxxxxxx",
@@ -257,6 +229,7 @@
     },
     "ExportCertResp": {
       "example": {
+        "CertsAndKeys": [],
         "ResponseCode": "..",
         "ResponseText": ".."
       },
@@ -426,6 +399,7 @@
     },
     "ListAccountsResp": {
       "example": {
+        "Accounts": [],
         "ResponseCode": "..",
         "ResponseText": ".."
       },
@@ -455,6 +429,7 @@
     },
     "ListCertsResp": {
       "example": {
+        "Certs": [],
         "ResponseCode": "..",
         "ResponseText": ".."
       },
@@ -484,6 +459,7 @@
     },
     "ListFilesResp": {
       "example": {
+        "FileDescriptors": [],
         "ResponseCode": "..",
         "ResponseText": ".."
       },
@@ -513,6 +489,7 @@
     },
     "ListKeysResp": {
       "example": {
+        "PgpKeys": [],
         "ResponseCode": "..",
         "ResponseText": ".."
       },
@@ -542,16 +519,26 @@
     },
     "LoginMFAReq": {
       "example": {
+        "ChallengeName": "SMS_MFA",
         "Code": "123456",
-        "Session": "..."
+        "Session": "...",
+        "SetupTOTP": "false"
       },
       "properties": {
+        "ChallengeName": {
+          "description": "Echo the `ChallengeName` returned by the login response (`SMS_MFA` or `SOFTWARE_TOKEN_MFA`). Optional; defaults to `SMS_MFA` when omitted",
+          "type": "string"
+        },
         "Code": {
-          "description": "Code from SMS",
+          "description": "MFA code: SMS code (when ChallengeName is `SMS_MFA`) or authenticator/TOTP code (when `SOFTWARE_TOKEN_MFA`)",
           "type": "string"
         },
         "Session": {
           "description": "Session token from login response",
+          "type": "string"
+        },
+        "SetupTOTP": {
+          "description": "When `true`, a successful login also returns `SecretCode`, `OtpauthUri`, and `AccessToken` to begin Google Authenticator (TOTP) enrollment. Optional",
           "type": "string"
         }
       },
@@ -567,24 +554,30 @@
         "ApiKey": "4vN6hGHrav31smM0Ha1k15MDlZKOEGn43UToWTt2",
         "ExpiresIn": "3600",
         "IdToken": "eyJraWQiOiJ...jExlzbFU4GlGtml7AWQHDYi05IpA",
+        "OtpauthUri": "otpauth://totp/ISECure:dan.forsberg@isecure.fi?secret=JBSWY3DPEHPK3PXP&issuer=ISECure",
         "ResponseCode": "..",
-        "ResponseText": ".."
+        "ResponseText": "..",
+        "SecretCode": "JBSWY3DPEHPK3PXP"
       },
       "properties": {
         "AccessToken": {
-          "description": "Access token\n- **Only** present when Email verification is required",
+          "description": "Access token\\n- **Only** present when Email verification is required, or when `SetupTOTP` was requested (held by the client in memory only, posted back to `VerifyTOTP`)",
           "type": "string"
         },
         "ApiKey": {
-          "description": "Integrator API Key\n- **Not** present when Email verification is required",
+          "description": "Integrator API Key\\n- **Not** present when Email verification is required",
           "type": "string"
         },
         "ExpiresIn": {
-          "description": "Session expiration time\n- **Not** present when Email verification is required",
+          "description": "Session expiration time\\n- **Not** present when Email verification is required",
           "type": "string"
         },
         "IdToken": {
-          "description": "ID token\n- **Not** present when Email verification is required",
+          "description": "ID token\\n- **Not** present when Email verification is required",
+          "type": "string"
+        },
+        "OtpauthUri": {
+          "description": "`otpauth://` URI for rendering the enrollment QR code\\n- **Only** present when `SetupTOTP` was requested",
           "type": "string"
         },
         "ResponseCode": {
@@ -593,6 +586,10 @@
         },
         "ResponseText": {
           "description": "Human readable response text",
+          "type": "string"
+        },
+        "SecretCode": {
+          "description": "TOTP shared secret\\n- **Only** present when `SetupTOTP` was requested",
           "type": "string"
         }
       },
@@ -627,6 +624,7 @@
       "example": {
         "AccessToken": "eyJraWQiO...CzzcdcdAdEzKIcJPR7Fda0A",
         "ApiKey": "4vN6hGHrav31smM0Ha1k15MDlZKOEGn43UToWTt2",
+        "ChallengeName": "SOFTWARE_TOKEN_MFA",
         "ExpiresIn": "3600",
         "IdToken": "eyJraWQiOiJ...jExlzbFU4GlGtml7AWQHDYi05IpA",
         "ResponseCode": "..",
@@ -635,19 +633,23 @@
       },
       "properties": {
         "AccessToken": {
-          "description": "Access token\n- **Not** present on MFA login initiation, i.e. `admin` mode\n- **Only** present when Email verification is required",
+          "description": "Access token\\n- **Not** present on MFA login initiation, i.e. `admin` mode\\n- **Only** present when Email verification is required",
           "type": "string"
         },
         "ApiKey": {
-          "description": "Integrator API Key\n- **Not** present on MFA login initiation, i.e. `admin` mode)",
+          "description": "Integrator API Key\\n- **Not** present on MFA login initiation, i.e. `admin` mode)",
+          "type": "string"
+        },
+        "ChallengeName": {
+          "description": "MFA challenge returned by Cognito\\n- **Only** present on MFA login initiation (`SMS_MFA` or `SOFTWARE_TOKEN_MFA`)",
           "type": "string"
         },
         "ExpiresIn": {
-          "description": "Session expiration time\n- **Not** present on MFA login initiation, i.e. `admin` mode)",
+          "description": "Session expiration time\\n- **Not** present on MFA login initiation, i.e. `admin` mode)",
           "type": "string"
         },
         "IdToken": {
-          "description": "ID token\n- **Not** present on MFA login initiation, i.e. `admin` mode",
+          "description": "ID token\\n- **Not** present on MFA login initiation, i.e. `admin` mode",
           "type": "string"
         },
         "ResponseCode": {
@@ -659,7 +661,7 @@
           "type": "string"
         },
         "Session": {
-          "description": "Session token\n- **Only** present on MFA login initiation, i.e. `admin` mode)",
+          "description": "Session token\\n- **Only** present on MFA login initiation, i.e. `admin` mode)",
           "type": "string"
         }
       },
@@ -813,8 +815,8 @@
       "example": {
         "ResponseCode": "..",
         "ResponseText": "..",
-        "SharedFrom": "string",
-        "SharedTo": "string"
+        "SharedFrom": [],
+        "SharedTo": []
       },
       "properties": {
         "ResponseCode": {
@@ -852,8 +854,8 @@
       "example": {
         "ResponseCode": "..",
         "ResponseText": "..",
-        "SharedFrom": "string",
-        "SharedTo": "string"
+        "SharedFrom": [],
+        "SharedTo": []
       },
       "properties": {
         "ResponseCode": {
@@ -976,23 +978,44 @@
         "Code"
       ],
       "type": "object"
+    },
+    "VerifyTOTPReq": {
+      "example": {
+        "AccessToken": "eyJraWQiO...CzzcdcdAdEzKIcJPR7Fda0A",
+        "Code": "123456"
+      },
+      "properties": {
+        "AccessToken": {
+          "description": "AccessToken returned by `LoginMFA` when `SetupTOTP` was requested (held by the client in memory only)",
+          "type": "string"
+        },
+        "Code": {
+          "description": "6-digit code from the authenticator app",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Code",
+        "AccessToken"
+      ],
+      "type": "object"
     }
   },
-  "host": "ws-api.test.isecure.fi",
+  "host": "ws-api.isecure.fi",
   "info": {
     "contact": {
       "email": "dan.forsberg@isecure.fi",
       "name": "ISECure Oy",
       "url": "https://www.isecure.fi/"
     },
-    "description": "The API provides secure file exchange with all common banks in Finland via *SEPA WebServices* channel on the API side towards the banks, including certificate enrollment (PKI) with automatic renewals.\n\nThe API specification in OpenAPI v2 format can be found on GitHub [isecurefi/wsapi-v2](https://github.com/isecurefi/wsapi-v2). Command line CLI and beefed-up PHP SDK are also available on GitHub [isecurefi/wscli-php](https://github.com/isecurefi/wscli-php).\n\n```\n% export SESSION=~/.wscli/settings.yaml\n% wscli session login -c $SESSION\n% export APIKEY=`yq -r .settings.apikey $SESSION`\n% export IDTOKEN=`yq -r .settings.idtoken $SESSION`\n%\n% curl -H Authorization:$IDTOKEN \\ \n       -H x-api-key:$APIKEY \\ \n       https://ws-api.isecure.fi/v2/files/danskebank\n```\n\nAPI provides simple role based access control (RBAC) and user account management, password recovery, and SMS based Multi Factor Authentication based on AWS Cognito Your User Pool managed service.\n\n*NOTE: The API endpoint for production is the same as for test, but without `test.` in the URL. Production and test APIs are deployd on separate AWS accounts*.\n\n*NOTE: The API is run on AWS API Gateway and with AWS Lambda backend. When Lambda functions are cold, there is a small delay in response time. Additionally, banks have considerable delays in their processings, especially with certificate enrollments.*\n\n### Service enrollment\n\nEvery integrator (partner) has own *API Key* and every user account belongs to one integrator. *API Key* is bound with service subscription. In other words, enrolling fresh *API Key* requires service agreement before file transfers are allowed on production accounts.\n\nIf user registers with `0` *API Key* (i.e. no *API Key*) she gets a fresh *API Key* and becomes the *API Key* owner. The *API Key* owner account can list all users under the same *API Key*, see the *Integrator API*. Integrators (partners) registers their own *API Key* owner accounts and use it to register their client accounts.\n\n*NOTE: API call rate limits are set and tracked per API Key by AWS API Gateway*.\n\n### Account management\n\nA user (email address) can register either *admin* or *data* or both roles. The role in the API is referred to as *mode*. Both modes have separate passwords and provide differing capabilities for the user.\n\nLogin always requires account mode parameter in addition to user's email address and password. *Admin* mode login always requires an additional SMS one-time-password (MFA), whilst with *data* mode password is enough (suitable for automation). *Admin* mode is used to configure the account (e.g. adding PGP keys and sharing certs) and *data* mode to exchange files. Listing files is allowed on both modes.\n\n*NOTE: Integrator (partner) registers her customers by using her API Key from the API Key owner account.*\n\n### Bank certificate enrollment\n\nThe *SEPA WebServices* connection to the bank requires enrolling PKI certificate with the bank. The *Admin* mode can enroll certificates for different banks, but only one certificate per bank. The corresponding private key is stored encrypted with AWS KMS service.\n\n### Bank certificate sharing\n\nIt is possible to share the same bank certificate with multiple accounts. Certificate sharing between accounts can be configured when accounts have the same API Key. Account that holds the certificate can share/unshare it with another account (*admin* mode operation). Note that only the account that has the certificate can PGP export the certificate and corresponding private key. This allows creating e.g. one *admin* mode only account and multiple *data* mode only accounts, where the *admin* account shares its certificates with other *data* accounts.\n\nAn account can never have multiple certificates per bank, be it shared or account's enrolled certificate. This is because the API requires identification of the bank, but not the certificate and private key pair.\n\n### Access security\n\nAccess is secured with TLS on Amazon Web Services (AWS) API Gateway. Inside TLS, secure sessions are established by using email address as username and by RSA encrypting password along with dynamic username specific parameters fetched from the API with `InitRegister` or `InitLogin` API commands (challenge response).\n\nSuccessful login provides a session token (AWS Cognito User Pool). Authorization happens with the session token (`Authorization`) and *API Key* (`x-api-key`) headers.\n\nAdministrative actions require SMS based MFA authentication (see *admin* mode). User account management is handled with AWS Cognito User Pools and each user (email) has separate *admin* and/or *data* mode (role) accounts sharing the same API account data.\n\n### CHANGELOG\n\n**2.6.0** :: 2021-06-14\n- Added token revocation for logout (AWS SDK based new capability), no changes to the API itself.\n\n**2.5.0** :: 2020-04-19\n- Removed OPTIONS\n- Fixed Login response.",
+    "description": "The API provides secure file exchange with common banks in Finland via the *SEPA WebServices* channel, including certificate enrollment (PKI) and automatic certificate renewals.\n\nThe OpenAPI v2 specification is published on GitHub [isecurefi/wsapi-v2](https://github.com/isecurefi/wsapi-v2). Browser-compatible TypeScript SDK is available on GitHub [dforsber/isecure-ts-client](https://github.com/dforsber/isecure-ts-client). Command line CLI and PHP SDK remain available on GitHub [isecurefi/wscli-php](https://github.com/isecurefi/wscli-php).\n\n~~~ts\nimport { WSChannel } from \"isecure-ts-client\";\n\nconst client = new WSChannel({\n  ApiKey: process.env.ISECURE_API_KEY ?? \"0\",\n  Company: \"Example Company Oy\",\n  Name: \"Example User\",\n  Password: process.env.ISECURE_PASSWORD!,\n  Phone: \"+358401234567\",\n  PublicKey: process.env.ISECURE_PUBLIC_KEY_PEM!,\n  BaseUrl: \"https://ws-api.isecure.fi/v2\",\n  Email: \"user@example.com\",\n  Mode: \"data\",\n  Bank: \"nordea\",\n});\n\nconst state = await client.login();\nif (state.status === \"authenticated\") {\n  const certs = await client.listCerts();\n  console.log(certs.Certs);\n}\n~~~\n\n~~~sh\nexport SESSION=~/.wscli/settings.yaml\nwscli session login -c $SESSION\nexport APIKEY=$(yq -r .settings.apikey $SESSION)\nexport IDTOKEN=$(yq -r .settings.idtoken $SESSION)\n\ncurl -H Authorization:$IDTOKEN \\\n     -H x-api-key:$APIKEY \\\n     https://ws-api.isecure.fi/v2/files/danskebank\n~~~\n\nThe API provides role based access control (RBAC), user account management, password recovery, and SMS or authenticator-app (TOTP) multi-factor authentication based on Amazon Cognito user pools.\n\n*NOTE: The API endpoint for production is the same as for test, but without `test.` in the URL. Production and test APIs are deployed on separate AWS accounts.*\n\n*NOTE: The API runs on AWS API Gateway with AWS Lambda backends. Cold Lambda functions can add a small response delay. Banks can also have considerable processing delays, especially for certificate enrollments.*\n\n### Service enrollment\n\nEvery integrator (partner) has an own *API Key*, and every user account belongs to one integrator. The *API Key* is bound to the service subscription. In other words, a new production *API Key* requires a service agreement before file transfers are allowed.\n\nIf a user registers with `0` as the *API Key*, the API creates a new *API Key* and the user becomes the *API Key* owner. The owner account can list all users under the same *API Key* with the Integrator API. Integrators register their own owner account first and use its API key to register customer accounts.\n\n*NOTE: API call rate limits are set and tracked per API Key by AWS API Gateway.*\n\n### Account management\n\nA user email address can have an *admin* account, a *data* account, or both. The role in the API is called `mode`. The modes have separate passwords and different capabilities.\n\nLogin always requires both email address and mode. *Admin* mode login always requires MFA. Existing accounts may continue with SMS MFA, and accounts that have enrolled software-token MFA use authenticator-app/TOTP codes. *Data* mode uses password authentication and is suitable for automation. *Admin* mode configures the account, such as PGP keys and certificate sharing. *Data* mode exchanges files. Listing files is allowed in both modes.\n\n*NOTE: Integrators register customer accounts by using the API key from the API key owner account.*\n\n### Initial registration with TOTP\n\n1. Register the `admin` account first. Use `InitRegister` to get the challenge and `Register` to create the account.\n2. Login with `admin` mode. Complete the returned SMS MFA challenge with `LoginMFA`.\n3. Confirm phone with `VerifyPhone` and email with `VerifyEmail` when required. After verification, start a fresh login cycle.\n4. During an authenticated admin SMS MFA login, call `LoginMFA` with `SetupTOTP: true`. The response includes `SecretCode`, `OtpauthUri`, and an in-memory `AccessToken`.\n5. Show `OtpauthUri` as a QR code, or let the user enter `SecretCode` manually in an authenticator app.\n6. Submit the authenticator code and the returned `AccessToken` to `VerifyTOTP`. TOTP becomes the preferred admin MFA method; SMS remains available as a fallback.\n7. Register the `data` account with the same email and API key for automation/file transfer workflows.\n\n~~~ts\nconst registration = await adminClient.register();\nlet state = await adminClient.login();\n\nif (state.status === \"needs_mfa\" && state.method === \"sms\") {\n  state = await adminClient.submitMfaCode(smsCode, { setupTotp: true });\n}\n\nif (state.status === \"authenticated\" && state.totpEnrollment) {\n  const { otpauthUri, secret, accessToken } = state.totpEnrollment;\n  // Render otpauthUri as a QR code, or display secret for manual entry.\n  await adminClient.verifyTotp(accessToken, codeFromAuthenticatorApp);\n}\n~~~\n\n### Existing SMS MFA user migration to TOTP\n\n1. Login with the existing `admin` account.\n2. When `Login` returns `ChallengeName: SMS_MFA`, submit the SMS code with `LoginMFA` and set `SetupTOTP: true`.\n3. Add the returned `OtpauthUri` or `SecretCode` to the authenticator app.\n4. Confirm enrollment with `VerifyTOTP` using the returned `AccessToken` and the current authenticator code.\n5. Future admin logins normally return `ChallengeName: SOFTWARE_TOKEN_MFA`; submit the authenticator code through `LoginMFA`. SMS remains available as a fallback for accounts where Cognito still has SMS MFA enabled.\n\n~~~ts\nlet state = await adminClient.login();\nif (state.status === \"needs_mfa\" && state.method === \"sms\") {\n  state = await adminClient.submitMfaCode(smsCode, { setupTotp: true });\n}\nif (state.status === \"authenticated\" && state.totpEnrollment) {\n  await adminClient.verifyTotp(state.totpEnrollment.accessToken, authenticatorCode);\n}\n~~~\n\n### Bank certificate enrollment\n\nThe *SEPA WebServices* connection to the bank requires enrolling a PKI certificate with the bank. *Admin* mode can enroll certificates for different banks, but only one certificate per bank. The corresponding private key is generated and stored encrypted with AWS KMS.\n\n### Bank certificate sharing\n\nIt is possible to share the same bank certificate with multiple accounts. Certificate sharing can be configured when accounts have the same API key. The account that holds the certificate can share it with another account (*admin* mode operation). Only the account that owns the certificate can PGP-export the certificate and corresponding private key. This allows one *admin* mode account to own certificates and share them with multiple *data* mode accounts.\n\nAn account can never have multiple certificates per bank, whether shared or directly enrolled. The API identifies the bank, not an individual certificate/key pair.\n\n### Access security\n\nAccess is secured with TLS on AWS API Gateway. Inside TLS, register and login use challenge-response: the client fetches fresh username-specific parameters with `InitRegister` or `InitLogin`, RSA-encrypts the password and challenge timestamp with OAEP padding, and submits the encrypted value to `Register`, `Login`, or `PasswordReset`.\n\nSuccessful login returns a Cognito `IdToken` and the integrator `ApiKey`. For protected operations, send `Authorization: <IdToken>` and `x-api-key: <ApiKey>`. The OpenAPI document also models these headers as security schemes. If a generated client exposes both explicit header parameters and security settings, use the same values for both; the wire request must contain exactly those two headers.\n\nAdministrative actions require MFA authentication. SMS MFA remains available and TOTP can be enrolled with `LoginMFA` and confirmed with `VerifyTOTP`. User account management is handled with Cognito user pools. Each email can have separate `admin` and/or `data` mode Cognito users that share the same API account data.\n\n### Error handling and retryability\n\nSuccessful logical API responses have `ResponseCode: \"00\"`. Logical failures usually return `ResponseCode: \"01\"` with a human-readable `ResponseText` and `RequestId`. Include `RequestId` in support tickets.\n\nHTTP status still matters. `401`/`403` authentication and authorization failures are not retryable without changing credentials, token, role, API key, or verification state. `Invalid API key` is not retryable. Validation errors are not retryable without changing the request. Bank/backend integration errors may be retryable only when the text indicates a temporary upstream problem, timeout, throttling, or bank-side availability issue.\n\nThe TypeScript SDK throws typed transport errors for non-2xx responses and network failures, while API-level failures are returned as structured response objects or typed authentication states. Prefer the SDK for browser and Node.js integrations so MFA, retries, logging redaction, and session handling stay consistent.\n\n### CHANGELOG\n\n**2.7.0** :: 2026-06-25\n- Added software-token/TOTP admin MFA (`LoginMFA` with `SetupTOTP` and `VerifyTOTP`) while keeping SMS MFA available.\n- Documented the browser-compatible TypeScript SDK.\n\n**2.6.0** :: 2021-06-14\n- Added token revocation for logout (AWS SDK based new capability), no changes to the API itself.\n\n**2.5.0** :: 2020-04-19\n- Removed OPTIONS\n- Fixed Login response.",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "termsOfService": "https://www.isecure.fi/ws-api-terms",
     "title": "ISECure WS Channel API",
-    "version": "v2.6.0",
+    "version": "v2.7.0",
     "x-logo": {
       "backgroundColor": "#FFFFFF",
       "url": "https://www.isecure.fi/images/isecure-small-logo.png"
@@ -1001,7 +1024,7 @@
   "paths": {
     "/account/{Email}/{Mode}": {
       "get": {
-        "description": "Before register (or login), client must fetch `challenge` from the API. Then on register (or login), the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with register (or login). The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n",
+        "description": "Before register (or login), client must fetch `challenge` from the API. Then on register (or login), the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with register (or login). The challenge has form of `base64-string|timestamp|uuid`. For example:\\n\\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\\n\\n**NOTE:** The call must contain the same email as used for registration itself.\\n",
         "operationId": "InitRegister",
         "parameters": [
           {
@@ -1028,7 +1051,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/InitRegisterResp"
             }
@@ -1056,15 +1079,15 @@
         "x-code-samples": [
           {
             "lang": "cURL",
-            "source": "curl -H 'Content-Type: application/json' https://ws-api.test.isecure.fi/v2/account/dan.forsberg%40isecure.fi/admin"
+            "source": "curl -H 'Content-Type: application/json' https://ws-api.isecure.fi/v2/account/dan.forsberg%40isecure.fi/admin"
           },
           {
             "lang": "PHP",
-            "source": "$config = new Swagger\\Client\\Configuration();\n$api = new Swagger\\Client\\Api\\AccountApi(new Swagger\\Client\\apiClient($config));\n$api->InitRegister(\"dan.forsberg@isecure.fi\", \"admin\");"
+            "source": "$config = new Swagger\\\\Client\\\\Configuration();\\n$api = new Swagger\\\\Client\\\\Api\\\\AccountApi(new Swagger\\\\Client\\\\apiClient($config));\\n$api->InitRegister(\\\"dan.forsberg@isecure.fi\\\", \\\"admin\\\");"
           },
           {
             "lang": "C#",
-            "source": "InitRegisterResp r = account.InitRegister(\"dan.forsberg@isecure.fi\", \"admin\");\nreturn r.Challenge;"
+            "source": "InitRegisterResp r = account.InitRegister(\\\"dan.forsberg@isecure.fi\\\", \\\"admin\\\");\\nreturn r.Challenge;"
           },
           {
             "lang": "Javascript",
@@ -1076,7 +1099,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _Code_ received to _Email_ address for email address verification. Provide also _AccessToken_ received during login.\n\n**NOTE**: _Phone_ and _EMail_ verification can be bypassed per API key on request to _dan.forsberg@isecure.fi_. E.g. if integrator verifies EMail and Phone beforehand.",
+        "description": "Provide the _Code_ received by email and the _AccessToken_ received during login. The access token is only used to complete verification and should not be persisted.\n\n**NOTE:** Phone and email verification bypass is an integrator-level policy option for deployments where the integrator has already verified those attributes. Contact ISECure support if this is required for your API key.",
         "operationId": "VerifyEmail",
         "parameters": [
           {
@@ -1112,7 +1135,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1160,7 +1183,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "You need to register both *admin* and *data* accounts with the same email address. Both accounts share the same data, but are used for different purposes. *Admin* account must be registered first, then *data* account.\n\n*Admin* account is used to configure setup with **Certs** and **Pgp** operations, while the *data* account is used with **Files** operations only. Both accounts use **Account** and **Session** operations.\n\n*Admin* account always requires SMS MFA during login, whilst *data* account does not. Generally, the *data* account is considered *read-noly* when no PGP keys are configured, since PGP Keys are used to verify file upload signatures and are thus required to successfully upload files with **Files** *UploadFile* operation.\n\nRegistrations are independent for both accounts, *admin* and *data* and both require phone number and email verifications.\n\n`email` is the login username for both accounts and `mode` defines the selected &quot;mode&quot; for the login, i.e. *admin* or *data*.\n\nBefore registration client must fetch challenge from API (see Account InitRegister operation) and pass it back within the `ChResp` parameter.\n\nThe following parameters `name`, `phone`, and `company` are required and must be valid (`phone`, `email`) as they need to be confirmed before registration becomes successful and login possible.\n\nClient must RSA encrypt (OAEP padding) the _password_ and the challenge _timestamp_ as string in the form `password||timestamp`, base64 encode it and provide the resulting string as `Encrypted` parameter. The RSA encryption can be done e.g. for illustration purposes within command line with openssl rsautl:\n```\necho -n Toddler_..123456789012345\\|\\|1475175151231 |\n\topenssl rsautl -oaep -encrypt -pubin -inkey test.pem |\n\tbase64\n\n```\n\nThe **test** API's RSA public key is as follows:\n\n```\n% cat test.pem\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuSaoSZztGAIGDTY7Rff\npsBHJJT1k207UodOJbYFhHAq0lWJnvMPLl5Q1DUUZdTGtTdL8Dsaj/Bo2+gSykMM\nR5QiKewvQsLfvqjwOO8JDItnhJl0lUqcPpdQV4M/Ai3YNRjNcVy4a+pichqtSAWl\n9S1HV01MNeouk8PEr/zoUasmgfO3mz6N6XTUtF/tIi8K2kBOsLAtqltihFSd/zT8\nifYZE9cZTJ09lUs7kMz1wxFIsiegaE1jUYV+VSLu3PJ97oKhQpqop8EnkBAoBl6r\nmdmFryBQIdakPIdd4rO5Yg+to10n4u7Wij9ePIwWMfbqY4QoW5nXqMgFJQkIt4TG\neQIDAQAB\n-----END PUBLIC KEY-----\n```\n\nThe **production** API's RSA public key is as follows:\n\n```\n% cat prod.pem\n-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7wx4l7P3eLsaEyK7ZRME\ng5urEHwaEoY9LjkYcpMw9gmPIi3RoGjQX7HzPad2D7ES2yIGdmyxjN8R2LyFa8ke\nEE+VY3ISYzP2cOjd/zDkX01yjDXQLRxntXbtqIypGQAzmZbCyIB226ZKEE+ldh6M\nYyM41YWYikfocYssFEjY7fpPGeUg4FOmHmyWIZeMkXYovskoi1jZ1Ay1qn95XlpA\n/Ptru2efro4T1xksv4WBBrj8bMNwdDpf4oyzH2PKYkn3/KlNTBCHlAmzP0jd4pIa\nN0tAf2m8TcNq7kuBzyfs8AcCUj870p8SEiko0PMx6K+zVsTVWsxfUX+/+kmapmp/\nAwIDAQAB\n-----END PUBLIC KEY-----\n```\n\n\n\n**NOTE:** Password must be at least 20 characters long, have lower and upper case letters, numbers, and special characters.\n\n**NOTE:** Phone number must be provided with country code, e.g. `+358404982201`.",
+        "description": "You need to register both *admin* and *data* accounts with the same email address. Both accounts share the same data, but are used for different purposes. *Admin* account must be registered first, then *data* account.\\n\\n*Admin* account is used to configure setup with **Certs** and **Pgp** operations, while the *data* account is used with **Files** operations only. Both accounts use **Account** and **Session** operations.\\n\\n*Admin* account always requires MFA during login. SMS MFA remains available, and TOTP can be enrolled after SMS bootstrap. *Data* account does not require MFA. Generally, the *data* account is considered *read-only* when no PGP keys are configured, since PGP Keys are used to verify file upload signatures and are thus required to successfully upload files with **Files** *UploadFile* operation.\\n\\nRegistrations are independent for both accounts, *admin* and *data* and both require phone number and email verifications.\\n\\n`email` is the login username for both accounts and `mode` defines the selected \"mode\" for the login, i.e. *admin* or *data*.\\n\\nBefore registration client must fetch challenge from API (see Account InitRegister operation) and pass it back within the `ChResp` parameter.\\n\\nThe following parameters `name`, `phone`, and `company` are required and must be valid (`phone`, `email`) as they need to be confirmed before registration becomes successful and login possible.\\n\\nClient must RSA encrypt (OAEP padding) the _password_ and the challenge _timestamp_ as string in the form `password||timestamp`, base64 encode it and provide the resulting string as `Encrypted` parameter. The RSA encryption can be done e.g. for illustration purposes within command line with openssl rsautl:\\n```\\necho -n Toddler_..123456789012345\\\\|\\\\|1475175151231 |\\n\\topenssl rsautl -oaep -encrypt -pubin -inkey test.pem |\\n\\tbase64\\n\\n```\\n\\nThe **test** API's RSA public key is as follows:\\n\\n```\\n% cat test.pem\\n-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkuSaoSZztGAIGDTY7Rff\\npsBHJJT1k207UodOJbYFhHAq0lWJnvMPLl5Q1DUUZdTGtTdL8Dsaj/Bo2+gSykMM\\nR5QiKewvQsLfvqjwOO8JDItnhJl0lUqcPpdQV4M/Ai3YNRjNcVy4a+pichqtSAWl\\n9S1HV01MNeouk8PEr/zoUasmgfO3mz6N6XTUtF/tIi8K2kBOsLAtqltihFSd/zT8\\nifYZE9cZTJ09lUs7kMz1wxFIsiegaE1jUYV+VSLu3PJ97oKhQpqop8EnkBAoBl6r\\nmdmFryBQIdakPIdd4rO5Yg+to10n4u7Wij9ePIwWMfbqY4QoW5nXqMgFJQkIt4TG\\neQIDAQAB\\n-----END PUBLIC KEY-----\\n```\\n\\nThe **production** API's RSA public key is as follows:\\n\\n```\\n% cat prod.pem\\n-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7wx4l7P3eLsaEyK7ZRME\\ng5urEHwaEoY9LjkYcpMw9gmPIi3RoGjQX7HzPad2D7ES2yIGdmyxjN8R2LyFa8ke\\nEE+VY3ISYzP2cOjd/zDkX01yjDXQLRxntXbtqIypGQAzmZbCyIB226ZKEE+ldh6M\\nYyM41YWYikfocYssFEjY7fpPGeUg4FOmHmyWIZeMkXYovskoi1jZ1Ay1qn95XlpA\\n/Ptru2efro4T1xksv4WBBrj8bMNwdDpf4oyzH2PKYkn3/KlNTBCHlAmzP0jd4pIa\\nN0tAf2m8TcNq7kuBzyfs8AcCUj870p8SEiko0PMx6K+zVsTVWsxfUX+/+kmapmp/\\nAwIDAQAB\\n-----END PUBLIC KEY-----\\n```\\n\\n\\n\\n**NOTE:** Password must be at least 20 characters long, have lower and upper case letters, numbers, and special characters.\\n\\n**NOTE:** Phone number must be provided with country code, e.g. `+358404982201`.",
         "operationId": "Register",
         "parameters": [
           {
@@ -1196,7 +1219,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Operation succesfully processed. Resource created. See response.",
+            "description": "Operation successfully processed. Resource created. See response.",
             "schema": {
               "$ref": "#/definitions/RegisterResp"
             }
@@ -1243,7 +1266,7 @@
     },
     "/account/{Email}/{Mode}/password": {
       "get": {
-        "description": "Start password reset by getting confirmation SMS code.",
+        "description": "Start password reset for the selected email and mode. Cognito sends a confirmation code to the configured recovery channel. This flow is separate from admin login MFA.",
         "operationId": "InitPasswordReset",
         "parameters": [
           {
@@ -1270,7 +1293,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1318,7 +1341,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Set new _password_ for user with _Email_. Provide received SMS _Code_.\n\n**NOTE:** the password must be encrypted, see Register for more details.\n",
+        "description": "Set a new _password_ for the selected email and mode. Provide the confirmation _Code_ from the password reset flow.\n\n**NOTE:** The new password must be RSA encrypted with the challenge timestamp; see Register for encryption details.",
         "operationId": "PasswordReset",
         "parameters": [
           {
@@ -1354,7 +1377,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1404,7 +1427,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Confirm phone number for _Email_ _Mode_ user, with _Code_ received via SMS.\n\n**NOTE**: _Phone_ and _EMail_ verification can be bypassed per API key on request to _dan.forsberg@isecure.fi_. E.g. if integrator verifies EMail and Phone beforehand.",
+        "description": "Confirm the phone number for the _Email_ and _Mode_ user with the _Code_ received by SMS.\n\n**NOTE:** Phone and email verification bypass is an integrator-level policy option for deployments where the integrator has already verified those attributes. Contact ISECure support if this is required for your API key.",
         "operationId": "VerifyPhone",
         "parameters": [
           {
@@ -1447,7 +1470,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1492,9 +1515,9 @@
         ]
       }
     },
-    "/certs/": {
+    "/certs": {
       "get": {
-        "description": "List certs from all banks",
+        "description": "List bank certificates visible to the authenticated account. The result includes certificates directly owned by the account and certificates shared to it by another account under the same API key.",
         "operationId": "ListCerts",
         "parameters": [
           {
@@ -1517,7 +1540,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/ListCertsResp"
             }
@@ -1580,7 +1603,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Configure certificate usage parameters. Currently, only settable (permanent) parameter is `export`. Set it to `disabled` for disallowing private key export.\n\n**NOTE**: When export is disabled it is permanent, it can not be re-enabled through the API (safety feature).",
+        "description": "Reserved admin operation for configuring certificate usage parameters such as private-key export policy. The current deployed implementation validates authorization and then returns `configcerts not yet implemented`; do not build production workflows that depend on this operation changing account state yet.",
         "operationId": "ConfigCerts",
         "parameters": [
           {
@@ -1612,7 +1635,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -1674,7 +1697,7 @@
     },
     "/certs/shared/{ExtEmail}": {
       "delete": {
-        "description": "Unshare certs with an existing _ExtEmail_ account.",
+        "description": "Reserved admin operation for removing certificate sharing from an existing _ExtEmail_ account under the same API key. The current deployed implementation validates authorization and then returns `unlinkaccount not yet implemented`; contact ISECure support if certificate sharing must be removed before this operation is fully available.",
         "operationId": "UnshareCerts",
         "parameters": [
           {
@@ -1704,7 +1727,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/UnshareCertsResp"
             }
@@ -1767,7 +1790,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Share certs with an existing account _ExtEmail_ under the same API Key.\n\nIf the _ExtEmail_ account does not have the specific bank certificate (key pair), then certs (key pair) from this account will be used (shared), if any. Both accounts must be registered and using the same integrator API Key.",
+        "description": "Share this account's bank certificates with an existing _ExtEmail_ account under the same API key. The caller must be authenticated in `admin` mode and must own the certificate being shared. The target account can then use the shared certificate for bank operations, but certificate/private-key export remains available only to the certificate owner.",
         "operationId": "ShareCerts",
         "parameters": [
           {
@@ -1797,7 +1820,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Operation succesfully processed. Resource created. See response.",
+            "description": "Operation successfully processed. Resource created. See response.",
             "schema": {
               "$ref": "#/definitions/ShareCertsResp"
             }
@@ -1859,7 +1882,7 @@
     },
     "/certs/{Bank}": {
       "get": {
-        "description": "Download bank certificate and private key encrypted with stored PGP key.\n\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `export`. I.e. purpose type `authorize` PGP keys can not be used for exporting.\n\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
+        "description": "Download bank certificate and private key encrypted with stored PGP key.\\n\\n**NOTE**: The previously uploaded `PgpKeyId` must have purpose type `export`. I.e. purpose type `authorize` PGP keys can not be used for exporting.\\n\\n**NOTE**: If `export` has been set to `disabled` (see ConfigCerts), then exporting private keys is not possible through API.",
         "operationId": "ExportCert",
         "parameters": [
           {
@@ -1896,7 +1919,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/ExportCertResp"
             }
@@ -1959,7 +1982,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted with AWS KMS encrypted authentication on API side. Certificates are automatically renewed when needed.\n\n**NOTE:** For OP bank, ensure that you set the PIN code blocks 1 and 2 in correct order. If not initially in correct order, bank will lock the registration and you need to call them for unlock.",
+        "description": "Provide WS-Channel user id, _WsUserId_, _Company_, and PIN _Code_ for _Bank_ certificate enrollment. _Company_ must match with the contract with the bank and is part of enrollment process. Note that certificate private key is securely generated and stored encrypted with AWS KMS encrypted authentication on API side. Certificates are automatically renewed when needed.\\n\\n**NOTE:** For OP bank, ensure that you set the PIN code blocks 1 and 2 in correct order. If not initially in correct order, bank will lock the registration and you need to call them for unlock.",
         "operationId": "EnrollCert",
         "parameters": [
           {
@@ -1998,7 +2021,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Operation succesfully processed. Resource created. See response.",
+            "description": "Operation successfully processed. Resource created. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2061,7 +2084,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\n\n**NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
+        "description": "Provide _WsUserId_, _Company_, _PrivateKey_, and _Certificate_ for importing existing WS Channel certificate and private key. _Company_ must match with the contract with the bank. Certificate(s) and private key(s) must be PEM formatted.\\n\\n**NOTE:** _EncCcertificate_ and _EncPrivatekey_ are for DanskeBank only.",
         "operationId": "ImportCert",
         "parameters": [
           {
@@ -2100,7 +2123,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Operation succesfully processed. Resource created. See response.",
+            "description": "Operation successfully processed. Resource created. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2162,7 +2185,7 @@
     },
     "/files/{Bank}": {
       "get": {
-        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\n\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\n\n**NOTE:** The uploaded files do not show up on the file listing.\n\n```\n% export SESSION=~/.wscli/settings.yaml\n% wscli session login -c $SESSION\n%\n% curl -H Authorization:`yq -r .settings.idtoken $SESSION` \\ \n       -H x-api-key:`yq -r .settings.apikey $SESSION` \\ \n       https://ws-api.isecure.fi/v2/files/danskebank\n```",
+        "description": "Asks _bank_ to list downloadable files matching filters. _Status_ can be e.g. _NEW_, _ALL_, or _DLD_. _Filetype_ is bank specific (ALL is not accepted), see bank specification. _Bank_ is the name of the bank. Returns a list of _FileDescriptors_.\\n\\n**NOTE:** Certificate must be enrolled before files can be listed, downloaded or uploaded.\\n\\n**NOTE:** The uploaded files do not show up on the file listing.\\n\\n```\\n% export SESSION=~/.wscli/settings.yaml\\n% wscli session login -c $SESSION\\n%\\n% curl -H Authorization:`yq -r .settings.idtoken $SESSION` \\\\ \\n       -H x-api-key:`yq -r .settings.apikey $SESSION` \\\\ \\n       https://ws-api.isecure.fi/v2/files/danskebank\\n```",
         "operationId": "ListFiles",
         "parameters": [
           {
@@ -2204,7 +2227,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/ListFilesResp"
             }
@@ -2267,7 +2290,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Uploads file to bank if PGP signature(s) are valid. _FileContents_ is a string of _Base64_ encoded file contents. _FileType_ is bank specific. _Signature_ is detached PGP signature or concatenation of PGP detached signatures in ASCII armor format. PGP signatures are used for authorizing file uploads. Currently one valid PGP authorize registered key signature is enough. _FileName_ is upload filename.\n\n**NOTE:** The uploaded files do not show up on the file listing from bank.\n\n```\n% export SESSION=~/.wscli/settings.yaml\n% wscli session login -c $SESSION\n% export APIKEY=`yq -r .settings.apikey $SESSION`\n% export IDTOKEN=`yq -r .settings.idtoken $SESSION`\n%\n% curl -X PUT -H Content-Type:application/json \\ \n       -H Authorization:$IDTOKEN \\ \n       -H x-api-key:$APIKEY \\ \n       -d @request-example.json \\ \n       https://ws-api.isecure.fi/v2/files/danskebank\n```\n\n",
+        "description": "Uploads file to bank if PGP signature(s) are valid. _FileContents_ is a string of _Base64_ encoded file contents. _FileType_ is bank specific. _Signature_ is detached PGP signature or concatenation of PGP detached signatures in ASCII armor format. PGP signatures are used for authorizing file uploads. Currently one valid PGP authorize registered key signature is enough. _FileName_ is upload filename.\\n\\n**NOTE:** The uploaded files do not show up on the file listing from bank.\\n\\n```\\n% export SESSION=~/.wscli/settings.yaml\\n% wscli session login -c $SESSION\\n% export APIKEY=`yq -r .settings.apikey $SESSION`\\n% export IDTOKEN=`yq -r .settings.idtoken $SESSION`\\n%\\n% curl -X PUT -H Content-Type:application/json \\\\ \\n       -H Authorization:$IDTOKEN \\\\ \\n       -H x-api-key:$APIKEY \\\\ \\n       -d @request-example.json \\\\ \\n       https://ws-api.isecure.fi/v2/files/danskebank\\n```\\n\\n",
         "operationId": "UploadFile",
         "parameters": [
           {
@@ -2306,7 +2329,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Operation succesfully processed. Resource created. See response.",
+            "description": "Operation successfully processed. Resource created. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2368,7 +2391,7 @@
     },
     "/files/{Bank}/{FileType}/{FileReference}": {
       "delete": {
-        "description": "Deletes file on bank side. File is identified with _filereference_.",
+        "description": "Delete or mark as deleted a bank-side file identified by _Bank_, _FileType_, and _FileReference_. Use values returned by ListFiles. Bank support and final semantics are bank-specific.",
         "operationId": "DeleteFile",
         "parameters": [
           {
@@ -2412,7 +2435,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2472,7 +2495,7 @@
         ]
       },
       "get": {
-        "description": "Downloads file identified with _filereference_, _filetype_, and _bank_. _Filereference_ is received in file list from bank. Returns _base64_ encoded file content.",
+        "description": "Download a bank file identified by _Bank_, _FileType_, and _FileReference_. The file reference is received from ListFiles. The response Content field contains the file content returned by the bank, typically Base64 encoded.",
         "operationId": "DownloadFile",
         "parameters": [
           {
@@ -2516,7 +2539,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/DownloadFileResp"
             }
@@ -2578,7 +2601,7 @@
     },
     "/integrator/accounts": {
       "get": {
-        "description": "List accounts registered under the integrator's API key. Account that created the API key is authorized to call this.",
+        "description": "List accounts registered under the authenticated integrator API key. This is an API key owner/admin operation intended for integrators managing their own customer accounts.",
         "operationId": "ListAccounts",
         "parameters": [
           {
@@ -2601,7 +2624,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/ListAccountsResp"
             }
@@ -2663,7 +2686,7 @@
     },
     "/pgp": {
       "delete": {
-        "description": "Delete PGP key.",
+        "description": "Reserved admin operation for deleting a registered PGP key by 8-character key id. The current deployed implementation validates authorization and key lookup, but returns `pgpDelete is not yet supported`; do not build production workflows that rely on key deletion yet.",
         "operationId": "DeleteKey",
         "parameters": [
           {
@@ -2695,9 +2718,9 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
-              "$ref": "#/definitions/DeleteKeyResp"
+              "$ref": "#/definitions/Response"
             }
           },
           "400": {
@@ -2755,7 +2778,7 @@
         ]
       },
       "get": {
-        "description": "List PGP keys.",
+        "description": "List PGP public keys registered for the authenticated account. `authorize` keys verify UploadFile signatures. `export` keys encrypt exported certificate private keys.",
         "operationId": "ListKeys",
         "parameters": [
           {
@@ -2778,7 +2801,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/ListKeysResp"
             }
@@ -2841,7 +2864,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Upload PGP key.",
+        "description": "Upload an ASCII-armored PGP public key for the authenticated admin account. Use purpose `authorize` for detached UploadFile signature verification, or `export` for encrypting ExportCert private-key material. The same PGP key cannot be registered for both purposes at the same time.",
         "operationId": "UploadKey",
         "parameters": [
           {
@@ -2859,7 +2882,7 @@
             "type": "string"
           },
           {
-            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification) in `PgpKeyPurpose`.\n\n**NOTE**: The same PGP key can not be used for both `export` and `authorize` purpose at the same time.",
+            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification) in `PgpKeyPurpose`.\\n\\n**NOTE**: The same PGP key can not be used for both `export` and `authorize` purpose at the same time.",
             "in": "body",
             "name": "UploadKeyReq",
             "required": true,
@@ -2873,7 +2896,7 @@
         ],
         "responses": {
           "201": {
-            "description": "Operation succesfully processed. Resource created. See response.",
+            "description": "Operation successfully processed. Resource created. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -2935,7 +2958,7 @@
     },
     "/session/{Email}/{Mode}": {
       "delete": {
-        "description": "Logout user.\n\n**NOTE**: AWS Cognito allows user logout, but the received authorization _IdToken_ **is still valid**. When the optional _AccessToken_ parameter is also provided, the _IdToken_ is also revoked.",
+        "description": "Logout user.\\n\\n**NOTE**: AWS Cognito allows user logout, but the received authorization _IdToken_ **is still valid**. When the optional _AccessToken_ parameter is also provided, the _IdToken_ is also revoked.",
         "operationId": "Logout",
         "parameters": [
           {
@@ -2976,7 +2999,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/Response"
             }
@@ -3036,7 +3059,7 @@
         ]
       },
       "get": {
-        "description": "Before login, client must fetch `challenge` from the API. Then on login, the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with login. The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.",
+        "description": "Before login, client must fetch `challenge` from the API. Then on login, the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with login. The challenge has form of `base64-string|timestamp|uuid`. For example:\\n\\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\\n\\n**NOTE:** The call must contain the same email as used for registration itself.",
         "operationId": "InitLogin",
         "parameters": [
           {
@@ -3063,7 +3086,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/InitLoginResp"
             }
@@ -3111,7 +3134,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authorization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\n\n**NOTE:** In case SMS _Code_ is required, the call returns only _Session_, _ResponseCode_, and _ResponseText_ as the login process continues with the _LoginMFA_ API call.\n\n**NOTE:** If _Email_ has not been yet verified, successful login provides only _ResponseCode_, _ResponseText_, and an _AccessToken_ that must be used to verify email address.\n\n\n```\n% CHALLENGE=`curl -s https://ws-api.test.isecure.fi/v2/session/dan.forsberg@isecure.fi/data | jq -r .Challenge`\n% TIMESTAMP=`echo $CHALLENGE | cut -f 2 -d \\|`\n% ENCRYPTED=`echo -n testPassword..123455677098811\\|\\|$TIMESTAMP | openssl rsautl -oaep -encrypt -pubin -inkey test.pem | base64\n```",
+        "description": "After `getchallenge`, call `login` with _Email_, _Mode_, and RSA encrypted _admin_ or _data_ account _password_ and _challenge timestamp_. For further API calls (requiring authorization), include the received _IdToken_ into the Authorization header of the request (pass idtoken as required parameter with the client SDK API calls). The _IdToken_ expires in _ExpiresIn_ seconds, after which new login must be performed.\\n\\n**NOTE:** In case MFA _Code_ is required, the call returns _Session_, _ChallengeName_, _ResponseCode_, and _ResponseText_ as the login process continues with the _LoginMFA_ API call. Echo _ChallengeName_ back to `LoginMFA` so the API can distinguish SMS (`SMS_MFA`) from authenticator/TOTP (`SOFTWARE_TOKEN_MFA`) codes.\\n\\n**NOTE:** If _Email_ has not been yet verified, successful login provides only _ResponseCode_, _ResponseText_, and an _AccessToken_ that must be used to verify email address.\\n\\n\\n```\\n% CHALLENGE=`curl -s https://ws-api.isecure.fi/v2/session/dan.forsberg@isecure.fi/data | jq -r .Challenge`\\n% TIMESTAMP=`echo $CHALLENGE | cut -f 2 -d \\\\|`\\n% ENCRYPTED=`echo -n testPassword..123455677098811\\\\|\\\\|$TIMESTAMP | openssl rsautl -oaep -encrypt -pubin -inkey prod.pem | base64\\n```",
         "operationId": "Login",
         "parameters": [
           {
@@ -3147,7 +3170,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/LoginResp"
             }
@@ -3197,7 +3220,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Send SMS _Code_ along with previously received _Session_ token. If _Email_ has not been yet verified, successful login provides only _ResponseCode_, _ResponseText_, and an _AccessToken_ that must be used to verify email address. If email is already verified and the login succeeds, add the _IdToken_ from the login response as Authorization header in API requests requiring authorization (i.e. pass as parameter to client SDK API calls). _IdToken_ expires in _ExpiresIn_ seconds.",
+        "description": "Send MFA _Code_ along with the previously received _Session_ token. For SMS MFA use the SMS code; for software-token MFA use the authenticator/TOTP code and echo `ChallengeName: SOFTWARE_TOKEN_MFA`. If _Email_ has not been yet verified, successful login provides only _ResponseCode_, _ResponseText_, and an _AccessToken_ that must be used to verify email address. If email is already verified and the login succeeds, add the _IdToken_ from the login response as Authorization header in API requests requiring authorization (i.e. pass as parameter to client SDK API calls). _IdToken_ expires in _ExpiresIn_ seconds.",
         "operationId": "LoginMFA",
         "parameters": [
           {
@@ -3233,7 +3256,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Operation succesfully processed. See response.",
+            "description": "Operation successfully processed. See response.",
             "schema": {
               "$ref": "#/definitions/LoginMFAResp"
             }
@@ -3255,6 +3278,91 @@
           {}
         ],
         "summary": "LoginMFA",
+        "tags": [
+          "Session"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/session/{Email}/{Mode}/verifytotp": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Confirm Google Authenticator (TOTP) enrollment. After a `LoginMFA` call with `SetupTOTP: true`, scan the returned `OtpauthUri`/`SecretCode` into an authenticator app and submit the generated 6-digit _Code_ together with the _AccessToken_ from that login response. On success, TOTP becomes the preferred MFA factor (SMS remains enabled as a fallback). No phone number parameter is required.",
+        "operationId": "VerifyTOTP",
+        "parameters": [
+          {
+            "description": "Session parameters",
+            "in": "body",
+            "name": "VerifyTOTPReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyTOTPReq"
+            }
+          },
+          {
+            "description": "Email address as the account username, e.g. `dan.forsberg@isecure.fi`",
+            "in": "path",
+            "name": "Email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "TOTP enrollment is an `admin` mode operation",
+            "enum": [
+              "admin"
+            ],
+            "in": "path",
+            "name": "Mode",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {}
+        ],
+        "summary": "VerifyTOTP",
         "tags": [
           "Session"
         ],
