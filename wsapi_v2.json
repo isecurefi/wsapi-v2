@@ -64,6 +64,58 @@
       ],
       "type": "object"
     },
+    "BankConnectionCertificateDescriptor": {
+      "description": "Minimal certificate status for bank connection discovery",
+      "properties": {
+        "Expires": {
+          "description": "Certificate expiry reported by the certificate parser",
+          "type": "string"
+        },
+        "Purpose": {
+          "description": "How the certificate is used for this bank connection",
+          "enum": [
+            "signing",
+            "encryption"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "Purpose",
+        "Expires"
+      ],
+      "type": "object"
+    },
+    "BankConnectionDescriptor": {
+      "description": "A bank connection the authenticated account can use",
+      "properties": {
+        "Access": {
+          "description": "Whether this account owns the bank certificates or uses certificates shared by its linked account",
+          "enum": [
+            "direct",
+            "shared"
+          ],
+          "type": "string"
+        },
+        "Bank": {
+          "description": "Public File Exchange API bank identifier",
+          "type": "string"
+        },
+        "Certificates": {
+          "description": "Minimal certificate status needed for connection discovery; certificate material and owner identity are omitted",
+          "items": {
+            "$ref": "#/definitions/BankConnectionCertificateDescriptor"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "Bank",
+        "Access",
+        "Certificates"
+      ],
+      "type": "object"
+    },
     "CertDescriptor": {
       "example": {
         "CertName": "osuuspankki_customer_signing_cert",
@@ -430,14 +482,22 @@
     "ListCertsResp": {
       "example": {
         "Certs": [],
+        "Connections": [],
         "ResponseCode": "..",
         "ResponseText": ".."
       },
       "properties": {
         "Certs": {
-          "description": "List of certificates",
+          "description": "Legacy list of certificates directly owned by this account",
           "items": {
             "$ref": "#/definitions/CertDescriptor"
+          },
+          "type": "array"
+        },
+        "Connections": {
+          "description": "Effective bank connections, including same-API-key certificates shared by the linked owner",
+          "items": {
+            "$ref": "#/definitions/BankConnectionDescriptor"
           },
           "type": "array"
         },
@@ -522,7 +582,7 @@
         "ChallengeName": "SMS_MFA",
         "Code": "123456",
         "Session": "...",
-        "SetupTOTP": "false"
+        "SetupTOTP": false
       },
       "properties": {
         "ChallengeName": {
@@ -539,7 +599,7 @@
         },
         "SetupTOTP": {
           "description": "When `true`, a successful login also returns `SecretCode`, `OtpauthUri`, and `AccessToken` to begin Google Authenticator (TOTP) enrollment. Optional",
-          "type": "string"
+          "type": "boolean"
         }
       },
       "required": [
@@ -1517,7 +1577,7 @@
     },
     "/certs": {
       "get": {
-        "description": "List bank certificates visible to the authenticated account. The result includes certificates directly owned by the account and certificates shared to it by another account under the same API key.",
+        "description": "List bank connections visible to the authenticated account. Connections includes directly owned and same-API-key shared certificate status without exposing the linked owner or shared certificate material. The legacy Certs field remains limited to certificates directly owned by this account.",
         "operationId": "ListCerts",
         "parameters": [
           {
