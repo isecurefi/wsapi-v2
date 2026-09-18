@@ -1,6 +1,29 @@
 {
   "basePath": "/v2",
   "definitions": {
+    "AccountDeletionDescriptor": {
+      "description": "Which resources DeleteAccount removed; `false` means the resource was already absent",
+      "properties": {
+        "Account": {
+          "description": "The account record with all certificates was deleted by this call",
+          "type": "boolean"
+        },
+        "AdminUser": {
+          "description": "The *admin* mode Cognito user was deleted by this call",
+          "type": "boolean"
+        },
+        "DataUser": {
+          "description": "The *data* mode Cognito user was deleted by this call",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "AdminUser",
+        "DataUser",
+        "Account"
+      ],
+      "type": "object"
+    },
     "AccountDescriptor": {
       "example": {
         "AdminMode": "registered",
@@ -241,8 +264,8 @@
       },
       "properties": {
         "Deleted": {
-          "description": "Which resources were removed by this call; `false` means it was already absent",
-          "type": "object"
+          "$ref": "#/definitions/AccountDeletionDescriptor",
+          "description": "Which resources were removed by this call; `false` means it was already absent"
         },
         "Email": {
           "description": "Deleted account email",
@@ -260,8 +283,8 @@
       "required": [
         "ResponseCode",
         "ResponseText",
-        "Email",
-        "Deleted"
+        "Deleted",
+        "Email"
       ],
       "type": "object"
     },
