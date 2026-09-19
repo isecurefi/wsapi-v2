@@ -107,6 +107,101 @@
       ],
       "type": "object"
     },
+    "AuditEventDescriptor": {
+      "properties": {
+        "action": {
+          "description": "Account-management action.",
+          "type": "string"
+        },
+        "actorEmail": {
+          "description": "Authenticated actor email when available.",
+          "type": "string"
+        },
+        "actorId": {
+          "description": "Authenticated actor subject when available.",
+          "type": "string"
+        },
+        "actorMode": {
+          "description": "Actor login mode, when known.",
+          "type": "string"
+        },
+        "actorType": {
+          "description": "operator, integrator, customer, authenticated or unauthenticated. Registration has no authenticated actor.",
+          "type": "string"
+        },
+        "bank": {
+          "description": "Public bank identifier.",
+          "type": "string"
+        },
+        "completedSteps": {
+          "description": "Number of acknowledged mutation steps; missing resources on a deletion retry do not increment it.",
+          "type": "integer"
+        },
+        "eventId": {
+          "description": "Stable operation and sequence identifier; deduplicate publication retries by this value.",
+          "type": "string"
+        },
+        "operationId": {
+          "description": "Identifier for one invocation; retries have different operation IDs.",
+          "type": "string"
+        },
+        "outcome": {
+          "description": "started, accepted, completed, not_found, rejected, failed or partial_failure.",
+          "type": "string"
+        },
+        "pendingStep": {
+          "description": "Step without acknowledged completion; actual state may be unknown.",
+          "type": "string"
+        },
+        "phase": {
+          "description": "request, authorization, step or result.",
+          "type": "string"
+        },
+        "reason": {
+          "description": "Stable failure category without internal error details.",
+          "type": "string"
+        },
+        "requestId": {
+          "description": "Gateway request correlation identifier.",
+          "type": "string"
+        },
+        "resourceId": {
+          "description": "Retired certificate attribute or PGP public key identifier.",
+          "type": "string"
+        },
+        "sequence": {
+          "description": "Sequence within the operation.",
+          "type": "integer"
+        },
+        "step": {
+          "description": "Instrumented operation step.",
+          "type": "string"
+        },
+        "targetEmail": {
+          "description": "Affected account, or attempted target in a tenant-visible denial.",
+          "type": "string"
+        },
+        "targetMode": {
+          "description": "Registered account mode.",
+          "type": "string"
+        },
+        "timestamp": {
+          "description": "UTC event timestamp.",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "eventId",
+        "timestamp",
+        "action",
+        "phase",
+        "outcome",
+        "operationId",
+        "sequence"
+      ],
+      "type": "object"
+    },
     "BankConnectionCertificateDescriptor": {
       "description": "Minimal certificate status for bank connection discovery",
       "properties": {
@@ -571,6 +666,41 @@
         "ResponseCode",
         "ResponseText",
         "Accounts"
+      ],
+      "type": "object"
+    },
+    "ListAuditEventsResp": {
+      "example": {
+        "Events": [],
+        "NextToken": "opaque-cursor",
+        "ResponseCode": "..",
+        "ResponseText": ".."
+      },
+      "properties": {
+        "Events": {
+          "description": "Sanitized audit events; may be empty even when NextToken is present.",
+          "items": {
+            "$ref": "#/definitions/AuditEventDescriptor"
+          },
+          "type": "array"
+        },
+        "NextToken": {
+          "description": "Optional continuation token; absent when pagination is complete.",
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Events"
       ],
       "type": "object"
     },
@@ -1316,14 +1446,14 @@
       "name": "ISECure Oy",
       "url": "https://www.isecure.fi/"
     },
-    "description": "The API provides secure file exchange with common banks in Finland via the *SEPA WebServices* channel, including certificate enrollment (PKI) and automatic certificate renewals.\n\nThe OpenAPI v2 specification is published on GitHub [isecurefi/wsapi-v2](https://github.com/isecurefi/wsapi-v2). Browser-compatible TypeScript SDK is available on GitHub [dforsber/isecure-ts-client](https://github.com/dforsber/isecure-ts-client). Command line CLI and PHP SDK remain available on GitHub [isecurefi/wscli-php](https://github.com/isecurefi/wscli-php).\n\n~~~ts\nimport { WSChannel } from \"isecure-ts-client\";\n\nconst client = new WSChannel({\n  ApiKey: process.env.ISECURE_API_KEY ?? \"0\",\n  Company: \"Example Company Oy\",\n  Name: \"Example User\",\n  Password: process.env.ISECURE_PASSWORD!,\n  Phone: \"+358401234567\",\n  PublicKey: process.env.ISECURE_PUBLIC_KEY_PEM!,\n  BaseUrl: \"https://ws-api.isecure.fi/v2\",\n  Email: \"user@example.com\",\n  Mode: \"data\",\n  Bank: \"nordea\",\n});\n\nconst state = await client.login();\nif (state.status === \"authenticated\") {\n  const { Connections = [] } = await client.listCerts();\n  for (const connection of Connections) {\n    console.log(connection.Bank, connection.Access);\n  }\n}\n~~~\n\n~~~sh\nexport SESSION=~/.wscli/settings.yaml\nwscli session login -c $SESSION\nexport APIKEY=$(yq -r .settings.apikey $SESSION)\nexport IDTOKEN=$(yq -r .settings.idtoken $SESSION)\n\ncurl -H Authorization:$IDTOKEN \\\n     -H x-api-key:$APIKEY \\\n     https://ws-api.isecure.fi/v2/files/danskebank\n~~~\n\nThe API provides role based access control (RBAC), user account management, password recovery, and SMS or authenticator-app (TOTP) multi-factor authentication based on Amazon Cognito user pools.\n\n*NOTE: The API endpoint for production is the same as for test, but without `test.` in the URL. Production and test APIs are deployed on separate AWS accounts.*\n\n*NOTE: The API runs on AWS API Gateway with AWS Lambda backends. Cold Lambda functions can add a small response delay. Banks can also have considerable processing delays, especially for certificate enrollments.*\n\n## Service enrollment\n\nEvery integrator (partner) has an own *API Key*, and every user account belongs to one integrator. The *API Key* is bound to the service subscription. In other words, a new production *API Key* requires a service agreement before file transfers are allowed.\n\nIf a user registers with `0` as the *API Key*, the API creates a new *API Key* and the user becomes the *API Key* owner. The owner account can list all users under the same *API Key* with the Integrator API. Integrators register their own owner account first and use its API key to register customer accounts.\n\n*NOTE: API call rate limits are set and tracked per API Key by AWS API Gateway.*\n\n## Account management\n\nA user email address can have an *admin* account, a *data* account, or both. The role in the API is called `mode`. The modes have separate passwords and different capabilities.\n\nLogin always requires both email address and mode. *Admin* mode login always requires MFA. Existing accounts may continue with SMS MFA, and accounts that have enrolled software-token MFA use authenticator-app/TOTP codes. *Data* mode uses password authentication and is suitable for automation. *Admin* mode configures the account, such as PGP keys and certificate sharing. *Data* mode exchanges files. Listing files is allowed in both modes.\n\n*NOTE: Integrators register customer accounts by using the API key from the API key owner account.*\n\n## Initial registration with TOTP\n\n1. Register the `admin` account first. Use `InitRegister` to get the challenge and `Register` to create the account.\n2. Login with `admin` mode. Complete the returned SMS MFA challenge with `LoginMFA`.\n3. Confirm phone with `VerifyPhone` and email with `VerifyEmail` when required. After verification, start a fresh login cycle.\n4. During an authenticated admin SMS MFA login, call `LoginMFA` with `SetupTOTP: true`. The response includes `SecretCode`, `OtpauthUri`, and an in-memory `AccessToken`.\n5. Show `OtpauthUri` as a QR code, or let the user enter `SecretCode` manually in an authenticator app.\n6. Submit the authenticator code and the returned `AccessToken` to `VerifyTOTP`. TOTP becomes the preferred admin MFA method; SMS remains available as a fallback.\n7. Register the `data` account with the same email and API key for automation/file transfer workflows.\n\n~~~ts\nconst registration = await adminClient.register();\nlet state = await adminClient.login();\n\nif (state.status === \"needs_mfa\" && state.method === \"sms\") {\n  state = await adminClient.submitMfaCode(smsCode, { setupTotp: true });\n}\n\nif (state.status === \"authenticated\" && state.totpEnrollment) {\n  const { otpauthUri, secret, accessToken } = state.totpEnrollment;\n  // Render otpauthUri as a QR code, or display secret for manual entry.\n  await adminClient.verifyTotp(accessToken, codeFromAuthenticatorApp);\n}\n~~~\n\n## Existing SMS MFA user migration to TOTP\n\n1. Login with the existing `admin` account.\n2. When `Login` returns `ChallengeName: SMS_MFA`, submit the SMS code with `LoginMFA` and set `SetupTOTP: true`.\n3. Add the returned `OtpauthUri` or `SecretCode` to the authenticator app.\n4. Confirm enrollment with `VerifyTOTP` using the returned `AccessToken` and the current authenticator code.\n5. Future admin logins normally return `ChallengeName: SOFTWARE_TOKEN_MFA`; submit the authenticator code through `LoginMFA`. SMS remains available as a fallback for accounts where Cognito still has SMS MFA enabled.\n\n~~~ts\nlet state = await adminClient.login();\nif (state.status === \"needs_mfa\" && state.method === \"sms\") {\n  state = await adminClient.submitMfaCode(smsCode, { setupTotp: true });\n}\nif (state.status === \"authenticated\" && state.totpEnrollment) {\n  await adminClient.verifyTotp(state.totpEnrollment.accessToken, authenticatorCode);\n}\n~~~\n\n## Bank certificate enrollment\n\nThe *SEPA WebServices* connection to the bank requires enrolling a PKI certificate with the bank. *Admin* mode can enroll certificates for different banks, but only one certificate per bank. The corresponding private key is generated and stored encrypted with AWS KMS.\n\n## Bank certificate sharing\n\nIt is possible to share the same bank certificate with multiple accounts. Certificate sharing can be configured when accounts have the same API key. The account that holds the certificate can share it with another account (*admin* mode operation). Only the account that owns the certificate can PGP-export the certificate and corresponding private key. This allows one *admin* mode account to own certificates and share them with multiple *data* mode accounts.\n\nAn account can never have multiple certificates per bank, whether shared or directly enrolled. The API identifies the bank, not an individual certificate/key pair.\n\n## Access security\n\nAccess is secured with TLS on AWS API Gateway. Inside TLS, register and login use challenge-response: the client fetches fresh username-specific parameters with `InitRegister` or `InitLogin`, RSA-encrypts the password and challenge timestamp with OAEP padding, and submits the encrypted value to `Register`, `Login`, or `PasswordReset`.\n\nSuccessful login returns a Cognito `IdToken` and the integrator `ApiKey`. For protected operations, send `Authorization: <IdToken>` and `x-api-key: <ApiKey>`. The OpenAPI document also models these headers as security schemes. If a generated client exposes both explicit header parameters and security settings, use the same values for both; the wire request must contain exactly those two headers.\n\nAdministrative actions require MFA authentication. SMS MFA remains available and TOTP can be enrolled with `LoginMFA` and confirmed with `VerifyTOTP`. User account management is handled with Cognito user pools. Each email can have separate `admin` and/or `data` mode Cognito users that share the same API account data.\n\n## Error handling and retryability\n\nSuccessful logical API responses have `ResponseCode: \"00\"`. Logical failures usually return `ResponseCode: \"01\"` with a human-readable `ResponseText` and `RequestId`. Include `RequestId` in support tickets.\n\nHTTP status still matters. `401`/`403` authentication and authorization failures are not retryable without changing credentials, token, role, API key, or verification state. `Invalid API key` is not retryable. Validation errors are not retryable without changing the request. Bank/backend integration errors may be retryable only when the text indicates a temporary upstream problem, timeout, throttling, or bank-side availability issue.\n\nThe TypeScript SDK throws typed transport errors for non-2xx responses and network failures, while API-level failures are returned as structured response objects or typed authentication states. Prefer the SDK for browser and Node.js integrations so MFA, retries, logging redaction, and session handling stay consistent. Browser clients use normal API methods through the TypeScript SDK. API Gateway also supports CORS preflight `OPTIONS` requests, but these are infrastructure-only and are not public API operations or SDK methods.\n\n## CHANGELOG\n\n**2.10.0** :: 2026-09-18\n- `Login` and `LoginMFA` return an `Account` object on authenticated sessions: `Type` (`operator` for the ISECure owner account, `integrator` for an API key owner, `customer` otherwise), `Entitlements` (the tenant's active product ids) and `Features` (per-user preview flags). All values are server-decided; authorization is unchanged.\n\n**2.9.0** :: 2026-09-17\n- Added `RetireCert` (`DELETE /certs/{Bank}`) to retire a bank certificate, optionally on a customer account by the integrator owner.\n- Added `DeleteAccount` (`DELETE /account/{Email}`) for permanent, confirmed customer account deletion by the integrator owner within 10 minutes of an MFA login. Integrator owner accounts cannot be deleted.\n- `ListCerts` reports `Retired` certificates; `ListAccounts` reports `AccountType`, `LinkedTo`, and `Retired`.\n\n**2.8.0** :: 2026-08-10\n- Added privacy-minimal effective bank connection discovery to `ListCerts`, including direct or shared access and certificate purpose/expiry status.\n- Kept legacy `Certs` direct-only and made `Connections` optional for compatible rollout.\n- Corrected `LoginMFA.SetupTOTP` to its runtime boolean type.\n\n**2.7.0** :: 2026-06-25\n- Added software-token/TOTP admin MFA (`LoginMFA` with `SetupTOTP` and `VerifyTOTP`) while keeping SMS MFA available.\n- Documented the browser-compatible TypeScript SDK.\n- Added browser CORS preflight support (`OPTIONS`) for the TypeScript SDK. `OPTIONS` is infrastructure-only and not a public SDK operation.\n\n**2.6.0** :: 2021-06-14\n- Added token revocation for logout (AWS SDK based new capability), no changes to the API itself.\n\n**2.5.0** :: 2020-04-19\n- Removed `OPTIONS` from the documented business API operations.\n- Fixed Login response.",
+    "description": "The API provides secure file exchange with common banks in Finland via the *SEPA WebServices* channel, including certificate enrollment (PKI) and automatic certificate renewals.\n\nThe OpenAPI v2 specification is published on GitHub [isecurefi/wsapi-v2](https://github.com/isecurefi/wsapi-v2). Browser-compatible TypeScript SDK is available on GitHub [dforsber/isecure-ts-client](https://github.com/dforsber/isecure-ts-client). Command line CLI and PHP SDK remain available on GitHub [isecurefi/wscli-php](https://github.com/isecurefi/wscli-php).\n\n~~~ts\nimport { WSChannel } from \"isecure-ts-client\";\n\nconst client = new WSChannel({\n  ApiKey: process.env.ISECURE_API_KEY ?? \"0\",\n  Company: \"Example Company Oy\",\n  Name: \"Example User\",\n  Password: process.env.ISECURE_PASSWORD!,\n  Phone: \"+358401234567\",\n  PublicKey: process.env.ISECURE_PUBLIC_KEY_PEM!,\n  BaseUrl: \"https://ws-api.isecure.fi/v2\",\n  Email: \"user@example.com\",\n  Mode: \"data\",\n  Bank: \"nordea\",\n});\n\nconst state = await client.login();\nif (state.status === \"authenticated\") {\n  const { Connections = [] } = await client.listCerts();\n  for (const connection of Connections) {\n    console.log(connection.Bank, connection.Access);\n  }\n}\n~~~\n\n~~~sh\nexport SESSION=~/.wscli/settings.yaml\nwscli session login -c $SESSION\nexport APIKEY=$(yq -r .settings.apikey $SESSION)\nexport IDTOKEN=$(yq -r .settings.idtoken $SESSION)\n\ncurl -H Authorization:$IDTOKEN \\\n     -H x-api-key:$APIKEY \\\n     https://ws-api.isecure.fi/v2/files/danskebank\n~~~\n\nThe API provides role based access control (RBAC), user account management, password recovery, and SMS or authenticator-app (TOTP) multi-factor authentication based on Amazon Cognito user pools.\n\n*NOTE: The API endpoint for production is the same as for test, but without `test.` in the URL. Production and test APIs are deployed on separate AWS accounts.*\n\n*NOTE: The API runs on AWS API Gateway with AWS Lambda backends. Cold Lambda functions can add a small response delay. Banks can also have considerable processing delays, especially for certificate enrollments.*\n\n## Service enrollment\n\nEvery integrator (partner) has an own *API Key*, and every user account belongs to one integrator. The *API Key* is bound to the service subscription. In other words, a new production *API Key* requires a service agreement before file transfers are allowed.\n\nIf a user registers with `0` as the *API Key*, the API creates a new *API Key* and the user becomes the *API Key* owner. The owner account can list all users under the same *API Key* with the Integrator API. Integrators register their own owner account first and use its API key to register customer accounts.\n\n*NOTE: API call rate limits are set and tracked per API Key by AWS API Gateway.*\n\n## Account management\n\nA user email address can have an *admin* account, a *data* account, or both. The role in the API is called `mode`. The modes have separate passwords and different capabilities.\n\nLogin always requires both email address and mode. *Admin* mode login always requires MFA. Existing accounts may continue with SMS MFA, and accounts that have enrolled software-token MFA use authenticator-app/TOTP codes. *Data* mode uses password authentication and is suitable for automation. *Admin* mode configures the account, such as PGP keys and certificate sharing. *Data* mode exchanges files. Listing files is allowed in both modes.\n\n*NOTE: Integrators register customer accounts by using the API key from the API key owner account.*\n\n## Initial registration with TOTP\n\n1. Register the `admin` account first. Use `InitRegister` to get the challenge and `Register` to create the account.\n2. Login with `admin` mode. Complete the returned SMS MFA challenge with `LoginMFA`.\n3. Confirm phone with `VerifyPhone` and email with `VerifyEmail` when required. After verification, start a fresh login cycle.\n4. During an authenticated admin SMS MFA login, call `LoginMFA` with `SetupTOTP: true`. The response includes `SecretCode`, `OtpauthUri`, and an in-memory `AccessToken`.\n5. Show `OtpauthUri` as a QR code, or let the user enter `SecretCode` manually in an authenticator app.\n6. Submit the authenticator code and the returned `AccessToken` to `VerifyTOTP`. TOTP becomes the preferred admin MFA method; SMS remains available as a fallback.\n7. Register the `data` account with the same email and API key for automation/file transfer workflows.\n\n~~~ts\nconst registration = await adminClient.register();\nlet state = await adminClient.login();\n\nif (state.status === \"needs_mfa\" && state.method === \"sms\") {\n  state = await adminClient.submitMfaCode(smsCode, { setupTotp: true });\n}\n\nif (state.status === \"authenticated\" && state.totpEnrollment) {\n  const { otpauthUri, secret, accessToken } = state.totpEnrollment;\n  // Render otpauthUri as a QR code, or display secret for manual entry.\n  await adminClient.verifyTotp(accessToken, codeFromAuthenticatorApp);\n}\n~~~\n\n## Existing SMS MFA user migration to TOTP\n\n1. Login with the existing `admin` account.\n2. When `Login` returns `ChallengeName: SMS_MFA`, submit the SMS code with `LoginMFA` and set `SetupTOTP: true`.\n3. Add the returned `OtpauthUri` or `SecretCode` to the authenticator app.\n4. Confirm enrollment with `VerifyTOTP` using the returned `AccessToken` and the current authenticator code.\n5. Future admin logins normally return `ChallengeName: SOFTWARE_TOKEN_MFA`; submit the authenticator code through `LoginMFA`. SMS remains available as a fallback for accounts where Cognito still has SMS MFA enabled.\n\n~~~ts\nlet state = await adminClient.login();\nif (state.status === \"needs_mfa\" && state.method === \"sms\") {\n  state = await adminClient.submitMfaCode(smsCode, { setupTotp: true });\n}\nif (state.status === \"authenticated\" && state.totpEnrollment) {\n  await adminClient.verifyTotp(state.totpEnrollment.accessToken, authenticatorCode);\n}\n~~~\n\n## Bank certificate enrollment\n\nThe *SEPA WebServices* connection to the bank requires enrolling a PKI certificate with the bank. *Admin* mode can enroll certificates for different banks, but only one certificate per bank. The corresponding private key is generated and stored encrypted with AWS KMS.\n\n## Bank certificate sharing\n\nIt is possible to share the same bank certificate with multiple accounts. Certificate sharing can be configured when accounts have the same API key. The account that holds the certificate can share it with another account (*admin* mode operation). Only the account that owns the certificate can PGP-export the certificate and corresponding private key. This allows one *admin* mode account to own certificates and share them with multiple *data* mode accounts.\n\nAn account can never have multiple certificates per bank, whether shared or directly enrolled. The API identifies the bank, not an individual certificate/key pair.\n\n## Access security\n\nAccess is secured with TLS on AWS API Gateway. Inside TLS, register and login use challenge-response: the client fetches fresh username-specific parameters with `InitRegister` or `InitLogin`, RSA-encrypts the password and challenge timestamp with OAEP padding, and submits the encrypted value to `Register`, `Login`, or `PasswordReset`.\n\nSuccessful login returns a Cognito `IdToken` and the integrator `ApiKey`. For protected operations, send `Authorization: <IdToken>` and `x-api-key: <ApiKey>`. The OpenAPI document also models these headers as security schemes. If a generated client exposes both explicit header parameters and security settings, use the same values for both; the wire request must contain exactly those two headers.\n\nAdministrative actions require MFA authentication. SMS MFA remains available and TOTP can be enrolled with `LoginMFA` and confirmed with `VerifyTOTP`. User account management is handled with Cognito user pools. Each email can have separate `admin` and/or `data` mode Cognito users that share the same API account data.\n\n## Error handling and retryability\n\nSuccessful logical API responses have `ResponseCode: \"00\"`. Logical failures usually return `ResponseCode: \"01\"` with a human-readable `ResponseText` and `RequestId`. Include `RequestId` in support tickets.\n\nHTTP status still matters. `401`/`403` authentication and authorization failures are not retryable without changing credentials, token, role, API key, or verification state. `Invalid API key` is not retryable. Validation errors are not retryable without changing the request. Bank/backend integration errors may be retryable only when the text indicates a temporary upstream problem, timeout, throttling, or bank-side availability issue.\n\nThe TypeScript SDK throws typed transport errors for non-2xx responses and network failures, while API-level failures are returned as structured response objects or typed authentication states. Prefer the SDK for browser and Node.js integrations so MFA, retries, logging redaction, and session handling stay consistent. Browser clients use normal API methods through the TypeScript SDK. API Gateway also supports CORS preflight `OPTIONS` requests, but these are infrastructure-only and are not public API operations or SDK methods.\n\n## CHANGELOG\n\n**2.11.0** :: 2026-09-19\n- `ListAuditEvents` exposes sanitized audit evidence: integrators see their tenant and customers see their own account.\n- Account-management audit streams survive account deletion, with ten-year event retention.\n\n**2.10.0** :: 2026-09-18\n- `Login` and `LoginMFA` return an `Account` object on authenticated sessions: `Type` (`operator` for the ISECure owner account, `integrator` for an API key owner, `customer` otherwise), `Entitlements` (the tenant's active product ids) and `Features` (per-user preview flags). All values are server-decided; authorization is unchanged.\n\n**2.9.0** :: 2026-09-17\n- Added `RetireCert` (`DELETE /certs/{Bank}`) to retire a bank certificate, optionally on a customer account by the integrator owner.\n- Added `DeleteAccount` (`DELETE /account/{Email}`) for permanent, confirmed customer account deletion by the integrator owner within 10 minutes of an MFA login. Integrator owner accounts cannot be deleted.\n- `ListCerts` reports `Retired` certificates; `ListAccounts` reports `AccountType`, `LinkedTo`, and `Retired`.\n\n**2.8.0** :: 2026-08-10\n- Added privacy-minimal effective bank connection discovery to `ListCerts`, including direct or shared access and certificate purpose/expiry status.\n- Kept legacy `Certs` direct-only and made `Connections` optional for compatible rollout.\n- Corrected `LoginMFA.SetupTOTP` to its runtime boolean type.\n\n**2.7.0** :: 2026-06-25\n- Added software-token/TOTP admin MFA (`LoginMFA` with `SetupTOTP` and `VerifyTOTP`) while keeping SMS MFA available.\n- Documented the browser-compatible TypeScript SDK.\n- Added browser CORS preflight support (`OPTIONS`) for the TypeScript SDK. `OPTIONS` is infrastructure-only and not a public SDK operation.\n\n**2.6.0** :: 2021-06-14\n- Added token revocation for logout (AWS SDK based new capability), no changes to the API itself.\n\n**2.5.0** :: 2020-04-19\n- Removed `OPTIONS` from the documented business API operations.\n- Fixed Login response.",
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "termsOfService": "https://www.isecure.fi/ws-api-terms",
     "title": "ISECure WS Channel API",
-    "version": "v2.10.0",
+    "version": "v2.11.0",
     "x-logo": {
       "backgroundColor": "#FFFFFF",
       "url": "https://www.isecure.fi/images/isecure-small-logo.png"
@@ -1335,7 +1465,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Permanently delete one customer account under the caller's API key: both Cognito users (*admin* and *data*), the account record, every active and retired certificate and private key on it, and its link to a certificate-sharing owner. Nothing is retained; use this for GDPR erasure. The operation is not reversible.\n\n*Admin* mode only, and only the integrator API key owner account may call it. The admin login (which always includes MFA) must be fresh: a token whose `auth_time` is older than 10 minutes is rejected with `Re-authenticate to delete accounts`, so clients should sign in again with MFA and retry. The caller must repeat the exact account email in the body `Confirm` field; a missing or different value is rejected before any change.\n\nIntegrator API key owner accounts can never be deleted through the API, not even by themselves. An account that still shares its certificates with other accounts (see `ShareCerts`) is rejected until those accounts are unshared or deleted. An interrupted deletion can be repeated safely: already removed Cognito users are tolerated and the account record is removed last.",
+        "description": "Permanently delete one customer account under the caller's API key: both Cognito users (*admin* and *data*), the account record, every active and retired certificate and private key on it, and its link to a certificate-sharing owner. Customer account and certificate material are removed. Audit evidence is retained separately for ten years; audit log streams are never deleted by account deletion. The operation is not reversible.\n\n*Admin* mode only, and only the integrator API key owner account may call it. The admin login (which always includes MFA) must be fresh: a token whose `auth_time` is older than 10 minutes is rejected with `Re-authenticate to delete accounts`, so clients should sign in again with MFA and retry. The caller must repeat the exact account email in the body `Confirm` field; a missing or different value is rejected before any change.\n\nIntegrator API key owner accounts can never be deleted through the API, not even by themselves. An account that still shares its certificates with other accounts (see `ShareCerts`) is rejected until those accounts are unshared or deleted. An interrupted deletion can be repeated safely: already removed Cognito users are tolerated and the account record is removed last.",
         "operationId": "DeleteAccount",
         "parameters": [
           {
@@ -2021,6 +2151,158 @@
         "summary": "VerifyPhone",
         "tags": [
           "Account"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/audit": {
+      "get": {
+        "description": "Read sanitized account-management audit history through the authenticated API. Integrator API key owners can read their entire tenant or select Account; customer accounts can read only their own account. API-key ownership is verified before any log access. Both admin and data modes can read their permitted history.\n\nEvents include the actor, action, affected account, timestamp, outcome and operation/request correlation. No bank files, SOAP messages, credentials, private keys or raw internal diagnostics are returned. Delivery is asynchronous; deduplicate by eventId across pages because publication retries may repeat an event. Streams survive account deletion and events have ten-year retention. Integrator owners can query deleted-account history without the deleted users-table row.\n\nResults are paginated newest first across all accounts in the permitted scope. Each page returns up to Limit events; additional pages continue toward older events. Use From and To to select up to 31 days at a time, and follow NextToken even after an empty page. Do not interpret missing or delayed events as proof that an operation did not happen.",
+        "operationId": "ListAuditEvents",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Optional customer email. Integrator owners may select any account history in their tenant, including deleted accounts. Other users may select only their own email; omitted means their own account. For an integrator, omitted means the entire tenant.",
+            "in": "query",
+            "name": "Account",
+            "type": "string"
+          },
+          {
+            "description": "Inclusive UTC start time on or after 2024-01-01, e.g. 2026-09-19T00:00:00.000Z. Defaults to seven days ago. Maximum range: 31 days.",
+            "in": "query",
+            "name": "From",
+            "type": "string"
+          },
+          {
+            "description": "Inclusive UTC end time. Defaults to now. Use the same range when continuing a page, or omit From and To to retain the cursor range.",
+            "in": "query",
+            "name": "To",
+            "type": "string"
+          },
+          {
+            "description": "Optional exact audit action, e.g. account.delete or certificate.retire.",
+            "in": "query",
+            "name": "Action",
+            "type": "string"
+          },
+          {
+            "description": "Optional exact outcome: started, accepted, completed, not_found, rejected, failed or partial_failure.",
+            "in": "query",
+            "name": "Outcome",
+            "type": "string"
+          },
+          {
+            "description": "Maximum events per page, from 1 to 100; defaults to 100.",
+            "in": "query",
+            "name": "Limit",
+            "type": "integer"
+          },
+          {
+            "description": "Opaque continuation token returned by this operation. Bound to the caller, tenant, account and filters; expires after 24 hours. An empty page may still include a token.",
+            "in": "query",
+            "name": "NextToken",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ListAuditEventsResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ListAuditEvents",
+        "tags": [
+          "Audit"
         ],
         "x-code-samples": [
           {
