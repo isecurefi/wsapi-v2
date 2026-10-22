@@ -14,6 +14,7 @@ command-line and PHP workflows.
 
 
 The 2.17.0 specification adds optional account public-key armor for client-side inspection.
-This additive field is qualified on test API first; production promotion is separate.
+This additive field is available in production and the test API. Credential-provider discovery
+reports enrollment only; it does not establish provider-operation availability.
 Older deployments may omit `Accounts[].PgpKeys`. See the operation and schema descriptions
 for unavailable entries and read-only handling.
