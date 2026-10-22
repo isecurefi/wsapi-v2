@@ -12,3 +12,8 @@ Use the official [`isecure-ts-client`](https://github.com/isecurefi/isecure-ts-c
 for TypeScript, or [`wscli`](https://github.com/isecurefi/wscli-php) for the
 command-line and PHP workflows.
 
+
+The 2.17.0 specification adds optional account public-key armor for client-side inspection.
+This additive field is qualified on gpgtest first; production promotion is separate.
+Older deployments may omit `Accounts[].PgpKeys`. See the operation and schema descriptions
+for unavailable entries and read-only handling.
