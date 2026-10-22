@@ -14,6 +14,6 @@ command-line and PHP workflows.
 
 
 The 2.17.0 specification adds optional account public-key armor for client-side inspection.
-This additive field is qualified on gpgtest first; production promotion is separate.
+This additive field is qualified on test API first; production promotion is separate.
 Older deployments may omit `Accounts[].PgpKeys`. See the operation and schema descriptions
 for unavailable entries and read-only handling.
