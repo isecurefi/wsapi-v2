@@ -61,3 +61,7 @@ history remains available independently. Integrator-owner accounts remain protec
 
 Account deletion and certificate retirement each require a fresh Admin MFA login, no more than
 ten minutes old and usable for one lifecycle action. These changes are not yet deployed.
+
+The deletion request now requires `ConfirmSoftDelete` equal to the target email and must omit
+the legacy `Confirm` field. This fails safely against a backend that still implements immediate
+deletion. Update clients together with the backend; older deletion requests are rejected.
