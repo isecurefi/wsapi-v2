@@ -58,6 +58,11 @@
           },
           "type": "array"
         },
+        "CreatedAt": {
+          "description": "Server-recorded initial account registration time in UTC. Adding a sign-in mode does not change it. Omitted for legacy records without a reliable creation timestamp.",
+          "format": "date-time",
+          "type": "string"
+        },
         "DataMode": {
           "description": "`data` mode status",
           "enum": [

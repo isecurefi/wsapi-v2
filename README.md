@@ -65,3 +65,7 @@ ten minutes old and usable for one lifecycle action. These changes are not yet d
 The deletion request now requires `ConfirmSoftDelete` equal to the target email and must omit
 the legacy `Confirm` field. This fails safely against a backend that still implements immediate
 deletion. Update clients together with the backend; older deletion requests are rejected.
+
+Account discovery includes optional `Accounts[].CreatedAt`, the original account registration
+instant in UTC RFC3339 format. Adding another sign-in mode does not change it. Legacy accounts
+without a recorded timestamp omit this field; clients should show an unknown registration date.
