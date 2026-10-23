@@ -40,9 +40,8 @@ Maventa/MobilePay connections have `Certificates: []` and must still appear in c
 Supported types are `MAVENTA_INVOICE_JSON_V1`, `MOBILEPAY_FUNDS_JSON_V1` and
 `MOBILEPAY_FEES_JSON_V1`. Omitted Status, ALL and DLD are equivalent; NEW is unsupported.
 DLD is a descriptor convention, not server-maintained download history. Upload and file
-deletion are unsupported for these providers. See the SDK's
-[provider guide](https://github.com/isecurefi/isecure-ts-client/blob/codex/provider-sdk-rc-20261023/docs/providers.md)
-for credential bundles, MobilePay listing windows and complete JSON download envelopes.
+deletion are unsupported for these providers. The candidate SDK's `docs/providers.md` covers credential bundles, MobilePay listing
+windows and complete JSON download envelopes.
 The SDK candidate remains unpublished during qualification; the online API-reference
 site is not changed merely by committing this companion.
 
