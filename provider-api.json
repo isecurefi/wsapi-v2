@@ -1,0 +1,1449 @@
+{
+  "basePath": "/v2",
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "CheckMaventaConnectionResp": {
+      "properties": {
+        "Environment": {
+          "type": "string"
+        },
+        "Ready": {
+          "type": "boolean"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Ready",
+        "Environment"
+      ],
+      "type": "object"
+    },
+    "CheckMobilePayConnectionResp": {
+      "properties": {
+        "Environment": {
+          "type": "string"
+        },
+        "Ready": {
+          "type": "boolean"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Ready",
+        "Environment"
+      ],
+      "type": "object"
+    },
+    "DisableMaventaConnectionResp": {
+      "properties": {
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Environment": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "Environment",
+        "Version"
+      ],
+      "type": "object"
+    },
+    "DisableMobilePayConnectionResp": {
+      "properties": {
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Environment": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "Environment",
+        "Version"
+      ],
+      "type": "object"
+    },
+    "EnrollMaventaConnectionReq": {
+      "additionalProperties": false,
+      "properties": {
+        "CompanyUuid": {
+          "description": "Write-only Maventa credential. Environment must match the deployment: stage on test, production on production RC.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Environment": {
+          "description": "Write-only Maventa credential. Environment must match the deployment: stage on test, production on production RC.",
+          "enum": [
+            "stage",
+            "production"
+          ],
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "UserApiKey": {
+          "description": "Write-only Maventa credential. Environment must match the deployment: stage on test, production on production RC.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "VendorApiKey": {
+          "description": "Write-only Maventa credential. Environment must match the deployment: stage on test, production on production RC.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "Environment",
+        "CompanyUuid",
+        "UserApiKey",
+        "VendorApiKey"
+      ],
+      "type": "object"
+    },
+    "EnrollMaventaConnectionResp": {
+      "properties": {
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Environment": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "Environment",
+        "Version"
+      ],
+      "type": "object"
+    },
+    "EnrollMobilePayConnectionReq": {
+      "additionalProperties": false,
+      "properties": {
+        "ClientId": {
+          "description": "Write-only accounting key or exact recipient/ledger scope; never a payment or subscription key.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "ClientSecret": {
+          "description": "Write-only accounting key or exact recipient/ledger scope; never a payment or subscription key.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "DefaultLookbackDays": {
+          "description": "Default listing lookback, 1 through 31 completed ledger dates; defaults to 7.",
+          "type": "integer"
+        },
+        "Environment": {
+          "description": "Write-only accounting key or exact recipient/ledger scope; never a payment or subscription key.",
+          "enum": [
+            "production"
+          ],
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "LedgerCutoff": {
+          "description": "Verified accounting cutoff HH:MM. Ambiguous DST cutoffs fail closed.",
+          "type": "string"
+        },
+        "LedgerId": {
+          "description": "Required together for a fixed ledger. Must be omitted when LedgerScope is AllAccessible.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        "LedgerScope": {
+          "description": "Explicitly discover all ledgers accessible to these accounting credentials. Omit for a fixed LedgerId and RecipientHandle. The declared calendar applies to every discovered ledger.",
+          "enum": [
+            "AllAccessible"
+          ],
+          "type": "string"
+        },
+        "LedgerTimezone": {
+          "description": "Verified IANA accounting timezone, such as Europe/Helsinki.",
+          "type": "string"
+        },
+        "RecipientHandle": {
+          "description": "Required together for a fixed ledger. Must be omitted when LedgerScope is AllAccessible.",
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "Environment",
+        "ClientId",
+        "ClientSecret",
+        "LedgerTimezone",
+        "LedgerCutoff"
+      ],
+      "type": "object"
+    },
+    "EnrollMobilePayConnectionResp": {
+      "properties": {
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Environment": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "Environment",
+        "Version"
+      ],
+      "type": "object"
+    },
+    "ErrorResponse": {
+      "properties": {
+        "RequestId": {
+          "description": "Service side request id for problem tracing purposes",
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GetMaventaConnectionResp": {
+      "properties": {
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Environment": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "Environment",
+        "Version"
+      ],
+      "type": "object"
+    },
+    "GetMobilePayConnectionResp": {
+      "properties": {
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Environment": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "Environment",
+        "Version"
+      ],
+      "type": "object"
+    }
+  },
+  "host": "ws-api.test.isecure.fi",
+  "info": {
+    "description": "Credential-provider operations available on the test API and the separately admitted production release candidate. Live production availability requires separate promotion. File listing, download and compatible enrollment use the existing File Exchange operations.",
+    "title": "ISECure provider connection API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/providers/maventa/check": {
+      "get": {
+        "description": "Isolated test/production RC live account readiness check through the native Maventa SDK. No invoice send or configuration mutation.",
+        "operationId": "CheckMaventaConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/CheckMaventaConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "CheckMaventaConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/providers/maventa/connection": {
+      "delete": {
+        "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
+        "operationId": "DisableMaventaConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Quoted connection Version from GET. A stale version returns 409.",
+            "in": "header",
+            "name": "If-Match",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "New lowercase UUID for this change. Retain the same UUID and body when retrying an uncertain outcome.",
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/DisableMaventaConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DisableMaventaConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "get": {
+        "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
+        "operationId": "GetMaventaConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetMaventaConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "GetMaventaConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
+        "operationId": "EnrollMaventaConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Files parameters",
+            "in": "body",
+            "name": "EnrollMaventaConnectionReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnrollMaventaConnectionReq"
+            }
+          },
+          {
+            "description": "Quoted connection Version from GET. A stale version returns 409.",
+            "in": "header",
+            "name": "If-Match",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "New lowercase UUID for this change. Retain the same UUID and body when retrying an uncertain outcome.",
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/EnrollMaventaConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "EnrollMaventaConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/providers/mobilepay/check": {
+      "get": {
+        "description": "Isolated test/production RC MobilePay read-only Report API adapter. Provider environment is production. Requires an enrolled connection and integration.mobilepay entitlement; no durable report or download state.",
+        "operationId": "CheckMobilePayConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/CheckMobilePayConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "CheckMobilePayConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/providers/mobilepay/connection": {
+      "delete": {
+        "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
+        "operationId": "DisableMobilePayConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Quoted connection Version from GET. A stale version returns 409.",
+            "in": "header",
+            "name": "If-Match",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "New lowercase UUID for this change. Retain the same UUID and body when retrying an uncertain outcome.",
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/DisableMobilePayConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DisableMobilePayConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "get": {
+        "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
+        "operationId": "GetMobilePayConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetMobilePayConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "GetMobilePayConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
+        "operationId": "EnrollMobilePayConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Files parameters",
+            "in": "body",
+            "name": "EnrollMobilePayConnectionReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnrollMobilePayConnectionReq"
+            }
+          },
+          {
+            "description": "Quoted connection Version from GET. A stale version returns 409.",
+            "in": "header",
+            "name": "If-Match",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "New lowercase UUID for this change. Retain the same UUID and body when retrying an uncertain outcome.",
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/EnrollMobilePayConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "EnrollMobilePayConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "Authorizer": {
+      "description": "Successful login provides `IdToken` that must be provided in the `Authorization` header",
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    },
+    "X-Api-Key": {
+      "description": "Integrator specific API Key. For all integrator customers, the API key must be the same.",
+      "in": "header",
+      "name": "x-api-key",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0"
+}

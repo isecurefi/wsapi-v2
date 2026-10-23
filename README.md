@@ -18,3 +18,36 @@ This additive field is available in production and the test API. Credential-prov
 reports enrollment only; it does not establish provider-operation availability.
 Older deployments may omit `Accounts[].PgpKeys`. See the operation and schema descriptions
 for unavailable entries and read-only handling.
+
+## Credential-provider companion contract
+
+[`provider-api.json`](provider-api.json) describes Maventa and MobilePay readiness and
+connection administration on the test API and separately admitted production release
+candidate. These operations are not yet promoted to live production. Discovery in the
+main specification reports an enrollment, not readiness or subscription authority.
+
+The companion adds GET `/providers/{provider}/check` and GET/PUT/DELETE
+`/providers/{provider}/connection`, with concrete `maventa` and `mobilepay` paths.
+Readiness returns Ready and Environment. Admin metadata returns Enrolled, Environment
+and Version, never credential values. PUT/DELETE require If-Match and Idempotency-Key;
+retain exact input/version/key after an uncertain outcome. The server enforces the
+signed-in account, tenant, role, provider subscription and deployment environment.
+Maventa accepts Stage credentials on test and production credentials on production RC;
+MobilePay uses production reporting credentials only when explicitly enrolled.
+
+File listing, downloads and compatible enrollment reuse the main API operations.
+Maventa/MobilePay connections have `Certificates: []` and must still appear in clients.
+Supported types are `MAVENTA_INVOICE_JSON_V1`, `MOBILEPAY_FUNDS_JSON_V1` and
+`MOBILEPAY_FEES_JSON_V1`. Omitted Status, ALL and DLD are equivalent; NEW is unsupported.
+DLD is a descriptor convention, not server-maintained download history. Upload and file
+deletion are unsupported for these providers. See the SDK's
+[provider guide](https://github.com/isecurefi/isecure-ts-client/blob/codex/provider-sdk-rc-20261023/docs/providers.md)
+for credential bundles, MobilePay listing windows and complete JSON download envelopes.
+The SDK candidate remains unpublished during qualification; the online API-reference
+site is not changed merely by committing this companion.
+
+The backend's `config.json` and `__wsapi.json.tmpl` remain authoritative.
+`scripts/export-provider-contract.py` in that repository generates the companion and
+checks deterministic drift with `--check`. `provider-api.source.json` records its owning
+path and SHA-256, identical to the SDK's vendored companion. Update these files only
+from the reviewed backend export. The main production specification is unchanged.

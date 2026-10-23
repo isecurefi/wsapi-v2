@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "repository": "aws",
+  "source": "ws-channel-api/provider-api.json",
+  "sha256": "a662369342cdc0e36cf1c959123c0bfdabc5d7774953117786781ac415170a80"
+}
