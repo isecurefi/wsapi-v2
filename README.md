@@ -50,3 +50,14 @@ The backend's `config.json` and `__wsapi.json.tmpl` remain authoritative.
 checks deterministic drift with `--check`. `provider-api.source.json` records its owning
 path and SHA-256, identical to the SDK's vendored companion. Update these files only
 from the reviewed backend export. The main production specification is unchanged.
+
+
+## Unreleased account lifecycle update (2.18.0)
+
+`DeleteAccount` revokes both sign-ins and retains the customer record with `Lifecycle: deleted`,
+`DeletedAt`, `DeletedBy` and `PurgeAfter`. Deleted customers contribute no customer licenses.
+Automatic removal becomes eligible after 30 days; physical removal is asynchronous. Audit
+history remains available independently. Integrator-owner accounts remain protected.
+
+Account deletion and certificate retirement each require a fresh Admin MFA login, no more than
+ten minutes old and usable for one lifecycle action. These changes are not yet deployed.
