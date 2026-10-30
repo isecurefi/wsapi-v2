@@ -69,3 +69,46 @@ deletion. Update clients together with the backend; older deletion requests are 
 Account discovery includes optional `Accounts[].CreatedAt`, the original account registration
 instant in UTC RFC3339 format. Adding another sign-in mode does not change it. Legacy accounts
 without a recorded timestamp omit this field; clients should show an unknown registration date.
+
+## Encrypted file-transfer companion (unpublished)
+
+[`transfer-api.json`](transfer-api.json) is generated from the backend's Test-only
+transfer routes. It supplements the existing Files API; it does not add these
+operations to current Production. The unpublished TypeScript SDK 4.6.0-rc.1 handles
+negotiation, gzip, AES-256-GCM and presigned object transfers. Deployment is separate
+from publication; always discover support in the authenticated session.
+
+- **Existing integration:** continue calling `uploadFile` and `downloadFile` with
+  ordinary Base64 Content. No new crypto or migration is required.
+- **Compressed upload:** open an inline transfer with the original length/hash and
+  `AcceptGzip: true`; create it, then execute with original bytes and their detached
+  signatures. The SDK uses gzip only when negotiated and smaller.
+- **Encrypted S3 upload:** open an S3 intent; create, prepare the original bytes,
+  upload the prepared ciphertext, then explicitly execute. S3 gets ciphertext,
+  never API authentication headers. Keys arrive only through the authenticated API.
+- **Download:** create and execute a download intent, then receive the verified
+  result. The SDK authenticates and checks integrity before releasing any bytes.
+- **Timeout or expired URL:** keep the same ClientRequestId and transfer handle.
+  Read status; do not automatically resubmit a bank operation. Refresh retained
+  delivery to obtain a new URL without contacting the bank. Retirement denies new
+  grants but cannot undo a bank operation or retract already delivered data.
+
+The API ceiling is 32 MiB of original bytes. Local SDK/Rust/ordinary-HTTPS tests
+passed both directions for compressible and incompressible files; upstream bank
+and hosting limits still apply. The hosted Simulator's Lambda payload ceiling is
+separate. No S3 protocol is imposed on banks. A leaked URL alone exposes encrypted
+bytes, but possession of both a key and URL defeats that protection.
+
+Temporary objects have one-day current and one-day noncurrent expiration, expired
+marker cleanup and abandoned multipart cleanup. Periods run sequentially, round to
+midnight UTC and delete asynchronously; permanent deletion within 24 hours is not
+guaranteed. API grant/delivery expiry is enforced separately.
+
+See the SDK's [file-transfer guide](https://github.com/isecurefi/isecure-ts-client/blob/main/docs/file-transfers.md)
+for executable method examples. The companion source digest is retained in
+`transfer-api.source.json`. Neither this commit nor local generation publishes it.
+
+Bounded hosted Test checks passed with unpublished SDK 4.6.0-rc.1: inline upload,
+encrypted S3 upload, download, retained encrypted delivery and retirement. These
+small-file checks complement local 32-MiB interoperability; they do not claim
+32-MiB capacity through the hosted Simulator Lambda. Production is unchanged.

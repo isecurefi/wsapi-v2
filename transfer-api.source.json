@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/isecurefi/aws",
+  "path": "ws-channel-api/transfer-api.json",
+  "sha256": "2ea21688d177f24827a5c10adb513cf7c8e29a1016fda85caa8db0d9157ef1cf",
+  "status": "Unpublished Test contract; bounded hosted SDK transfer checks pass. Consult authenticated discovery for availability."
+}

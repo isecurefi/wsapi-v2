@@ -1,0 +1,1793 @@
+{
+  "basePath": "/v2",
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "ErrorResponse": {
+      "properties": {
+        "RequestId": {
+          "description": "Service side request id for problem tracing purposes",
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TransferArtifactContext": {
+      "additionalProperties": false,
+      "properties": {
+        "AccountScope": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "ArtifactId": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "EncodedBytes": {
+          "maximum": 33554432,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "Encoding": {
+          "enum": [
+            "identity",
+            "gzip"
+          ],
+          "type": "string"
+        },
+        "Environment": {
+          "enum": [
+            "test",
+            "production"
+          ],
+          "type": "string"
+        },
+        "OriginalBytes": {
+          "maximum": 33554432,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "OriginalSha256": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Purpose": {
+          "enum": [
+            "upload",
+            "download"
+          ],
+          "type": "string"
+        },
+        "TransferId": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Environment",
+        "AccountScope",
+        "TransferId",
+        "ArtifactId",
+        "Purpose",
+        "Encoding",
+        "OriginalBytes",
+        "EncodedBytes",
+        "OriginalSha256"
+      ],
+      "type": "object"
+    },
+    "TransferArtifactKeyGrant": {
+      "additionalProperties": false,
+      "properties": {
+        "CiphertextSha256": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Context": {
+          "$ref": "#/definitions/TransferArtifactContext"
+        },
+        "EncodedSha256": {
+          "description": "SHA-256 of the exact encoded bytes, frozen before key release. A retry must reuse this representation, including gzip headers and compressed bytes.",
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Format": {
+          "enum": [
+            "s3-aead-v1"
+          ],
+          "type": "string"
+        },
+        "Key": {
+          "maxLength": 44,
+          "minLength": 44,
+          "pattern": "^[A-Za-z0-9+/]{43}=$",
+          "type": "string"
+        },
+        "Nonce": {
+          "maxLength": 16,
+          "minLength": 16,
+          "pattern": "^[A-Za-z0-9+/]{16}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "Format",
+        "Context",
+        "Nonce",
+        "Key",
+        "EncodedSha256"
+      ],
+      "type": "object"
+    },
+    "TransferCapabilityResponse": {
+      "additionalProperties": false,
+      "description": "Version-2 detailed transfer capability, requested only after the existing authenticated ListCerts version-1 advertisement includes transfer-v1 for this bank. A successful response requires every capability field; RequestId is optional. Encryption is explicitly s3-aead-v1. Scope binds the current authenticated account and Environment. Capabilities do not authorize bank operations. This unpublished contract is not an availability advertisement; the endpoint remains disabled until qualification.",
+      "properties": {
+        "AccountScope": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "ArtifactFormat": {
+          "enum": [
+            "s3-aead-v1"
+          ],
+          "type": "string"
+        },
+        "Bank": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z0-9_-]+$",
+          "type": "string"
+        },
+        "ContractVersion": {
+          "enum": [
+            2
+          ],
+          "type": "integer"
+        },
+        "Delivery": {
+          "items": {
+            "enum": [
+              "inline",
+              "s3"
+            ],
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "DeliveryWindowSeconds": {
+          "maximum": 86400,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "Encodings": {
+          "items": {
+            "enum": [
+              "identity",
+              "gzip"
+            ],
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "Environment": {
+          "enum": [
+            "test",
+            "production"
+          ],
+          "type": "string"
+        },
+        "ExecuteWindowSeconds": {
+          "maximum": 3600,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "GrantMaxSeconds": {
+          "maximum": 300,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "MaxControlBytes": {
+          "maximum": 2097152,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "MaxInlineRequestBytes": {
+          "maximum": 6225920,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "MaxRawDownloadBytes": {
+          "maximum": 33554432,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "MaxRawUploadBytes": {
+          "maximum": 33554432,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "Protocol": {
+          "enum": [
+            "transfer-v1"
+          ],
+          "type": "string"
+        },
+        "RequestId": {
+          "maxLength": 128,
+          "type": "string"
+        },
+        "ResponseCode": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "ResponseText": {
+          "maxLength": 65536,
+          "type": "string"
+        },
+        "RetentionSeconds": {
+          "maximum": 604800,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "S3Origin": {
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^https://[a-z0-9-]+\\.s3\\.eu-west-1\\.amazonaws\\.com$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText"
+      ],
+      "type": "object"
+    },
+    "TransferCreateRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "ClientRequestId": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Intent": {
+          "$ref": "#/definitions/TransferIntent"
+        }
+      },
+      "required": [
+        "ClientRequestId",
+        "Intent"
+      ],
+      "type": "object"
+    },
+    "TransferEmptyRequest": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "TransferExecuteRequest": {
+      "additionalProperties": false,
+      "description": "An upload supplies detached PGP signatures as required by current policy, plus Payload. A download supplies {}. Lambda binds fields to the stored intent; no bank selector overrides.",
+      "properties": {
+        "Payload": {
+          "$ref": "#/definitions/TransferUploadPayload"
+        },
+        "Signature": {
+          "maxLength": 1048576,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TransferFilePayload": {
+      "additionalProperties": false,
+      "description": "Exclusive result variants: inline includes Data only; s3 includes TransferId, Url and ExpiresAt and requires the sibling Artifact key grant. S3 contains s3-aead-v1 ciphertext; authenticate it before decoding the negotiated identity/gzip representation and verifying original byte length and SHA-256. Never log Url or Artifact.Key.",
+      "properties": {
+        "Data": {
+          "maxLength": 6225920,
+          "minLength": 0,
+          "type": "string"
+        },
+        "Encoding": {
+          "enum": [
+            "identity",
+            "gzip"
+          ],
+          "type": "string"
+        },
+        "ExpiresAt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "Kind": {
+          "enum": [
+            "inline",
+            "s3"
+          ],
+          "type": "string"
+        },
+        "RawBytes": {
+          "maximum": 33554432,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "Sha256": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "TransferId": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Url": {
+          "maxLength": 16384,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "Kind",
+        "Encoding",
+        "RawBytes",
+        "Sha256"
+      ],
+      "type": "object"
+    },
+    "TransferIntegrity": {
+      "additionalProperties": false,
+      "properties": {
+        "RawBytes": {
+          "maximum": 33554432,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "Sha256": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "RawBytes",
+        "Sha256"
+      ],
+      "type": "object"
+    },
+    "TransferIntent": {
+      "additionalProperties": false,
+      "description": "Gateway validates the closed field/type superset. Lambda enforces the exclusive operation variants: upload requires Storage and nonempty Integrity, permits FileName and forbids FileReference; download requires FileReference and forbids FileName, Storage and Integrity. TargetId is optional. Omit optional fields rather than sending null.",
+      "properties": {
+        "AcceptGzip": {
+          "type": "boolean"
+        },
+        "Bank": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "FileName": {
+          "description": "UTF-8 text, at most 256 bytes and no control characters; Lambda enforces byte counts.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "FileReference": {
+          "description": "UTF-8 text, at most 256 bytes and no control characters; Lambda enforces byte counts.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "FileType": {
+          "description": "UTF-8 text, at most 256 bytes and no control characters; Lambda enforces byte counts.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Integrity": {
+          "$ref": "#/definitions/TransferIntegrity"
+        },
+        "Operation": {
+          "enum": [
+            "upload",
+            "download"
+          ],
+          "type": "string"
+        },
+        "Storage": {
+          "enum": [
+            "inline",
+            "s3"
+          ],
+          "type": "string"
+        },
+        "TargetId": {
+          "description": "UTF-8 text, at most 256 bytes and no control characters; Lambda enforces byte counts.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "Operation",
+        "Bank",
+        "FileType",
+        "AcceptGzip"
+      ],
+      "type": "object"
+    },
+    "TransferResponse": {
+      "additionalProperties": false,
+      "description": "ISECure refusal uses 01; bank codes remain unchanged. Successful control responses include TransferId, State, ExecuteUntil and RetentionUntil. State is admission evidence, not proof of bank exactly-once processing. Status never includes file bytes. Upload grant control returns exactly one of Upload (confirmed absent, new signed POST allowed) or Uploaded (reuse this existing version). Storage access errors never mean absence. All timestamps are Unix seconds.",
+      "properties": {
+        "Artifact": {
+          "$ref": "#/definitions/TransferArtifactKeyGrant"
+        },
+        "DeliveryRevokedAt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "DeliveryUntil": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "ExecuteUntil": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "FilePayload": {
+          "$ref": "#/definitions/TransferFilePayload"
+        },
+        "RequestId": {
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "ResponseCode": {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        "ResponseText": {
+          "maxLength": 65536,
+          "minLength": 0,
+          "type": "string"
+        },
+        "RetentionUntil": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "State": {
+          "enum": [
+            "prepared",
+            "executing",
+            "completed",
+            "failed",
+            "uncertain",
+            "cancelled"
+          ],
+          "type": "string"
+        },
+        "TransferId": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Upload": {
+          "$ref": "#/definitions/TransferUploadGrant"
+        },
+        "Uploaded": {
+          "$ref": "#/definitions/TransferUploadedCiphertext"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText"
+      ],
+      "type": "object"
+    },
+    "TransferUploadGrant": {
+      "additionalProperties": false,
+      "description": "Short-lived signed POST form. Treat all Fields as bearer secrets and append file bytes last. Never attach API credentials to S3 requests.",
+      "properties": {
+        "ExpiresAt": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "Fields": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "Url": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "Url",
+        "ExpiresAt",
+        "Fields"
+      ],
+      "type": "object"
+    },
+    "TransferUploadGrantRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "CiphertextSha256": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "CiphertextSha256"
+      ],
+      "type": "object"
+    },
+    "TransferUploadPayload": {
+      "additionalProperties": false,
+      "description": "Lambda enforces exclusive variants: inline requires Encoding and Data only; s3 requires the exact uploaded Version only. No URL, key or bucket input. Data is bounded Base64 and decoded only after admission; no Gateway Base64 scanning.",
+      "properties": {
+        "Data": {
+          "maxLength": 6225920,
+          "minLength": 0,
+          "type": "string"
+        },
+        "Encoding": {
+          "enum": [
+            "identity",
+            "gzip"
+          ],
+          "type": "string"
+        },
+        "Kind": {
+          "enum": [
+            "inline",
+            "s3"
+          ],
+          "type": "string"
+        },
+        "Version": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "Kind"
+      ],
+      "type": "object"
+    },
+    "TransferUploadPrepareRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "EncodedBytes": {
+          "maximum": 33554432,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "EncodedSha256": {
+          "description": "SHA-256 of the exact encoded bytes, frozen before key release. A retry must reuse this representation, including gzip headers and compressed bytes.",
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "Encoding": {
+          "enum": [
+            "identity",
+            "gzip"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "Encoding",
+        "EncodedBytes",
+        "EncodedSha256"
+      ],
+      "type": "object"
+    },
+    "TransferUploadedCiphertext": {
+      "additionalProperties": false,
+      "description": "Existing uploaded ciphertext verified by S3 metadata. Reuse this exact version instead of uploading again. Execution still authenticates the actual ciphertext and original bytes before contacting the bank.",
+      "properties": {
+        "CiphertextSha256": {
+          "maxLength": 64,
+          "minLength": 64,
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        "ObjectBytes": {
+          "maximum": 33554468,
+          "minimum": 37,
+          "type": "integer"
+        },
+        "VersionId": {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "VersionId",
+        "CiphertextSha256",
+        "ObjectBytes"
+      ],
+      "type": "object"
+    }
+  },
+  "host": "ws-api.test.isecure.fi",
+  "info": {
+    "description": "Unpublished contract for encrypted transfers on Test with the simulator. Discover current support before use. Current Production uses the existing Files API. Bootstrap only through an authenticated ListCerts version-1 transfer-v1 advertisement; require this endpoint's version-2 s3-aead-v1 capability. Errors never authorize plaintext or legacy fallback. Only explicit execute contacts the bank. Reuse a stable ClientRequestId and retained handle; uncertain outcomes must not trigger automatic bank resubmission.",
+    "title": "ISECure encrypted file-transfer API",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/file-transfers": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Test-only additive transfer protocol. Requires a current Data session and the bank entitlement. Create a scoped upload or download intent. ClientRequestId identifies one intent; repeated creation must use identical selectors. Never automatically create a replacement after an uncertain bank outcome. S3 creation returns only the intent handle; prepare encryption and freeze the ciphertext checksum before requesting an upload grant.",
+        "operationId": "CreateFileTransfer",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransferCreateRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "CreateFileTransfer",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/file-transfers/capabilities/{Bank}": {
+      "get": {
+        "description": "Test-only additive transfer protocol. Requires a current Data session and the bank entitlement. Reserved test discovery endpoint. Support remains unadvertised until end-to-end qualification; current responses refuse discovery. Bootstrap through the existing authenticated certificate response; errors never imply legacy fallback.",
+        "operationId": "GetFileTransferCapabilities",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Bank",
+            "in": "path",
+            "name": "Bank",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferCapabilityResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "GetFileTransferCapabilities",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/file-transfers/{TransferId}": {
+      "delete": {
+        "description": "Test-only additive transfer protocol. Requires a current Data session and the bank entitlement. Cancel an unexecuted transfer or retire retained delivery. Cannot undo a bank operation. Retires new URL issuance before best-effort exact-version deletion; storage expiration cleans abandoned versions. Preserve the admission tombstone.",
+        "operationId": "DeleteFileTransfer",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "TransferId",
+            "in": "path",
+            "name": "TransferId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DeleteFileTransfer",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "get": {
+        "description": "Test-only additive transfer protocol. Requires a current Data session and the bank entitlement. Read retained transfer state and the known bank response code. This operation never contacts the bank. Executing or uncertain state does not authorize resubmission.",
+        "operationId": "GetFileTransfer",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "TransferId",
+            "in": "path",
+            "name": "TransferId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "GetFileTransfer",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/file-transfers/{TransferId}/download-url": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Test-only additive transfer protocol. Requires a current Data session and the bank entitlement. Reauthorize delivery and issue a short-lived URL for an existing immutable result. Never retrieves from the bank. URLs are reusable bearer credentials until expiry; do not log or persist them.",
+        "operationId": "RenewFileTransferDownload",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransferEmptyRequest"
+            }
+          },
+          {
+            "description": "TransferId",
+            "in": "path",
+            "name": "TransferId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "RenewFileTransferDownload",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/file-transfers/{TransferId}/execute": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Test-only additive transfer protocol. Requires a current Data session and the bank entitlement. Execute the frozen intent at most once. Uploads require Signature and a matching Payload; downloads require an empty object. Never automatically retry this bank operation. A completed duplicate can return retained delivery; it cannot contact the bank again.",
+        "operationId": "ExecuteFileTransfer",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransferExecuteRequest"
+            }
+          },
+          {
+            "description": "TransferId",
+            "in": "path",
+            "name": "TransferId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "ExecuteFileTransfer",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/file-transfers/{TransferId}/upload/grant": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Test-only encrypted upload grant. Freeze the SHA-256 of the exact complete encrypted object before receiving a short-lived S3 POST grant. Repeated grants must use the same checksum and ciphertext. Conflicting checksums are refused. An uncertain write returns no grant; retain the logical transfer ID and reconcile it. S3 requests must never include API authentication headers.",
+        "operationId": "CreateFileTransferUploadGrant",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransferUploadGrantRequest"
+            }
+          },
+          {
+            "description": "TransferId",
+            "in": "path",
+            "name": "TransferId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "CreateFileTransferUploadGrant",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/file-transfers/{TransferId}/upload/prepare": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Test-only encrypted upload preparation. After compressing the original file if useful, submit its encoding and encoded byte count. The authenticated no-store response contains a random artifact key and frozen context. Identical preparation reuses the existing artifact. Do not encrypt changed bytes with the same key and nonce. No upload URL is returned yet.",
+        "operationId": "PrepareFileTransferUpload",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransferUploadPrepareRequest"
+            }
+          },
+          {
+            "description": "TransferId",
+            "in": "path",
+            "name": "TransferId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TransferResponse"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "PrepareFileTransferUpload",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "Authorizer": {
+      "description": "Successful login provides `IdToken` that must be provided in the `Authorization` header",
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey"
+    },
+    "X-Api-Key": {
+      "description": "Integrator specific API Key. For all integrator customers, the API key must be the same.",
+      "in": "header",
+      "name": "x-api-key",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0"
+}
