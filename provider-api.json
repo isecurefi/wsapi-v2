@@ -4,6 +4,27 @@
     "application/json"
   ],
   "definitions": {
+    "CheckHolviConnectionResp": {
+      "properties": {
+        "NewFiles": {
+          "type": "integer"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "NewFiles"
+      ],
+      "type": "object"
+    },
     "CheckMaventaConnectionResp": {
       "properties": {
         "Environment": {
@@ -51,6 +72,56 @@
         "ResponseText",
         "Ready",
         "Environment"
+      ],
+      "type": "object"
+    },
+    "DisableHolviConnectionResp": {
+      "properties": {
+        "Created": {
+          "description": "UTC enrollment time. SSH keys have no expiry; Holvi keeps a registered key until it is revoked.",
+          "type": "string"
+        },
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Fingerprint": {
+          "type": "string"
+        },
+        "KeyType": {
+          "description": "Always sftp-public-key: an SSH login key, not an X.509 certificate",
+          "type": "string"
+        },
+        "PublicKey": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "SftpUser": {
+          "type": "string"
+        },
+        "SourceAddresses": {
+          "description": "Fixed public IPv4 addresses that ISECure connects to Holvi from; give them to Holvi for its allow-list. Empty only for the synthetic test bank.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "SourceAddresses",
+        "Version"
       ],
       "type": "object"
     },
@@ -108,6 +179,71 @@
         "ResponseText",
         "Enrolled",
         "Environment",
+        "Version"
+      ],
+      "type": "object"
+    },
+    "EnrollHolviConnectionReq": {
+      "additionalProperties": false,
+      "properties": {
+        "SftpUser": {
+          "description": "Holvi-assigned SFTP login (<client id><client number>).",
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "SftpUser"
+      ],
+      "type": "object"
+    },
+    "EnrollHolviConnectionResp": {
+      "properties": {
+        "Created": {
+          "description": "UTC enrollment time. SSH keys have no expiry; Holvi keeps a registered key until it is revoked.",
+          "type": "string"
+        },
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Fingerprint": {
+          "type": "string"
+        },
+        "KeyType": {
+          "description": "Always sftp-public-key: an SSH login key, not an X.509 certificate",
+          "type": "string"
+        },
+        "PublicKey": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "SftpUser": {
+          "type": "string"
+        },
+        "SourceAddresses": {
+          "description": "Fixed public IPv4 addresses that ISECure connects to Holvi from; give them to Holvi for its allow-list. Empty only for the synthetic test bank.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "SourceAddresses",
         "Version"
       ],
       "type": "object"
@@ -292,6 +428,56 @@
       },
       "type": "object"
     },
+    "GetHolviConnectionResp": {
+      "properties": {
+        "Created": {
+          "description": "UTC enrollment time. SSH keys have no expiry; Holvi keeps a registered key until it is revoked.",
+          "type": "string"
+        },
+        "Enrolled": {
+          "type": "boolean"
+        },
+        "Fingerprint": {
+          "type": "string"
+        },
+        "KeyType": {
+          "description": "Always sftp-public-key: an SSH login key, not an X.509 certificate",
+          "type": "string"
+        },
+        "PublicKey": {
+          "type": "string"
+        },
+        "ResponseCode": {
+          "description": "Two digit response code in string format",
+          "type": "string"
+        },
+        "ResponseText": {
+          "description": "Human readable response text",
+          "type": "string"
+        },
+        "SftpUser": {
+          "type": "string"
+        },
+        "SourceAddresses": {
+          "description": "Fixed public IPv4 addresses that ISECure connects to Holvi from; give them to Holvi for its allow-list. Empty only for the synthetic test bank.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "Version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Enrolled",
+        "SourceAddresses",
+        "Version"
+      ],
+      "type": "object"
+    },
     "GetMaventaConnectionResp": {
       "properties": {
         "Enrolled": {
@@ -353,11 +539,533 @@
   },
   "host": "ws-api.test.isecure.fi",
   "info": {
-    "description": "Credential-provider operations available on the test API and the separately admitted production release candidate. Live production availability requires separate promotion. File listing, download and compatible enrollment use the existing File Exchange operations.",
+    "description": "Credential-provider operations available on the test API and the separately admitted production release candidate. Live production availability requires separate promotion. File listing, download and compatible enrollment use the existing File Exchange operations. The Holvi SFTP connection operations are prepared for the test API and are available only after the separately authorized holvi deployment.",
     "title": "ISECure provider connection API",
     "version": "1.0.0"
   },
   "paths": {
+    "/providers/holvi/check": {
+      "get": {
+        "description": "Admin-only check that Holvi accepts the registered key: authenticates over SFTP and counts /from_holvi without reading or moving files. ResponseCode 30 means the key is not (yet) registered with Holvi.",
+        "operationId": "CheckHolviConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/CheckHolviConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "CheckHolviConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
+    "/providers/holvi/connection": {
+      "delete": {
+        "description": "Admin-only Holvi SFTP connection. The server generates the Ed25519 key, stores it KMS-encrypted and returns only the OpenSSH public key to register with Holvi. PUT and DELETE require If-Match with the current Version (absent for a new connection); a stale version is refused. Rotate the key by DELETE then PUT. SourceAddresses lists the fixed public IPv4 addresses for Holvi's allow-list; the key is also listed in ListCerts SftpKeys.",
+        "operationId": "DisableHolviConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Current connection Version from GET, optionally quoted; absent for a new connection.",
+            "in": "header",
+            "name": "If-Match",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/DisableHolviConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "DisableHolviConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "get": {
+        "description": "Admin-only Holvi SFTP connection. The server generates the Ed25519 key, stores it KMS-encrypted and returns only the OpenSSH public key to register with Holvi. PUT and DELETE require If-Match with the current Version (absent for a new connection); a stale version is refused. Rotate the key by DELETE then PUT. SourceAddresses lists the fixed public IPv4 addresses for Holvi's allow-list; the key is also listed in ListCerts SftpKeys.",
+        "operationId": "GetHolviConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/GetHolviConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "GetHolviConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "Admin-only Holvi SFTP connection. The server generates the Ed25519 key, stores it KMS-encrypted and returns only the OpenSSH public key to register with Holvi. PUT and DELETE require If-Match with the current Version (absent for a new connection); a stale version is refused. Rotate the key by DELETE then PUT. SourceAddresses lists the fixed public IPv4 addresses for Holvi's allow-list; the key is also listed in ListCerts SftpKeys.",
+        "operationId": "EnrollHolviConnection",
+        "parameters": [
+          {
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "JSON object with SftpUser, the login Holvi assigned: 1-64 ASCII letters, digits, '.', '_' or '-', starting with a letter or digit. No key material is sent; the server generates the key.",
+            "in": "body",
+            "name": "EnrollHolviConnectionReq",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EnrollHolviConnectionReq"
+            }
+          },
+          {
+            "description": "Current connection Version from GET, optionally quoted; absent for a new connection.",
+            "in": "header",
+            "name": "If-Match",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/EnrollHolviConnectionResp"
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Cache-Control": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Authorizer": [],
+            "X-Api-Key": []
+          }
+        ],
+        "summary": "EnrollHolviConnection",
+        "tags": [
+          "Files"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "cURL",
+            "source": ""
+          },
+          {
+            "lang": "PHP",
+            "source": ""
+          },
+          {
+            "lang": "C#",
+            "source": ""
+          },
+          {
+            "lang": "Javascript",
+            "source": ""
+          }
+        ]
+      }
+    },
     "/providers/maventa/check": {
       "get": {
         "description": "Isolated test/production RC live account readiness check through the native Maventa SDK. No invoice send or configuration mutation.",
@@ -745,6 +1453,9 @@
         ]
       },
       "put": {
+        "consumes": [
+          "application/json"
+        ],
         "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
         "operationId": "EnrollMaventaConnection",
         "parameters": [
@@ -763,7 +1474,7 @@
             "type": "string"
           },
           {
-            "description": "Files parameters",
+            "description": "Closed JSON object of at most 4096 bytes with the Maventa company credentials. Unknown fields and base64-encoded bodies are refused; responses return connection metadata only, never the credentials.",
             "in": "body",
             "name": "EnrollMaventaConnectionReq",
             "required": true,
@@ -1278,6 +1989,9 @@
         ]
       },
       "put": {
+        "consumes": [
+          "application/json"
+        ],
         "description": "Admin-only account and tenant scoped credential resource. Credentials are never returned. PUT validates provider access before a version-conditional DynamoDB/KMS write. DELETE removes active ciphertext and retains a revision. PUT and DELETE require If-Match and Idempotency-Key.",
         "operationId": "EnrollMobilePayConnection",
         "parameters": [
@@ -1296,7 +2010,7 @@
             "type": "string"
           },
           {
-            "description": "Files parameters",
+            "description": "Closed JSON object of at most 4096 bytes with the MobilePay client credentials and ledger settings. Unknown fields and base64-encoded bodies are refused; responses return connection metadata only, never the credentials.",
             "in": "body",
             "name": "EnrollMobilePayConnectionReq",
             "required": true,

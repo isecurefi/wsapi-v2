@@ -23,8 +23,9 @@ for unavailable entries and read-only handling.
 
 [`provider-api.json`](provider-api.json) describes Maventa and MobilePay readiness and
 connection administration on the test API and separately admitted production release
-candidate. These operations are not yet promoted to live production. Discovery in the
-main specification reports an enrollment, not readiness or subscription authority.
+candidate, and Holvi connection administration on the test API. These operations are not yet
+promoted to live production. Discovery in the main specification reports an enrollment, not
+readiness or subscription authority.
 
 The companion adds GET `/providers/{provider}/check` and GET/PUT/DELETE
 `/providers/{provider}/connection`, with concrete `maventa` and `mobilepay` paths.
@@ -40,10 +41,17 @@ Maventa/MobilePay connections have `Certificates: []` and must still appear in c
 Supported types are `MAVENTA_INVOICE_JSON_V1`, `MOBILEPAY_FUNDS_JSON_V1` and
 `MOBILEPAY_FEES_JSON_V1`. Omitted Status, ALL and DLD are equivalent; NEW is unsupported.
 DLD is a descriptor convention, not server-maintained download history. Upload and file
-deletion are unsupported for these providers. The candidate SDK's `docs/providers.md` covers credential bundles, MobilePay listing
-windows and complete JSON download envelopes.
-The SDK candidate remains unpublished during qualification; the online API-reference
-site is not changed merely by committing this companion.
+deletion are unsupported for these providers. The SDK's `docs/providers.md` covers credential
+bundles, MobilePay listing windows and complete JSON download envelopes.
+
+Holvi (bank `holvi`, SFTP channel) adds Admin-only GET/PUT/DELETE
+`/providers/holvi/connection` and GET `/providers/holvi/check`. PUT `{"SftpUser"}` with `If-Match: "absent"`
+enrolls a server-generated Ed25519 key and returns only its public key, fingerprint and the
+source addresses Holvi must allow; rotate by DELETE and PUT again. Check returns `00` with
+`NewFiles` or `30` while Holvi has not registered the key. Holvi files use the main file
+operations. The test API connects to the ISECure Bank Simulator, never to Holvi.
+
+The online API-reference site is not changed merely by committing this companion.
 
 The backend's `config.json` and `__wsapi.json.tmpl` remain authoritative.
 `scripts/export-provider-contract.py` in that repository generates the companion and
