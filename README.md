@@ -19,6 +19,30 @@ reports enrollment only; it does not establish provider-operation availability.
 Older deployments may omit `Accounts[].PgpKeys`. See the operation and schema descriptions
 for unavailable entries and read-only handling.
 
+## Password profile update (2.19.0)
+
+The stronger `password-rsa-oaep-sha256-v1` profile is available on the existing v2 endpoints in production and test. There is no new API base URL. TypeScript SDK v5 defaults to it; installations pinned to v4 keep their legacy default. Python 1.0.0 and C# 1.0.0 also use the stronger profile by default. These SDKs offer an explicit legacy setting and never automatically downgrade after a failure.
+
+New tenants must use the stronger profile for registration, login and password reset. Existing tenants explicitly enabled for legacy compatibility can use either profile, including when registering new customer accounts under their existing API key. Compatibility is a server-owned policy associated with the tenant/API key, not the SDK version or email address. Omitting the selector does not grant legacy access. Legacy mode cannot create a new tenant.
+
+For TypeScript v5, omit `EncryptionProfile` to use the default. Set `EncryptionProfile: "legacy"` only for a compatible tenant. For Python 1.0.0 use `encryption_profile="legacy"`; for C# 1.0.0 use `PasswordProfiles.Legacy` in the client options. PHP 3.0.0's `Auth\PasswordProfile` helper defaults to the stronger profile; its existing CLI and raw generated client are separate legacy interfaces. See each SDK's release and migration guide before upgrading.
+
+### Direct HTTP clients
+
+1. Add `EncryptionProfile=password-rsa-oaep-sha256-v1` to the query of `InitRegister`, `InitLogin` or `InitPasswordReset`. For registration under an existing tenant, also pass the same `ApiKey` in initialization and registration; use `0` for a new tenant.
+2. Require a successful response with the exact requested `EncryptionProfile`, `Challenge`, `KeyId` and `PublicKey`. An older server might ignore the query: missing or mismatched discovery must fail before password submission. Responses use `Cache-Control: no-store`; keep discovery only in memory for this attempt.
+3. Encode the password as UTF-8 without normalization. Construct `0x01 || SHA256(exact ASCII Challenge) || uint16_be(UTF8(password).length) || UTF8(password)`. Encrypt this binary frame with the discovered RSA public key using OAEP SHA-256, MGF1-SHA-256 and an empty label; Base64-encode the ciphertext. The password limit is 283 UTF-8 bytes; the account's password-strength requirements still apply.
+4. Submit `Encrypted`, the unchanged challenge as `ChResp`, and the exact `EncryptionProfile` and `KeyId`. Keep the email, mode, tenant and operation consistent. Never substitute a login challenge for a reset challenge or reuse discovery after changing identity/profile.
+
+Discover the current key for each new attempt; do not pin a key or `KeyId` from documentation. Never log passwords, encrypted password bodies, challenges, reset codes or session credentials. Do not automatically retry password mutations or reset-code delivery, and do not retry a stronger-profile refusal as legacy.
+
+Legacy-compatible tenants retain the existing `password||timestamp` encryption protocol when the wire selector is omitted. The SDK setting `"legacy"` is local configuration, not an `EncryptionProfile` value to send to the API. Extra JSON fields remain accepted for compatibility; they do not grant authority. Admin MFA, contact verification and account permissions are unchanged.
+
+The authentication schemas are projected from the reviewed backend `config.json` and
+`__wsapi.json.tmpl`; `password-profile.source.json` records their exact source. This
+release updates six authentication operations only and does not promote the unrelated
+account-lifecycle, provider or transfer contracts below.
+
 ## Credential-provider companion contract
 
 [`provider-api.json`](provider-api.json) describes Maventa and MobilePay readiness and
