@@ -1655,6 +1655,16 @@
           "pattern": "^[A-Za-z0-9_-]{1,64}$",
           "description": "Exact KeyId from the matching initialization."
         }
+      },
+      "example": {
+        "Name": "Example User",
+        "Phone": "+358401234567",
+        "Company": "Example Company Oy",
+        "ApiKey": "example-integrator-api-key",
+        "ChResp": "example-registration-challenge",
+        "Encrypted": "example-base64-ciphertext",
+        "EncryptionProfile": "password-rsa-oaep-sha256-v1",
+        "KeyId": "example-key-id"
       }
     },
     "RegisterResp": {
