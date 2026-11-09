@@ -2610,7 +2610,7 @@
     },
     "/account/{Email}/{Mode}": {
       "get": {
-        "description": "Before register (or login), client must fetch `challenge` from the API. Then on register (or login), the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with register (or login). The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n\n\nStronger password profile (available in production and test): select EncryptionProfile=password-rsa-oaep-sha256-v1. Require the exact matching response profile before encrypting or sending a password; an older server may ignore the query. Discovery is not authorization.",
+        "description": "Fetch fresh discovery for registration using `EncryptionProfile=password-rsa-oaep-sha256-v1`. This profile is available in production and test. Require a successful response and the exact matching `EncryptionProfile`, `Challenge`, `KeyId` and `PublicKey` before encrypting or sending a password. Treat `Challenge` as opaque; do not parse its timestamp or replace its bytes. An older server may ignore the query, so missing discovery must fail without a legacy retry.\n\nUse the same email and mode for initialization and submission. Discovery is not authorization; keep it only in memory for this attempt. See **Password encryption and SDK migration**.\n\nFor a legacy-compatible tenant only, omitting the selector retains the existing `base64-string|timestamp|uuid` challenge protocol. Pass the same existing tenant `ApiKey` in initialization and registration, or `0` to create a new tenant with the stronger profile.",
         "operationId": "InitRegister",
         "parameters": [
           {
@@ -2706,15 +2706,18 @@
         "x-code-samples": [
           {
             "lang": "cURL",
-            "source": "curl -H 'Content-Type: application/json' https://ws-api.isecure.fi/v2/account/user%40example.com/admin"
+            "source": "curl -H 'Content-Type: application/json' https://ws-api.isecure.fi/v2/account/user%40example.com/admin",
+            "label": "cURL (legacy)"
           },
           {
             "lang": "PHP",
-            "source": "$config = new Swagger\\Client\\Configuration();\n$api = new Swagger\\Client\\Api\\AccountApi(new Swagger\\Client\\apiClient($config));\n$api->InitRegister(\"user@example.com\", \"admin\");"
+            "source": "$config = new Swagger\\Client\\Configuration();\n$api = new Swagger\\Client\\Api\\AccountApi(new Swagger\\Client\\apiClient($config));\n$api->InitRegister(\"user@example.com\", \"admin\");",
+            "label": "PHP (legacy)"
           },
           {
             "lang": "C#",
-            "source": "InitRegisterResp r = account.InitRegister(\"user@example.com\", \"admin\");\nreturn r.Challenge;"
+            "source": "InitRegisterResp r = account.InitRegister(\"user@example.com\", \"admin\");\nreturn r.Challenge;",
+            "label": "C# (legacy)"
           },
           {
             "lang": "Javascript",
@@ -5596,7 +5599,7 @@
         ]
       },
       "get": {
-        "description": "Before login, client must fetch `challenge` from the API. Then on login, the challenge must be passed along to the API (as response to the challenge). The challenge is always fresh for some period of time and the API validates it when passed with login. The challenge has form of `base64-string|timestamp|uuid`. For example:\n\n```ezwXceQ63fV9oWTSJBAE2Zq1Cw5tBIJe+7+Rl8jrgbk=|1475429754114|4017bda8-0a15-4154-a8b7-88069b05cb4e```\n\n**NOTE:** The call must contain the same email as used for registration itself.\n\nStronger password profile (available in production and test): select EncryptionProfile=password-rsa-oaep-sha256-v1. Require the exact matching response profile before encrypting or sending a password; an older server may ignore the query. Discovery is not authorization.",
+        "description": "Fetch fresh discovery for login using `EncryptionProfile=password-rsa-oaep-sha256-v1`. This profile is available in production and test. Require a successful response and the exact matching `EncryptionProfile`, `Challenge`, `KeyId` and `PublicKey` before encrypting or sending a password. Treat `Challenge` as opaque; do not parse its timestamp or replace its bytes. An older server may ignore the query, so missing discovery must fail without a legacy retry.\n\nUse the same email and mode for initialization and submission. Discovery is not authorization; keep it only in memory for this attempt. See **Password encryption and SDK migration**.\n\nFor a legacy-compatible tenant only, omitting the selector retains the existing `base64-string|timestamp|uuid` challenge protocol.",
         "operationId": "InitLogin",
         "parameters": [
           {
