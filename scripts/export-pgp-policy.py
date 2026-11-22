@@ -9,6 +9,8 @@ SELECTION = {'/pgp': ['get', 'put'], '/pgp/keys': ['delete'],
 def clean(value):
  if isinstance(value,dict):return {k:clean(v) for k,v in value.items() if not k.startswith('x-amazon-') and k not in ('example','x-code-samples','x-codeSamples')}
  if isinstance(value,list):return [clean(v) for v in value]
+ if isinstance(value,str):
+  for old,new in [('Candidate-only Admin operation.','Admin operation.'),('Not available until Rust registration deployment is qualified.',''),('Not available until Rust registration, audit-reader and candidate routing are qualified.',''),('Candidate Rust API policy metadata.','PGP authorization policy metadata.')]:value=value.replace(old,new)
  return value
 def project(source,guide,samples):
  paths={p:{m:clean(source['paths'][p][m]) for m in methods} for p,methods in SELECTION.items()}
@@ -27,7 +29,7 @@ def project(source,guide,samples):
  for methods in paths.values():
   for op in methods.values():
    op['security']=[{'X-Api-Key':[],'Authorizer':[]}]
-   op['description']=('This companion documents Test/RC behavior; this existing operation also exists on V2 with older policy metadata.\n\n' if op['operationId'] in ('ListKeys','UploadKey','ListAccounts') else 'Available on gpgtest and production RC; not production V2.\n\n')+op['description']
+   op['description']=('This companion documents Test/RC behavior; this existing operation also exists on V2 with older policy metadata.\n\n' if op['operationId'] in ('ListKeys','UploadKey','ListAccounts') else 'Available on Test and production RC; not production V2.\n\n')+op['description']
    op['x-code-samples']=[{'lang':'TypeScript','label':'Official TypeScript SDK 6.1.0','source':samples[op['operationId']]}]
  return {'swagger':'2.0','info':{'title':'ISECure PGP authorization API (Test and RC)','version':'1.0.0','description':guide,'contact':{'email':'support@isecure.fi'}},'host':'ws-api.isecure.fi','basePath':'/rc','schemes':['https'],'consumes':['application/json'],'produces':['application/json'],'securityDefinitions':clean(source['securityDefinitions']),'tags':[{'name':'Pgp','description':'Registered keys, per-bank thresholds, required signers and irreversible locking.'},{'name':'Session','description':'Fresh action MFA for an established Admin factor.'},{'name':'Integrator','description':'Read account policy state before editing.'}],'paths':paths,'definitions':definitions,'externalDocs':{'description':'Official TypeScript SDK 6.1.0','url':'https://github.com/isecurefi/isecure-ts-client'}}
 def main():
