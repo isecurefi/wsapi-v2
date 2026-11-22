@@ -1359,7 +1359,7 @@
       },
       "properties": {
         "AccessToken": {
-          "description": "Token for the indicated verification step; keep in memory. Not a business API IdToken. Also returned with TOTP enrollment details when requested after all verification checks pass.",
+          "description": "Token for the indicated verification step; keep in memory. Not a business API IdToken. Also returned with TOTP enrollment details when requested after all verification checks pass. On a completed Admin session, an opaque action credential may be returned for fresh action MFA; use it as AccessToken in action requests, not as the Authorization header. Keep it in memory and never log it.",
           "type": "string"
         },
         "Account": {
@@ -1443,7 +1443,7 @@
       },
       "properties": {
         "AccessToken": {
-          "description": "Token for the indicated verification step; keep in memory. Not a business API IdToken.",
+          "description": "Token for the indicated verification step; keep in memory. Not a business API IdToken. On a completed Admin session, an opaque action credential may be returned for fresh action MFA; use it as AccessToken in action requests, not as the Authorization header. Keep it in memory and never log it.",
           "type": "string"
         },
         "Account": {
@@ -2576,7 +2576,7 @@
         "consumes": [
           "application/json"
         ],
-        "description": "Soft-delete one customer account under the caller's API key. Both Admin and Data sign-in identities are revoked; the retained account, certificates and keys become unusable and stop contributing to the customer license total. ListAccounts keeps the row visible with Lifecycle `deleted`, DeletedAt, DeletedBy and PurgeAfter. DynamoDB TTL makes the retained row eligible for automatic removal 30 days after deletion; physical removal is asynchronous and may take additional days. Audit evidence is retained separately for ten years. This operation does not provide account restoration.\n\nAdmin mode and the integrator owner account are required. Complete a fresh MFA login for each deletion or certificate retirement: auth_time must be at most 10 minutes old, and each authentication is accepted for only one lifecycle action. Repeat the exact target email in ConfirmSoftDelete. The distinct confirmation field prevents an older immediate-deletion backend from accepting this request; clients must not send the legacy Confirm field. Integrator owner accounts are protected. Accounts still sharing certificates with other accounts must be unshared first. An interrupted operation can be retried after a new MFA login; already revoked sign-in identities are tolerated. Repeating a completed deletion is rejected and never extends its retention period.",
+        "description": "Soft-delete one customer account under the caller's API key. Both Admin and Data sign-in identities are revoked; the retained account, certificates and keys become unusable and stop contributing to the customer license total. ListAccounts keeps the row visible with Lifecycle `deleted`, DeletedAt, DeletedBy and PurgeAfter. DynamoDB TTL makes the retained row eligible for automatic removal 30 days after deletion; physical removal is asynchronous and may take additional days. Audit evidence is retained separately for ten years. This operation does not provide account restoration.\n\nAdmin mode and the integrator owner account are required. Provide the completed Admin session’s opaque AccessToken action credential and a fresh code from its established SMS or authenticator factor for this action. A recent login alone is insufficient. For SMS, request a new code using POST /session/action-mfa. Keep the credential in memory and never log it. Repeat the exact target email in ConfirmSoftDelete. The distinct confirmation field prevents an older immediate-deletion backend from accepting this request; clients must not send the legacy Confirm field. Integrator owner accounts are protected. Accounts still sharing certificates with other accounts must be unshared first. After an interrupted operation, inspect account state before an explicit retry with a fresh factor; already revoked sign-in identities are tolerated. Do not automatically replay an uncertain request. Repeating a completed deletion is rejected and never extends its retention period.",
         "operationId": "DeleteAccount",
         "parameters": [
           {
@@ -3956,7 +3956,7 @@
     },
     "/certs/{Bank}": {
       "delete": {
-        "description": "Retire the active certificate of *Bank* so the bank has no usable certificate and a fresh enrollment or import becomes possible. The certificate record is renamed on the account with a `.REMOVED.<random>` marker and stays only until the account is deleted; it is never exported, renewed, or used for file exchange again. `ListCerts` reports it under `Retired`.\n\n*Admin* mode only. Without the `Account` query parameter the caller's own certificate is retired. The integrator API key owner account may pass `Account` to retire a certificate on one of its customer accounts under the same API key. Any other account combination is rejected.\n\nRetiring a bank that has no active certificate fails, so a repeated call is a clean error rather than a second rename.\n\nComplete a fresh Admin MFA login before each retirement. Authentication must be at most 10 minutes old and can authorize only one account deletion or certificate retirement. Deleted accounts cannot be modified.",
+        "description": "Retire the active certificate of *Bank* so the bank has no usable certificate and a fresh enrollment or import becomes possible. The certificate record is renamed on the account with a `.REMOVED.<random>` marker and stays only until the account is deleted; it is never exported, renewed, or used for file exchange again. `ListCerts` reports it under `Retired`.\n\n*Admin* mode only. Without the `Account` query parameter the caller's own certificate is retired. The integrator API key owner account may pass `Account` to retire a certificate on one of its customer accounts under the same API key. Any other account combination is rejected.\n\nRetiring a bank that has no active certificate fails, so a repeated call is a clean error rather than a second rename.\n\nProvide the completed Admin session’s opaque AccessToken action credential and a fresh SMS or authenticator code for each retirement. A recent login alone is insufficient. For SMS, request a new code using POST /session/action-mfa. After an uncertain response, inspect certificate state before explicitly retrying with a fresh factor; do not automatically replay the request. Deleted accounts cannot be modified.",
         "operationId": "RetireCert",
         "parameters": [
           {
