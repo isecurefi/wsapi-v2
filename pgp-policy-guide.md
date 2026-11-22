@@ -7,7 +7,7 @@ Use **isecure-ts-client 6.1.0 or newer**. The policy controls in this companion 
 | Test | `https://ws-api.test.isecure.fi/v2` |
 | Production release candidate (RC) | `https://ws-api.isecure.fi/rc` |
 
-Key upload/list and account discovery also exist on production V2, with older policy metadata. Production `https://ws-api.isecure.fi/v2` retains its existing contract. It does not expose this policy administration API, and its legacy upload handler refuses policy-controlled uploads. Use the same RC endpoint for policy administration and the associated file uploads. Publishing SDK 6.1.0 does not promote RC to V2.
+Key upload/list, account discovery and fresh action MFA also exist on production V2; its policy metadata is older. Production `https://ws-api.isecure.fi/v2` retains its existing contract. It does not expose this policy administration API, and its legacy upload handler refuses policy-controlled uploads. Use the same RC endpoint for policy administration and the associated file uploads. Publishing SDK 6.1.0 does not promote RC to V2.
 
 Register and complete Admin login/MFA using the [File Exchange authentication reference](https://www.isecure.fi/wsapi_v2/). The SDK defaults to the stronger password profile. Requests require both the account's API key and completed session's ID token. The SDK manages those headers. This reference does not send requests from your browser.
 

@@ -160,3 +160,9 @@ revision recorded in `pgp-policy-api.source.json`. Regenerate with
 add `--check` for drift detection. Python requires the backend's `pystache` and
 `simplejson` dependencies. Workflow prose and SDK samples live in the adjacent
 Markdown/JSON files; schema fields are never independently redefined here.
+
+
+Production V2 also includes `POST /session/action-mfa`. Account deletion and certificate
+retirement require the fresh established-factor code and opaque Admin action credential
+documented in their request schemas; a recent login alone is insufficient. The public
+specification and SDK 6.1.0 examples reflect the deployed V2 request models.
