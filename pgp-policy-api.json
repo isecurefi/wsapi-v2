@@ -1,0 +1,1473 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "ISECure PGP authorization API (Test and RC)",
+    "version": "1.0.0",
+    "description": "## Availability and login\n\nUse **isecure-ts-client 6.1.0 or newer**. The policy controls in this companion are deployed on:\n\n| Environment | SDK BaseUrl |\n| --- | --- |\n| Test (gpgtest) | `https://ws-api.test.isecure.fi/v2` |\n| Production release candidate (RC) | `https://ws-api.isecure.fi/rc` |\n\nKey upload/list and account discovery also exist on production V2, with older policy metadata. Production `https://ws-api.isecure.fi/v2` retains its existing contract. It does not expose this policy administration API, and its legacy upload handler refuses policy-controlled uploads. Use the same RC endpoint for policy administration and the associated file uploads. Publishing SDK 6.1.0 does not promote RC to V2.\n\nRegister and complete Admin login/MFA using the [File Exchange authentication reference](https://www.isecure.fi/wsapi_v2/). The SDK defaults to the stronger password profile. Requests require both the account's API key and completed session's ID token. The SDK manages those headers. This reference does not send requests from your browser.\n\n## Require your ERP plus a human approval\n\nRegister three eligible **authorize** public keys: ERP, person A and person B. Set `RequiredSignatureCount: 2` and `RequiredSignerFingerprints: [erpPrimaryFingerprint]`. Upload with detached signatures from ERP plus either person. Two people without ERP are refused; ERP alone is also insufficient.\n\nA named signer counts toward N. Use full 40- or 64-character primary fingerprints; the server normalizes case. Signing subkeys count for their primary, and multiple signatures/subkeys from one primary count once. Registered keys must be usable and have at least 90 days of remaining validity when configuring or locking. Unknown, export-only, duplicate, expired or insufficient-lifetime keys are rejected.\n\n~~~ts\n// client: authenticated Admin WSChannel using the Test or RC BaseUrl above.\nconst result = await client.listAccounts();\nconst account = result.Accounts.find((item) => item.Email === accountEmail);\nif (!account) throw new Error(\"Account not found\");\nconst policy = account.PgpAuthorization;\nif (policy?.State === \"unavailable\") throw new Error(\"Policy unavailable; stop\");\nawait client.configureBankPgpPolicy(\"osuuspankki\", {\n  RequiredSignatureCount: 2,\n  RequiredSignerFingerprints: [erpPrimaryFingerprint],\n  ExpectedRevision: policy?.Revision ?? 0,\n});\n// Read the policy again after success before making another change.\n~~~\n\nThe policy belongs to the signed-in account and bank, not every customer in the tenant. Other banks' settings are preserved. During bank migration, the server combines the applicable predecessor and target requirements. Existing file uploads still carry the original file and detached signatures. This authorization policy does not prevent duplicate payments at a bank.\n\n## Editing, blocking and first-time setup\n\nRead `Accounts[].PgpAuthorization` using `listAccounts()`. `RequiredSignatures` maps banks to N; `RequiredSignerFingerprints` maps banks to named primary fingerprints. An empty named-signer map means count-only checks. Missing metadata on an older deployment is not proof that it supports this feature; `State: unavailable` must never be shown as unlocked.\n\nUse the exact `ExpectedRevision` from that read, or zero only when no policy exists. Refresh after a successful change, conflict or uncertain outcome. The SDK never automatically retries these mutations.\n\n| Action | Method | Meaning |\n| --- | --- | --- |\n| Configure one bank | `configureBankPgpPolicy(bank, request)` | Set N and optionally named signers; preserve other banks |\n| Omit `RequiredSignerFingerprints` | Same method | Preserve that bank's named signers |\n| Send `RequiredSignerFingerprints: []` | Same method | Explicitly clear only the named-signer requirement; N still applies |\n| Block one bank | `blockBankPgpPolicy(bank, { ExpectedRevision })` | Refuse uploads to that bank and remove its configured N/named signers |\n| Re-enable a bank | `configureBankPgpPolicy(...)` | Make a new explicit choice of N and named signers |\n\nN must be at least one; zero never disables PGP checks. Blocking every bank produces an explicit deny-all policy. Blocking does not retire a certificate or prevent downloads. Whole-policy `configurePgpPolicy` / `PUT /pgp/policy` has been removed; do not use it.\n\nThe first policy preserves one signature for other currently supported banks. Accounts with PGP exemptions or shared certificates must explicitly include `ConfirmPolicyInitialization: true` for that first change, acknowledging activation of checks for supported banks and linked callers. Do not add this automatically; it is rejected after initialization. Future banks remain blocked until explicitly enabled. No bank credentials or subscription access are granted by a policy change.\n\n## Key deletion and irreversible locking\n\nUse `deletePgpKey({ Fingerprint, ExpectedRevision })`, with a full primary fingerprint. The legacy short-ID `deleteKey()` endpoint is unsupported. A required primary cannot be deleted: first remove it from every applicable unlocked bank policy. Removing any key must also leave enough distinct eligible authorize keys for every allowed bank.\n\n`lockPgpPolicy` permanently freezes **all account PGP keys and all bank policy settings**. There is no unlock, administrator override or operator bypass. It requires the reviewed revision and a fresh code from an already established SMS/TOTP factor, plus the opaque Admin action credential in `client.session.accessToken`. A fresh login alone is insufficient. For SMS, call `requestActionMfa(actionCredential)` before collecting the new code; for TOTP, collect a fresh authenticator code. Never log or persist the code, credential or request body.\n\nReview all keys and bank settings before locking. Account audit history records these operations and survives account removal. Read it through the existing `listAuditEvents()` method; policy state itself is not audit history.\n",
+    "contact": {
+      "email": "support@isecure.fi"
+    }
+  },
+  "host": "ws-api.isecure.fi",
+  "basePath": "/rc",
+  "schemes": [
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "X-Api-Key": {
+      "type": "apiKey",
+      "name": "x-api-key",
+      "in": "header",
+      "description": "Integrator specific API Key. For all integrator customers, the API key must be the same."
+    },
+    "Authorizer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Successful login provides `IdToken` that must be provided in the `Authorization` header"
+    }
+  },
+  "tags": [
+    {
+      "name": "Pgp",
+      "description": "Registered keys, per-bank thresholds, required signers and irreversible locking."
+    },
+    {
+      "name": "Session",
+      "description": "Fresh action MFA for an established Admin factor."
+    },
+    {
+      "name": "Integrator",
+      "description": "Read account policy state before editing."
+    }
+  ],
+  "paths": {
+    "/pgp": {
+      "get": {
+        "summary": "ListKeys",
+        "operationId": "ListKeys",
+        "tags": [
+          "Pgp"
+        ],
+        "description": "This companion documents Test/RC behavior; this existing operation also exists on V2 with older policy metadata.\n\nList PGP public keys registered for the authenticated account. `authorize` keys verify UploadFile signatures. `export` keys encrypt exported certificate private keys. Each key reports `PgpKeyStatus` and, when it expires, `PgpKeyValidUntil`; extend expiring keys in time, as locked keys cannot be replaced.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/ListKeysResp"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "const keys = await client.listKeys();"
+          }
+        ]
+      },
+      "put": {
+        "summary": "UploadKey",
+        "operationId": "UploadKey",
+        "tags": [
+          "Pgp"
+        ],
+        "description": "This companion documents Test/RC behavior; this existing operation also exists on V2 with older policy metadata.\n\nUpload an ASCII-armored PGP public key for the authenticated admin account. Use purpose `authorize` for detached UploadFile signature verification, or `export` for encrypting ExportCert private-key material. The same PGP key cannot be registered for both purposes at the same time. Keys are checked with the UploadFile verification rules: expired or revoked keys, keys whose algorithm or key usage cannot serve the purpose, and keys valid for less than 90 days are refused. An `authorize` key needs a primary key or subkey that can sign.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "UploadKeyReq",
+            "description": "ASCII armored PGP Key in `PgpKey` and key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification) in `PgpKeyPurpose`.\n\n**NOTE**: The same PGP key cannot be used for both `export` and `authorize` purpose at the same time.",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UploadKeyReq"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Operation successfully processed. Resource created. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "// Public armor only; authorize keys must remain usable for at least 90 days.\nawait client.uploadPgpKey(armoredPublicKey, \"authorize\", reviewedRevision);"
+          }
+        ]
+      }
+    },
+    "/pgp/keys": {
+      "delete": {
+        "summary": "DeletePgpKey",
+        "operationId": "DeletePgpKey",
+        "tags": [
+          "Pgp"
+        ],
+        "description": "Available on gpgtest and production RC; not production V2.\n\nCandidate-only Admin operation. Delete every duplicate row of one full primary PGP fingerprint from the authenticated account while unlocked. ExpectedRevision must exactly match the reviewed policy, or be zero if none exists. Cannot reduce distinct eligible keys below configured requirements. The legacy short-ID DeleteKey operation remains reserved. Not available until Rust registration deployment is qualified.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "DeletePgpKeyReq",
+            "description": "Pgp parameters",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/DeletePgpKeyReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "await client.deletePgpKey({\n  Fingerprint: primaryFingerprint,\n  ExpectedRevision: reviewedRevision,\n});\n// A required signer cannot be deleted, and locked accounts refuse all key edits."
+          }
+        ]
+      }
+    },
+    "/pgp/policy/banks/{Bank}": {
+      "put": {
+        "summary": "ConfigureBankPgpPolicy",
+        "operationId": "ConfigureBankPgpPolicy",
+        "tags": [
+          "Pgp"
+        ],
+        "description": "Available on gpgtest and production RC; not production V2.\n\nAdmin: set the selected bank signature count without changing other banks. First use snapshots one signature for every currently supported bank. For accounts with PGP verification disabled or shared certificates, ConfirmPolicyInitialization=true explicitly activates these account-wide requirements, including linked callers. Future banks and banks absent from an existing policy are blocked. ExpectedRevision is zero before first configuration, otherwise the reviewed Account.PgpAuthorization revision. Counts require distinct authorize keys valid for at least 90 days. Refresh account state after success; never automatically retry mutations.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "ConfigureBankPgpPolicyReq",
+            "description": "Pgp parameters",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/ConfigureBankPgpPolicyReq"
+            }
+          },
+          {
+            "name": "Bank",
+            "description": "Explicit supported bank route. Aliases are canonicalized; unknown or retired banks are rejected.",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "await client.configureBankPgpPolicy(\"osuuspankki\", {\n  RequiredSignatureCount: 2,\n  RequiredSignerFingerprints: [erpPrimaryFingerprint],\n  ExpectedRevision: reviewedRevision,\n});\n// Omit the signer list to preserve it; [] explicitly clears it for this bank.\n// First-time exemptions/shared certificates also require explicit confirmation."
+          }
+        ]
+      },
+      "delete": {
+        "summary": "BlockBankPgpPolicy",
+        "operationId": "BlockBankPgpPolicy",
+        "tags": [
+          "Pgp"
+        ],
+        "description": "Available on gpgtest and production RC; not production V2.\n\nAdmin: block uploads to the selected bank while preserving every other bank setting. This never disables signature verification. Blocking the last allowed bank leaves an explicit deny-all policy; it does not reset to legacy behavior. Use ConfigureBankPgpPolicy to enable that bank again. Same initialization, revision and irreversible-lock rules as ConfigureBankPgpPolicy. Refresh account state after success; never automatically retry mutations.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "BlockBankPgpPolicyReq",
+            "description": "Pgp parameters",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/BlockBankPgpPolicyReq"
+            }
+          },
+          {
+            "name": "Bank",
+            "description": "Explicit supported bank route. Aliases are canonicalized; unknown or retired banks are rejected.",
+            "type": "string",
+            "required": true,
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "await client.blockBankPgpPolicy(\"osuuspankki\", { ExpectedRevision: reviewedRevision });\n// Other banks stay unchanged. Re-enable by configuring this bank again."
+          }
+        ]
+      }
+    },
+    "/pgp/policy/lock": {
+      "post": {
+        "summary": "LockPgpPolicy",
+        "operationId": "LockPgpPolicy",
+        "tags": [
+          "Pgp"
+        ],
+        "description": "Available on gpgtest and production RC; not production V2.\n\nCandidate-only Admin operation. Irreversibly freeze the authenticated account's configured bank signature requirements and all registered PGP keys, including export keys. Requires the exact reviewed policy revision and a fresh code from an established allowed factor. Refused unless every requirement is met by distinct authorization keys valid for at least 90 days. There is no API unlock or administrator override. Do not automatically replay an uncertain result; refresh Account.PgpAuthorization. Not available until Rust registration, audit-reader and candidate routing are qualified.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "LockPgpPolicyReq",
+            "description": "Pgp parameters",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LockPgpPolicyReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "// IRREVERSIBLE: review every account key and bank policy first.\nconst actionCredential = client.session.accessToken;\nif (!actionCredential) throw new Error(\"Complete Admin login first\");\nawait client.lockPgpPolicy({\n  ExpectedRevision: reviewedRevision,\n  AccessToken: actionCredential,\n  MfaType: \"SOFTWARE_TOKEN_MFA\",\n  Code: freshAuthenticatorCode,\n});"
+          }
+        ]
+      }
+    },
+    "/session/action-mfa": {
+      "post": {
+        "summary": "RequestActionMfa",
+        "operationId": "RequestActionMfa",
+        "tags": [
+          "Session"
+        ],
+        "description": "Available on gpgtest and production RC; not production V2.\n\nCandidate-only Admin operation. Request an SMS code for a protected action using the opaque AccessToken returned by completed Rust Admin login. Requires an already established, enabled SMS factor. This does not verify a code, change a phone or authenticator, or authorize or perform a protected mutation. TOTP-only accounts cannot request SMS. An acknowledged request is not proof of SMS delivery; do not automatically replay an uncertain request.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "RequestActionMfaReq",
+            "description": "Session parameters",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RequestActionMfaReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "const actionCredential = client.session.accessToken;\nif (!actionCredential) throw new Error(\"Complete Admin login first\");\nawait client.requestActionMfa(actionCredential);\n// Collect the new SMS code. This call does not authorize a mutation by itself."
+          }
+        ]
+      }
+    },
+    "/integrator/accounts": {
+      "get": {
+        "summary": "ListAccounts",
+        "operationId": "ListAccounts",
+        "tags": [
+          "Integrator"
+        ],
+        "description": "This companion documents Test/RC behavior; this existing operation also exists on V2 with older policy metadata.\n\nList accounts visible to the authenticated session. Integrator API key owners can list their customer accounts; customers can read only their own account.\n\nPgpKeys contains read-only public-key armor and registered purpose for each visible account. Integrator owners see accounts in their tenant; customers see their own account. Decode key metadata in the application. Preserve missing information, malformed entries and duplicates; no key changes are performed. This additive 2.17.0 field is available in production and the test API.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "Use _IdToken_ from the Login response as the `Authorization` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "x-api-key",
+            "description": "Use _ApiKey_ from the Login response as the `x-api-key` header",
+            "required": true,
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully processed. See response.",
+            "schema": {
+              "$ref": "#/definitions/ListAccountsResp"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Request validation error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthenticated",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error occurred",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "X-Api-Key": [],
+            "Authorizer": []
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "TypeScript",
+            "label": "Official TypeScript SDK 6.1.0",
+            "source": "const result = await client.listAccounts();\nconst policy = result.Accounts.find((account) => account.Email === accountEmail)?.PgpAuthorization;\nif (policy?.State === \"unavailable\") throw new Error(\"Policy unavailable; stop\");\nconsole.log(policy?.RequiredSignatures, policy?.RequiredSignerFingerprints);"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ListKeysResp": {
+      "type": "object",
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "PgpKeys"
+      ],
+      "properties": {
+        "ResponseCode": {
+          "type": "string",
+          "description": "Two digit response code in string format"
+        },
+        "ResponseText": {
+          "type": "string",
+          "description": "Human readable response text"
+        },
+        "PgpKeys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PgpKeyDescriptor"
+          },
+          "description": "List of PGP keys in API"
+        }
+      }
+    },
+    "PgpKeyDescriptor": {
+      "type": "object",
+      "required": [
+        "PgpKeyId"
+      ],
+      "properties": {
+        "PgpKeyId": {
+          "type": "string",
+          "description": "Short version of a PGP Key id identifying the key, e.g. `3A3A59B2`"
+        },
+        "PgpKeyPurpose": {
+          "type": "string",
+          "description": "PGP Key purpose",
+          "enum": [
+            "export",
+            "authorize"
+          ]
+        },
+        "PgpKeyStatus": {
+          "type": "string",
+          "description": "Whether the key can serve its purpose now, by the upload verification rules: `Valid`, `Expired` (extend its expiration date and refresh it) or `Unusable` (revoked, or its algorithm or key usage is not supported). Omitted when the entry cannot be evaluated.",
+          "enum": [
+            "Valid",
+            "Expired",
+            "Unusable"
+          ]
+        },
+        "PgpKeyValidUntil": {
+          "type": "string",
+          "format": "date-time",
+          "description": "UTC time when a valid key stops being usable for its purpose. Omitted for keys without expiry. New keys must remain valid for at least 90 days."
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "ResponseCode": {
+          "type": "string",
+          "description": "Two digit response code in string format"
+        },
+        "ResponseText": {
+          "type": "string",
+          "description": "Human readable response text"
+        },
+        "RequestId": {
+          "type": "string",
+          "description": "Service side request id for problem tracing purposes"
+        }
+      }
+    },
+    "UploadKeyReq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "PgpKey",
+        "PgpKeyPurpose"
+      ],
+      "properties": {
+        "PgpKey": {
+          "type": "string",
+          "minLength": 65,
+          "maxLength": 49152,
+          "description": "ASCII armored PGP Key"
+        },
+        "PgpKeyPurpose": {
+          "type": "string",
+          "description": "PGP key purpose, i.e. `export` (exporting cert private key) or `authorize` (upload content authorization verification).",
+          "enum": [
+            "export",
+            "authorize"
+          ]
+        },
+        "ExpectedRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Reviewed PGP authorization policy revision. Omit or use zero only for an account without a policy. Requires a deployment with policy-aware registration support."
+        }
+      }
+    },
+    "Response": {
+      "type": "object",
+      "required": [
+        "ResponseCode",
+        "ResponseText"
+      ],
+      "properties": {
+        "ResponseCode": {
+          "type": "string",
+          "description": "Two digit response code in string format"
+        },
+        "ResponseText": {
+          "type": "string",
+          "description": "Human readable response text"
+        }
+      }
+    },
+    "DeletePgpKeyReq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Fingerprint",
+        "ExpectedRevision"
+      ],
+      "properties": {
+        "Fingerprint": {
+          "type": "string",
+          "minLength": 40,
+          "maxLength": 64,
+          "pattern": "^([A-Fa-f0-9]{40}|[A-Fa-f0-9]{64})$",
+          "description": "Full primary-key fingerprint (40 or 64 hexadecimal characters), never a short key ID or subkey fingerprint."
+        },
+        "ExpectedRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact reviewed revision; zero only for a previously absent policy."
+        }
+      }
+    },
+    "ConfigureBankPgpPolicyReq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "RequiredSignatureCount",
+        "ExpectedRevision"
+      ],
+      "properties": {
+        "RequiredSignatureCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 64,
+          "description": "Required distinct authorize signatures for this bank only. Must not exceed eligible registered keys."
+        },
+        "RequiredSignerFingerprints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([0-9a-fA-F]{40}|[0-9a-fA-F]{64})$"
+          },
+          "maxItems": 64,
+          "uniqueItems": true,
+          "description": "Mandatory registered authorize primary fingerprints for this bank, in addition to the distinct signature count. Omit to preserve; [] explicitly clears. Must fit within RequiredSignatureCount and be valid for at least 90 days. Signing subkeys count for their primary identity."
+        },
+        "ExpectedRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact reviewed revision; zero only for a previously absent policy."
+        },
+        "ConfirmPolicyInitialization": {
+          "type": "boolean",
+          "description": "Only for first configuration. Explicitly confirm activating signature checks for all currently supported banks, including exempt accounts and linked callers. Rejected when a policy already exists."
+        }
+      }
+    },
+    "BlockBankPgpPolicyReq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ExpectedRevision"
+      ],
+      "properties": {
+        "ExpectedRevision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Exact reviewed revision; zero only for a previously absent policy."
+        },
+        "ConfirmPolicyInitialization": {
+          "type": "boolean",
+          "description": "Only for first configuration. Explicitly confirm activating signature checks for all currently supported banks, including exempt accounts and linked callers. Rejected when a policy already exists."
+        }
+      }
+    },
+    "LockPgpPolicyReq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ExpectedRevision",
+        "AccessToken",
+        "MfaType",
+        "Code"
+      ],
+      "properties": {
+        "ExpectedRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "description": "Exact reviewed revision of an existing configured policy."
+        },
+        "AccessToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384,
+          "description": "Opaque Admin action credential returned by completed Rust Admin login; never a raw provider token."
+        },
+        "MfaType": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "Established allowed factor to verify for this lock operation.",
+          "enum": [
+            "SMS_MFA",
+            "SOFTWARE_TOKEN_MFA"
+          ]
+        },
+        "Code": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 6,
+          "pattern": "^[0-9]{6}$",
+          "description": "Fresh six-digit code from the selected factor."
+        }
+      }
+    },
+    "RequestActionMfaReq": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "AccessToken",
+        "MfaType"
+      ],
+      "properties": {
+        "AccessToken": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384,
+          "description": "Opaque Admin action credential; never a raw provider access token."
+        },
+        "MfaType": {
+          "type": "string",
+          "maxLength": 128,
+          "description": "SMS_MFA only. TOTP codes are generated by the existing authenticator.",
+          "enum": [
+            "SMS_MFA"
+          ]
+        }
+      }
+    },
+    "ListAccountsResp": {
+      "type": "object",
+      "required": [
+        "ResponseCode",
+        "ResponseText",
+        "Accounts"
+      ],
+      "properties": {
+        "ResponseCode": {
+          "type": "string",
+          "description": "Two digit response code in string format"
+        },
+        "ResponseText": {
+          "type": "string",
+          "description": "Human readable response text"
+        },
+        "Accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccountDescriptor"
+          },
+          "description": "List of accounts under the API key"
+        }
+      }
+    },
+    "AccountDescriptor": {
+      "type": "object",
+      "required": [
+        "Name",
+        "Email",
+        "Phone",
+        "Export",
+        "Certs"
+      ],
+      "properties": {
+        "CreatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server-recorded initial account registration time in UTC. Adding a sign-in mode does not change it. Omitted for legacy records without a reliable creation timestamp."
+        },
+        "Lifecycle": {
+          "type": "string",
+          "enum": [
+            "active",
+            "deleted"
+          ],
+          "description": "Deleted accounts are retained for 30 days, cannot be used and are excluded from customer license totals."
+        },
+        "DeletedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time the account was soft deleted."
+        },
+        "DeletedBy": {
+          "type": "string",
+          "description": "Authenticated administrator who soft deleted the account."
+        },
+        "PurgeAfter": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Earliest automatic removal time; TTL removal is asynchronous."
+        },
+        "Name": {
+          "type": "string",
+          "description": "Full name of registrant"
+        },
+        "Email": {
+          "type": "string",
+          "description": "Email address as the account username"
+        },
+        "Phone": {
+          "type": "string",
+          "description": "Phone number with country code and `+` in front"
+        },
+        "AdminMode": {
+          "type": "string",
+          "description": "`admin` mode status",
+          "enum": [
+            "registered",
+            "unregistered"
+          ]
+        },
+        "DataMode": {
+          "type": "string",
+          "description": "`data` mode status",
+          "enum": [
+            "registered",
+            "unregistered"
+          ]
+        },
+        "Export": {
+          "type": "string",
+          "description": "Status for certificate and private key export allowance. See ConfigCerts.",
+          "enum": [
+            "disabled",
+            "allowed"
+          ]
+        },
+        "AccountType": {
+          "type": "string",
+          "description": "`integrator` for the API key owner account, `customer` for accounts registered under it",
+          "enum": [
+            "integrator",
+            "customer"
+          ]
+        },
+        "LinkedTo": {
+          "type": "string",
+          "description": "Email of the account whose certificates this account uses through ShareCerts, or empty"
+        },
+        "Certs": {
+          "type": "array",
+          "description": "Certificates directly owned by the account",
+          "items": {
+            "$ref": "#/definitions/CertDescriptor"
+          }
+        },
+        "PgpKeys": {
+          "type": "array",
+          "description": "Read-only public keys directly owned by this account, in stored order, including duplicates. An empty array means no stored entries; an absent field means unavailable information or an older deployment. Introduced in 2.17.0 and available in production and the test API. Decode the returned public armor in the application.",
+          "items": {
+            "$ref": "#/definitions/AccountPgpKeyDescriptor"
+          }
+        },
+        "PgpAuthorization": {
+          "type": "object",
+          "description": "Candidate Rust API policy metadata. Absent means no stored policy; unavailable means malformed data and must never be displayed as unlocked. This descriptive view does not grant file exchange or count distinct cryptographic keys. Times are Unix seconds.",
+          "additionalProperties": false,
+          "required": [
+            "State"
+          ],
+          "properties": {
+            "State": {
+              "type": "string",
+              "enum": [
+                "configured",
+                "unavailable"
+              ]
+            },
+            "Revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "Locked": {
+              "type": "boolean"
+            },
+            "UpdatedAt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "LockedAt": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "RequiredSignatures": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 64
+              }
+            },
+            "RequiredSignerFingerprints": {
+              "type": "object",
+              "description": "Mandatory primary fingerprints per bank, in addition to RequiredSignatures. Empty map means no named signers. Requires a supporting deployment.",
+              "additionalProperties": {
+                "type": "array",
+                "maxItems": 64,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})$"
+                }
+              }
+            }
+          }
+        },
+        "Retired": {
+          "type": "array",
+          "description": "Certificates retired with RetireCert or set aside by ISECure",
+          "items": {
+            "$ref": "#/definitions/RetiredCertDescriptor"
+          }
+        }
+      }
+    },
+    "CertDescriptor": {
+      "type": "object",
+      "required": [
+        "CertName",
+        "Expires",
+        "Subject",
+        "Issuer",
+        "Serial",
+        "PEM"
+      ],
+      "properties": {
+        "CertName": {
+          "type": "string",
+          "description": "Certificate common name"
+        },
+        "Expires": {
+          "type": "string",
+          "description": "Date of expiry"
+        },
+        "Subject": {
+          "type": "string",
+          "description": "Certificate subject"
+        },
+        "Issuer": {
+          "type": "string",
+          "description": "Certificate issuer"
+        },
+        "Serial": {
+          "type": "string",
+          "description": "Certificate serial number"
+        },
+        "PEM": {
+          "type": "string",
+          "description": "Certificate in PEM format"
+        }
+      }
+    },
+    "AccountPgpKeyDescriptor": {
+      "type": "object",
+      "description": "One stored account public-key entry. Decode OpenPGP packets locally to inspect identity, fingerprints, dates and subkeys; the API does not decode or establish trust. Duplicate entries remain separate. An unreadable entry remains present with unavailable fields omitted.",
+      "properties": {
+        "PgpKey": {
+          "type": "string",
+          "maxLength": 262144,
+          "description": "Original ASCII-armored PGP public-key text, at most 256 KiB in UTF-8. Omitted for missing, non-public, mixed-armored or oversized stored material. Public armor is not a guarantee that packets are valid; handle local decoding errors per entry. Never log key material or decoded personal identities."
+        },
+        "PgpKeyPurpose": {
+          "type": "string",
+          "enum": [
+            "authorize",
+            "export"
+          ],
+          "description": "Registered service purpose: authorize verifies file-upload signatures; export encrypts exported certificate private keys. This is separate from embedded OpenPGP key flags. Omitted if the stored purpose is unavailable or unrecognized."
+        }
+      }
+    },
+    "RetiredCertDescriptor": {
+      "type": "object",
+      "description": "A certificate retired from active use",
+      "required": [
+        "CertName",
+        "Bank",
+        "Purpose",
+        "Expires"
+      ],
+      "properties": {
+        "CertName": {
+          "type": "string",
+          "description": "Retired certificate record name, e.g. `nordea.REMOVED.1a2b3c4d_customer_signing_cert`"
+        },
+        "Bank": {
+          "type": "string",
+          "description": "Public bank name the certificate belonged to"
+        },
+        "Purpose": {
+          "type": "string",
+          "enum": [
+            "signing",
+            "encryption"
+          ]
+        },
+        "Expires": {
+          "type": "string",
+          "description": "Certificate expiry, or `unknown` when the retired material cannot be parsed"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Official TypeScript SDK 6.1.0",
+    "url": "https://github.com/isecurefi/isecure-ts-client"
+  }
+}

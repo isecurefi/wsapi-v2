@@ -1,0 +1,10 @@
+{
+  "ListKeys": "const keys = await client.listKeys();",
+  "UploadKey": "// Public armor only; authorize keys must remain usable for at least 90 days.\nawait client.uploadPgpKey(armoredPublicKey, \"authorize\", reviewedRevision);",
+  "ListAccounts": "const result = await client.listAccounts();\nconst policy = result.Accounts.find((account) => account.Email === accountEmail)?.PgpAuthorization;\nif (policy?.State === \"unavailable\") throw new Error(\"Policy unavailable; stop\");\nconsole.log(policy?.RequiredSignatures, policy?.RequiredSignerFingerprints);",
+  "ConfigureBankPgpPolicy": "await client.configureBankPgpPolicy(\"osuuspankki\", {\n  RequiredSignatureCount: 2,\n  RequiredSignerFingerprints: [erpPrimaryFingerprint],\n  ExpectedRevision: reviewedRevision,\n});\n// Omit the signer list to preserve it; [] explicitly clears it for this bank.\n// First-time exemptions/shared certificates also require explicit confirmation.",
+  "BlockBankPgpPolicy": "await client.blockBankPgpPolicy(\"osuuspankki\", { ExpectedRevision: reviewedRevision });\n// Other banks stay unchanged. Re-enable by configuring this bank again.",
+  "DeletePgpKey": "await client.deletePgpKey({\n  Fingerprint: primaryFingerprint,\n  ExpectedRevision: reviewedRevision,\n});\n// A required signer cannot be deleted, and locked accounts refuse all key edits.",
+  "RequestActionMfa": "const actionCredential = client.session.accessToken;\nif (!actionCredential) throw new Error(\"Complete Admin login first\");\nawait client.requestActionMfa(actionCredential);\n// Collect the new SMS code. This call does not authorize a mutation by itself.",
+  "LockPgpPolicy": "// IRREVERSIBLE: review every account key and bank policy first.\nconst actionCredential = client.session.accessToken;\nif (!actionCredential) throw new Error(\"Complete Admin login first\");\nawait client.lockPgpPolicy({\n  ExpectedRevision: reviewedRevision,\n  AccessToken: actionCredential,\n  MfaType: \"SOFTWARE_TOKEN_MFA\",\n  Code: freshAuthenticatorCode,\n});"
+}

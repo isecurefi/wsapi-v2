@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/isecurefi/aws",
+  "revision": "4548e35a31a55966d7077351cc1ec1d633568c2d",
+  "sourceFiles": {
+    "ws-channel-api/config.json": "7d9a593b936065f6b54a998b2648b9f9ca1d402020e80ccf951c9c2bb74ceac7",
+    "ws-channel-api/__wsapi.json.tmpl": "c581e000cce886a794fe9522aa2df36c3db2a56b8ca2866fa2b00f53844805e6",
+    "ws-channel-api/render.py": "b7c829919496ddb07c6f24e4ca0ce3c9868721bb393ad343a7d10d6ed513f7bd"
+  },
+  "renderedSha256": "6775eba8a366e1a53a000ccf0d5914cfc05eefe0bf5e002b1e0a245a6c870e13",
+  "sha256": "10e6cdd0832208537cdeeb82b7171696b5896b5a25b1a05a6f30ede68f8feb7a",
+  "sdkVersion": "6.1.0",
+  "availability": {
+    "gpgtest": "https://ws-api.test.isecure.fi/v2",
+    "productionRc": "https://ws-api.isecure.fi/rc",
+    "productionV2PolicyAdministration": false
+  }
+}

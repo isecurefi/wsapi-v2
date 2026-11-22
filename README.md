@@ -144,3 +144,19 @@ Bounded hosted Test checks passed with unpublished SDK 4.6.0-rc.1: inline upload
 encrypted S3 upload, download, retained encrypted delivery and retirement. These
 small-file checks complement local 32-MiB interoperability; they do not claim
 32-MiB capacity through the hosted Simulator Lambda. Production is unchanged.
+
+
+## PGP authorization companion (SDK 6.1.0)
+
+[Online reference](https://www.isecure.fi/apis/pgp-policy/),
+[OpenAPI companion](pgp-policy-api.json) and [workflow guide](pgp-policy-guide.md).
+Per-bank signature counts, mandatory primary signers, bank blocking, full-fingerprint
+key removal and irreversible locking are deployed on Test and production RC.
+Production V2 retains its separate operation set. SDK publication does not promote RC.
+
+The companion is generated from exact backend config/template/render source at the
+revision recorded in `pgp-policy-api.source.json`. Regenerate with
+`python3 scripts/export-pgp-policy.py --repository=/path/to/aws --revision=<commit>`;
+add `--check` for drift detection. Python requires the backend's `pystache` and
+`simplejson` dependencies. Workflow prose and SDK samples live in the adjacent
+Markdown/JSON files; schema fields are never independently redefined here.
