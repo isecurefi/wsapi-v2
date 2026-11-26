@@ -91,8 +91,8 @@ from the reviewed backend export. The main production specification is unchanged
 Automatic removal becomes eligible after 30 days; physical removal is asynchronous. Audit
 history remains available independently. Integrator-owner accounts remain protected.
 
-Account deletion and certificate retirement each require a fresh Admin MFA login, no more than
-ten minutes old and usable for one lifecycle action. These changes are not yet deployed.
+Account deletion and certificate retirement each require an opaque Admin action credential
+and a fresh established-factor code. A recent login alone is insufficient; these controls are deployed on production V2 and Test.
 
 The deletion request now requires `ConfirmSoftDelete` equal to the target email and must omit
 the legacy `Confirm` field. This fails safely against a backend that still implements immediate
@@ -151,8 +151,9 @@ small-file checks complement local 32-MiB interoperability; they do not claim
 [Online reference](https://www.isecure.fi/apis/pgp-policy/),
 [OpenAPI companion](pgp-policy-api.json) and [workflow guide](pgp-policy-guide.md).
 Per-bank signature counts, mandatory primary signers, bank blocking, full-fingerprint
-key removal and irreversible locking are deployed on Test and production RC.
-Production V2 retains its separate operation set. SDK publication does not promote RC.
+key removal and irreversible locking are deployed on production V2, Test and production RC.
+The 25 November 2026 production rollout works with SDK 6.1.0 without separate activation.
+The main File Exchange specification includes these operations; the companion provides a focused workflow guide.
 
 The companion is generated from exact backend config/template/render source at the
 revision recorded in `pgp-policy-api.source.json`. Regenerate with

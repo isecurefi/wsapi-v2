@@ -4,10 +4,11 @@ Use **isecure-ts-client 6.1.0 or newer**. The policy controls in this companion 
 
 | Environment | SDK BaseUrl |
 | --- | --- |
+| Production | `https://ws-api.isecure.fi/v2` |
 | Test | `https://ws-api.test.isecure.fi/v2` |
 | Production release candidate (RC) | `https://ws-api.isecure.fi/rc` |
 
-Key upload/list, account discovery and fresh action MFA also exist on production V2; its policy metadata is older. Production `https://ws-api.isecure.fi/v2` retains its existing contract. It does not expose this policy administration API, and its legacy upload handler refuses policy-controlled uploads. Use the same RC endpoint for policy administration and the associated file uploads. Publishing SDK 6.1.0 does not promote RC to V2.
+Production V2 supports policy administration and enforcement on uploads as of 25 November 2026. SDK 6.1.0 works unchanged: no upgrade, RC URL, feature flag or separate ISECure activation is needed. Configure the policy in an authenticated Admin session; existing customer policies are not changed automatically.
 
 Register and complete Admin login/MFA using the [File Exchange authentication reference](https://www.isecure.fi/wsapi_v2/). The SDK defaults to the stronger password profile. Requests require both the account's API key and completed session's ID token. The SDK manages those headers. This reference does not send requests from your browser.
 
@@ -15,10 +16,10 @@ Register and complete Admin login/MFA using the [File Exchange authentication re
 
 Register three eligible **authorize** public keys: ERP, person A and person B. Set `RequiredSignatureCount: 2` and `RequiredSignerFingerprints: [erpPrimaryFingerprint]`. Upload with detached signatures from ERP plus either person. Two people without ERP are refused; ERP alone is also insufficient.
 
-A named signer counts toward N. Use full 40- or 64-character primary fingerprints; the server normalizes case. Signing subkeys count for their primary, and multiple signatures/subkeys from one primary count once. Registered keys must be usable and have at least 90 days of remaining validity when configuring or locking. Unknown, export-only, duplicate, expired or insufficient-lifetime keys are rejected.
+A named signer counts toward N. Use full 40- or 64-character primary fingerprints; the server normalizes case. Signing subkeys count for their primary, and multiple signatures/subkeys from one primary count once. Registered keys must be usable and have at least 90 days of remaining validity when configuring or locking. Keys without expiry are accepted. Unknown, export-only, duplicate, expired or insufficient-lifetime keys are rejected. Uploads require valid keys and signatures, not 90 days of remaining lifetime.
 
 ~~~ts
-// client: authenticated Admin WSChannel using the Test or RC BaseUrl above.
+// client: authenticated Admin WSChannel using the production or Test BaseUrl above.
 const result = await client.listAccounts();
 const account = result.Accounts.find((item) => item.Email === accountEmail);
 if (!account) throw new Error("Account not found");

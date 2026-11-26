@@ -29,9 +29,9 @@ def project(source,guide,samples):
  for methods in paths.values():
   for op in methods.values():
    op['security']=[{'X-Api-Key':[],'Authorizer':[]}]
-   op['description']=('This companion documents Test/RC behavior; this existing operation also exists on V2 with older policy metadata.\n\n' if op['operationId'] in ('ListKeys','UploadKey','ListAccounts','RequestActionMfa') else 'Available on Test and production RC; not production V2.\n\n')+op['description']
+   op['description']='Available on production V2 and Test; production rollout verified 25 November 2026.\n\n'+op['description']
    op['x-code-samples']=[{'lang':'TypeScript','label':'Official TypeScript SDK 6.1.0','source':samples[op['operationId']]}]
- return {'swagger':'2.0','info':{'title':'ISECure PGP authorization API (Test and RC)','version':'1.0.0','description':guide,'contact':{'email':'support@isecure.fi'}},'host':'ws-api.isecure.fi','basePath':'/rc','schemes':['https'],'consumes':['application/json'],'produces':['application/json'],'securityDefinitions':clean(source['securityDefinitions']),'tags':[{'name':'Pgp','description':'Registered keys, per-bank thresholds, required signers and irreversible locking.'},{'name':'Session','description':'Fresh action MFA for an established Admin factor.'},{'name':'Integrator','description':'Read account policy state before editing.'}],'paths':paths,'definitions':definitions,'externalDocs':{'description':'Official TypeScript SDK 6.1.0','url':'https://github.com/isecurefi/isecure-ts-client'}}
+ return {'swagger':'2.0','info':{'title':'ISECure PGP authorization API','version':'1.1.0','description':guide,'contact':{'email':'support@isecure.fi'}},'host':'ws-api.isecure.fi','basePath':'/v2','schemes':['https'],'consumes':['application/json'],'produces':['application/json'],'securityDefinitions':clean(source['securityDefinitions']),'tags':[{'name':'Pgp','description':'Registered keys, per-bank thresholds, required signers and irreversible locking.'},{'name':'Session','description':'Fresh action MFA for an established Admin factor.'},{'name':'Integrator','description':'Read account policy state before editing.'}],'paths':paths,'definitions':definitions,'externalDocs':{'description':'Official TypeScript SDK 6.1.0','url':'https://github.com/isecurefi/isecure-ts-client'}}
 def main():
  p=argparse.ArgumentParser();p.add_argument('--repository',required=True);p.add_argument('--revision',required=True);p.add_argument('--check',action='store_true');a=p.parse_args()
  revision=subprocess.check_output(['git','rev-parse',a.revision+'^{commit}'],cwd=a.repository,text=True).strip()
@@ -43,8 +43,17 @@ def main():
   raw=module.render_api(folder/'config.json',folder/'__wsapi.json.tmpl',{'__API_STAGE__':'rc','__AWS_ACCOUNT__':'507820410808','__API_ID__':'gky0hkiw7k','__USER_POOL_ID__':'eu-west-1_iTHy7kDHx','__API_HOST__':'ws-api.isecure.fi','__API_BASE_PATH__':'rc'},pgp_policy=True).encode()
  doc=project(json.loads(raw),(ROOT/'pgp-policy-guide.md').read_text(),json.loads((ROOT/'pgp-policy-samples.json').read_text()))
  data=json.dumps(doc,indent=2,ensure_ascii=False)+'\n'
- metadata={'repository':'https://github.com/isecurefi/aws','revision':revision,'sourceFiles':{'ws-channel-api/'+k:hashlib.sha256(v).hexdigest() for k,v in inputs.items()},'renderedSha256':hashlib.sha256(raw).hexdigest(),'sha256':hashlib.sha256(data.encode()).hexdigest(),'sdkVersion':'6.1.0','availability':{'gpgtest':'https://ws-api.test.isecure.fi/v2','productionRc':'https://ws-api.isecure.fi/rc','productionV2PolicyAdministration':False}}
- for name,text in [('pgp-policy-api.json',data),('pgp-policy-api.source.json',json.dumps(metadata,indent=2)+'\n')]:
+ metadata={'repository':'https://github.com/isecurefi/aws','revision':revision,'sourceFiles':{'ws-channel-api/'+k:hashlib.sha256(v).hexdigest() for k,v in inputs.items()},'renderedSha256':hashlib.sha256(raw).hexdigest(),'sha256':hashlib.sha256(data.encode()).hexdigest(),'sdkVersion':'6.1.0','availability':{'gpgtest':'https://ws-api.test.isecure.fi/v2','productionRc':'https://ws-api.isecure.fi/rc','productionV2PolicyAdministration':True,'productionV2':'https://ws-api.isecure.fi/v2','verifiedAt':'2026-11-26','deploymentId':'i7hvpf'}}
+ main=json.loads((ROOT/'wsapi_v2.json').read_text())
+ for path,methods in doc['paths'].items():
+  for method,operation in methods.items():
+   if operation['operationId'] in ('ConfigureBankPgpPolicy','BlockBankPgpPolicy','DeletePgpKey','LockPgpPolicy'):main['paths'].setdefault(path,{})[method]=operation
+ for name,definition in doc['definitions'].items():
+  if name not in main['definitions']:main['definitions'][name]=definition
+ main['definitions']['AccountDescriptor']['properties']['PgpAuthorization']=doc['definitions']['AccountDescriptor']['properties']['PgpAuthorization']
+ main['definitions']['UploadKeyReq']['properties']['ExpectedRevision']['description']='Reviewed PGP authorization policy revision. Omit or use zero only when no policy exists. Read the current revision before changing keys.'
+ main['info']['version']='v2.20.0'
+ for name,text in [('wsapi_v2.json',json.dumps(main,indent=2,ensure_ascii=False)+'\n'),('pgp-policy-api.json',data),('pgp-policy-api.source.json',json.dumps(metadata,indent=2)+'\n')]:
   file=ROOT/name
   if a.check:assert file.read_text()==text,'Contract drift: '+name
   else:file.write_text(text)

@@ -1,17 +1,20 @@
 {
   "repository": "https://github.com/isecurefi/aws",
-  "revision": "4548e35a31a55966d7077351cc1ec1d633568c2d",
+  "revision": "d9c2ac573c956169d2b6659945bbc511a7951fbc",
   "sourceFiles": {
     "ws-channel-api/config.json": "7d9a593b936065f6b54a998b2648b9f9ca1d402020e80ccf951c9c2bb74ceac7",
     "ws-channel-api/__wsapi.json.tmpl": "c581e000cce886a794fe9522aa2df36c3db2a56b8ca2866fa2b00f53844805e6",
-    "ws-channel-api/render.py": "b7c829919496ddb07c6f24e4ca0ce3c9868721bb393ad343a7d10d6ed513f7bd"
+    "ws-channel-api/render.py": "d85d61fe2abdd4381755e9af64c12c75af090f77c96ab0b8ebdf59e6ee0e6968"
   },
   "renderedSha256": "6775eba8a366e1a53a000ccf0d5914cfc05eefe0bf5e002b1e0a245a6c870e13",
-  "sha256": "e2c5ef01ecb77ae0535ec647193c12b91e7731c2ae3e0acaad73866a866cff3e",
+  "sha256": "e55a924f7c91e2f572d118b85e38c660ce1b8ed520e971a0b585c1ce07736ded",
   "sdkVersion": "6.1.0",
   "availability": {
     "gpgtest": "https://ws-api.test.isecure.fi/v2",
     "productionRc": "https://ws-api.isecure.fi/rc",
-    "productionV2PolicyAdministration": false
+    "productionV2PolicyAdministration": true,
+    "productionV2": "https://ws-api.isecure.fi/v2",
+    "verifiedAt": "2026-11-26",
+    "deploymentId": "i7hvpf"
   }
 }
